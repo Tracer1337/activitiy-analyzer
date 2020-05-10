@@ -2,15 +2,37 @@ import pprint
 from datetime import timedelta
 from prettytable import PrettyTable
 
+def sort_by_time(unsorted):
+    result = []
+
+    for i in range(len(unsorted)):
+        # Get max value
+        max_value = ["", timedelta(-1)]
+
+        for key, value in unsorted.items():
+            if value > max_value[1]:
+                max_value = [key, value]
+
+        # Remove max value
+        del unsorted[max_value[0]]
+
+        # Remove seconds from value
+        max_value[1] = str(max_value[1])[:-3]
+
+        # Add max value to sorted list
+        result.append(max_value)
+
+    return result
+
 def prettyprint(object):
     pp = pprint.PrettyPrinter(indent=4)
     pp.pprint(object)
 
-def print_as_table(head, elements):
+def print_table(head, rows):
     table = PrettyTable(head)
 
-    for key, value in elements.items():
-        table.add_row([key, value])
+    for row in rows:
+        table.add_row(row)
 
     print(table)
 
@@ -23,10 +45,13 @@ def print_total_durations_per_day(durations_per_day):
             for d in durations:
                 durations_sum += d
 
-            rows[activity] = str(durations_sum)[:-3]
-
-
+            rows[activity] = durations_sum
+        
     # Print tables
     for date, rows in durations_per_day.items():
-        print(date)
-        print_as_table(["Aktivität", "Dauer"], rows)
+        # Sort rows and convert them to arrays
+        rows = sort_by_time(rows)
+
+        print("\n" + date + "\n")
+
+        print_table(["Aktivität", "Dauer"], rows)
