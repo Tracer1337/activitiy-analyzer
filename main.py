@@ -1,6 +1,7 @@
 from __future__ import print_function
 import pickle
 import os.path
+import click
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -17,7 +18,9 @@ DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 CREDENTIALS_PATH = DIR_PATH + "\\credentials.json"
 TOKEN_PATH = DIR_PATH + "\\token.pickle"
 
-def main():
+@click.command()
+@click.option("--summary", is_flag=True)
+def main(summary):
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -52,7 +55,7 @@ def main():
         print('No data found.')
     else:
         print("Run analyzer")
-        analyze(values)
+        analyze(values, summary=summary)
 
 if __name__ == '__main__':
     main()

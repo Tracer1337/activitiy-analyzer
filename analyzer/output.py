@@ -36,7 +36,7 @@ def print_table(head, rows):
 
     print(table)
 
-def print_total_durations_per_day(durations_per_day):
+def sum_durations_of_activities(durations_per_day):
     # Sum durations of each activity
     for date, rows in durations_per_day.items():        
         for activity, durations in rows.items():
@@ -46,6 +46,29 @@ def print_total_durations_per_day(durations_per_day):
                 durations_sum += d
 
             rows[activity] = durations_sum
+
+def sum_durations_of_days(durations_per_day):
+    # Sum durations of each activity for all days
+    summed_durations = {}
+    for date, rows in durations_per_day.items():
+        for activity, duration in rows.items():
+
+            if not activity in summed_durations:
+                summed_durations[activity] = duration
+            else:
+                summed_durations[activity] += duration
+
+    return summed_durations
+
+def print_total_durations(durations_per_day):
+    sum_durations_of_activities(durations_per_day)
+    summarized_durations = sum_durations_of_days(durations_per_day)
+    rows = sort_by_time(summarized_durations)
+
+    print_table(["Aktivität", "Dauer"], rows)
+
+def print_total_durations_per_day(durations_per_day):
+    sum_durations_of_activities(durations_per_day)
         
     # Print tables
     for date, rows in durations_per_day.items():

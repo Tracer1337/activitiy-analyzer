@@ -1,5 +1,5 @@
 from datetime import datetime
-from .output import print_total_durations_per_day, prettyprint
+from .output import print_total_durations, print_total_durations_per_day, prettyprint
 
 getDate = lambda column: column[0]
 getActivity = lambda column: column[1]
@@ -61,7 +61,7 @@ def create_durations(chunks):
 
     return durations_per_day
 
-def analyze(rows):
+def analyze(rows, summary = False):
     # Remove empty rows
     rows = remove_empty_rows(rows)
 
@@ -71,4 +71,7 @@ def analyze(rows):
     # Calculate the durations of all activities per day
     durations = create_durations(chunks)
 
-    print_total_durations_per_day(durations)
+    if summary:
+        print_total_durations(durations)
+    else:
+        print_total_durations_per_day(durations)
