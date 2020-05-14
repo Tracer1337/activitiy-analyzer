@@ -2,10 +2,11 @@ import pprint
 from datetime import timedelta
 from prettytable import PrettyTable
 import matplotlib.pyplot as plt
-import numpy as np
 
-def random_color():
-    return np.random.rand(3, )
+colors = [[52, 152, 219], [155, 89, 182], [52, 73, 94], [241, 196, 15], [230, 126, 34], [231, 76, 60], [27, 20, 100], [111, 30, 81]]
+
+for i in range(len(colors)):
+    colors[i] = [c / 255 for c in colors[i]]
 
 def sort_by_time(unsorted):
     result = []
@@ -85,7 +86,7 @@ def print_total_durations_per_day(durations_per_day):
         print_table(["Aktivität", "Dauer"], rows)
 
 def plot_total_durations_per_day(durations_per_day, labels):
-    label_color_map = dict((label, random_color()) for label in labels)
+    label_color_map = dict((labels[i], colors[i]) for i in range(len(labels)))
     
     # Get summed durations per activity
     sum_durations_of_activities(durations_per_day)
@@ -106,10 +107,6 @@ def plot_total_durations_per_day(durations_per_day, labels):
 
         ys.append(singleDayYs)
 
-    print({
-        "xs": xs
-    })
-
     # Plot each labels graph with color
     for i in range(len(labels)):
         label = labels[i]
@@ -117,12 +114,6 @@ def plot_total_durations_per_day(durations_per_day, labels):
         
         # Get all durations for label
         labelYs = [singleDayYs[i] for singleDayYs in ys]
-
-        prettyprint({
-            "ys": labelYs,
-            "color": label_color_map[label],
-            "label": label
-        })
 
         # Plot durations with color
         plt.plot(xs, labelYs, c=color, label=label)
