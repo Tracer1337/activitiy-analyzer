@@ -1,5 +1,5 @@
 from datetime import datetime
-from .output import print_total_durations, print_total_durations_per_day, prettyprint
+from .output import print_total_durations, print_total_durations_per_day, plot_total_durations_per_day, prettyprint
 import sys
 
 empty_category_placeholder = "Sonstiges"
@@ -18,9 +18,15 @@ def set_activity(row, new_value):
 
 def remove_empty_rows(rows):
     # Remove empty rows
-    for row in rows:
-        if len(row) == 0 or all(not cell for cell in row):
-            rows.remove(row)
+    def search_and_remove():
+        for row in rows:
+            if len(row) == 0 or all(not cell for cell in row) or not row:
+                rows.remove(row)
+
+                # Start from beginning
+                return search_and_remove()
+
+    search_and_remove()
 
 def chunk_rows(rows):
     # Create chunks containing all rows for one day
@@ -90,9 +96,10 @@ def validate_activities(activities, all_activities):
             sys.exit("Error: '{}' is an invalid activity".format(activity))
 
 def format_data(rows):
-    # Split spreadsheet into sections
+    # Define sections
     activities, all_categories, all_activities, activity_category_map = [], [], [], []
 
+    # Split spreadsheet into sections
     for row in rows:
         activities.append(get_activities(row))
 
@@ -109,14 +116,16 @@ def format_data(rows):
     
     activity_category_map = new_map
 
-    return (activities, all_categories, all_activities, activity_category_map)
+    # Remove empty rows
+    formatted_lists = (activities, all_categories, all_activities, activity_category_map)
+    for formatted in formatted_lists:
+        remove_empty_rows(formatted)
 
-def analyze(rows, summary = False, categories = False):
+    return formatted_lists
+
+def analyze(rows, summary=False, categories=False, plot=False):
     # Split spreadsheet into sections
     activities, all_categories, all_activities, activity_category_map = format_data(rows)
-
-    # Remove empty rows
-    remove_empty_rows(activities)
 
     # Check if all activities are valid
     validate_activities(activities, all_activities)
@@ -131,8 +140,13 @@ def analyze(rows, summary = False, categories = False):
     # Calculate the durations of all activities per day
     durations = create_durations(chunks)
 
-    # Print requested format
+    # Output requested format
     if summary:
         print_total_durations(durations)
+
+    elif plot:
+        labels = all_categories if categories else all_activities
+        plot_total_durations_per_day(durations, labels)
+
     else:
         print_total_durations_per_day(durations)
