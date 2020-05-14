@@ -12,7 +12,7 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
 # The ID and range of the spreadsheet.
 SPREADSHEET_ID = '1gS2LnBTx9aME2LewwTP4wglLLNQLZpGNBm0r3pm1i28'
-RANGE_NAME = 'A2:C'
+RANGE_NAME = 'A3:G'
 
 DIR_PATH = os.path.dirname(os.path.realpath(__file__))
 CREDENTIALS_PATH = DIR_PATH + "\\credentials.json"
@@ -20,7 +20,8 @@ TOKEN_PATH = DIR_PATH + "\\token.pickle"
 
 @click.command()
 @click.option("--summary", is_flag=True)
-def main(summary):
+@click.option("--categories", is_flag=True)
+def main(summary, categories):
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -55,7 +56,7 @@ def main(summary):
         print('No data found.')
     else:
         print("Run analyzer")
-        analyze(values, summary=summary)
+        analyze(values, summary=summary, categories=categories)
 
 if __name__ == '__main__':
     main()
