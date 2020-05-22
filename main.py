@@ -22,7 +22,8 @@ TOKEN_PATH = DIR_PATH + "\\token.pickle"
 @click.option("--summary", is_flag=True)
 @click.option("--categories", is_flag=True)
 @click.option("--plot", is_flag=True)
-def main(summary, categories, plot):
+@click.option("--average", is_flag=True)
+def main(summary, categories, plot, average):
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
@@ -57,7 +58,7 @@ def main(summary, categories, plot):
         print('No data found.')
     else:
         print("Run analyzer")
-        analyze(values, summary=summary, categories=categories, plot=plot)
+        analyze(values, summary=summary, categories=categories, plot=plot, average=average)
 
 if __name__ == '__main__':
     main()

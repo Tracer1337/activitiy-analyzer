@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 
 colors = [[52, 152, 219], [155, 89, 182], [52, 73, 94], [241, 196, 15], [230, 126, 34], [231, 76, 60], [27, 20, 100], [111, 30, 81]]
 
+# Format colors to range 0 - 1
 for i in range(len(colors)):
     colors[i] = [c / 255 for c in colors[i]]
 
@@ -66,6 +67,18 @@ def sum_durations_of_days(durations_per_day):
 
     return summed_durations
 
+def sum_activity_durations(durations):
+    # Sum durations of activities
+    summed_durations = {}
+
+    for activity, durations in durations.items():
+        summed_durations[activity] = timedelta(0)
+
+        for duration in durations:
+            summed_durations[activity] += duration
+
+    return summed_durations
+
 def print_total_durations(durations_per_day):
     sum_durations_of_activities(durations_per_day)
     summarized_durations = sum_durations_of_days(durations_per_day)
@@ -102,7 +115,7 @@ def plot_total_durations_per_day(durations_per_day, labels):
         singleDayYs = []
         for label in labels:
             # Get duration and format datetime object to integer
-            duration = durations[label].seconds if label in durations else 0
+            duration = durations[label].seconds / 3600 if label in durations else 0
             singleDayYs.append(duration)
 
         ys.append(singleDayYs)
@@ -125,3 +138,21 @@ def plot_total_durations_per_day(durations_per_day, labels):
 
     # Show plot
     plt.show()
+
+def print_average(durations):
+    amount_of_days = len(list(durations.keys()))
+
+    # Transform input
+    without_days = sum_durations_of_days(durations)
+    summed = sum_activity_durations(without_days)
+    
+    # Calculate averages
+    averages = {}
+    for activity, duration in summed.items():
+        averages[activity] = duration / amount_of_days
+
+    # Sort rows
+    rows = sort_by_time(averages)
+
+    # Print table
+    print_table(["Aktivität", "Dauer"], rows)

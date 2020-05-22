@@ -1,5 +1,5 @@
 from datetime import datetime
-from .output import print_total_durations, print_total_durations_per_day, plot_total_durations_per_day, prettyprint
+from .output import print_total_durations, print_total_durations_per_day, plot_total_durations_per_day, print_average, prettyprint
 import sys
 
 empty_category_placeholder = "Sonstiges"
@@ -123,7 +123,7 @@ def format_data(rows):
 
     return formatted_lists
 
-def analyze(rows, summary=False, categories=False, plot=False):
+def analyze(rows, summary=False, categories=False, plot=False, average=False):
     # Split spreadsheet into sections
     activities, all_categories, all_activities, activity_category_map = format_data(rows)
 
@@ -147,6 +147,9 @@ def analyze(rows, summary=False, categories=False, plot=False):
     elif plot:
         labels = all_categories if categories else all_activities
         plot_total_durations_per_day(durations, labels)
+
+    elif average:
+        print_average(durations)
 
     else:
         print_total_durations_per_day(durations)
