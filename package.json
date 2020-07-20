@@ -1,0 +1,30 @@
+{
+  "name": "acitivity-analyzer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js",
+    "migrate": "node ./database/migrations/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tracer1337/activitiy-analyzer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tracer1337/activitiy-analyzer/issues"
+  },
+  "homepage": "https://github.com/Tracer1337/activitiy-analyzer#readme",
+  "dependencies": {
+    "chalk": "^4.1.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
