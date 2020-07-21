@@ -7,6 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
 
+    "jwt-secret": "node ./scripts/jwt-secret.js",
+
     "setup-db": "npm run migrate && npm run seed",
     "migrate": "node ./scripts/migrate.js",
     "seed": "node ./scripts/seed.js"
@@ -26,6 +28,7 @@
     "chalk": "^4.1.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
     "uuid": "^8.2.0",

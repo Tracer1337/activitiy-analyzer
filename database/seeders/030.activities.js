@@ -13,7 +13,7 @@ module.exports = {
             // Get category id from given category name
             const categoryId = (await query(`SELECT id FROM categories WHERE name = '${category}'`))[0].id
 
-            activities.push([uuid(), activity, userId, categoryId])
+            activities.push([uuid(), activity, categoryId, userId])
         }
 
         return activities

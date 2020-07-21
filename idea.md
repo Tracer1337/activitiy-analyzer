@@ -41,3 +41,48 @@ WebApp:
 * Buttons: Get Up / Go To Bed
 
 * "Happy with the day" Button
+
+Routes:
+
+* api
+    * auth (protected)
+        * GET: Get profile
+
+        * register
+            * POST: Create new user
+
+        * login
+            * POST: Log into existing user
+
+    * activities (protected)
+        * GET: Get all activities from user
+        * POST: Create new activity for user
+            - Assign category
+            - Assign tags
+        * PUT: Update existing activity from user
+        * DELETE: Delete existing activity from user
+
+    * categories (protected)
+        * GET: Get all categories from user
+        * POST: Create new category for user
+            - Assign tags
+        * PUT: Update existing category from user
+        * DELETE: Delete existing category from user
+
+    * performed_activities (protected)
+        * GET: Get all performed activities from user
+        * POST: Add performed activity to database for user
+        * PUT: Update existing entry from user
+        * DELETE: Delete existing entry from user
+
+    * shortcuts (protected)
+        * GET: Get all shortcuts from user
+        * POST: Create new shortcut for user
+        * PUT: Update existing shortcut from user
+        * DELETE: Delete existing shortcut from user
+
+    * tags (protected)
+        * GET: Get all tags from user
+        * POST: Create new tag for user
+        * PUT: Update existing tag from user
+        * DELETE: Delete existing tag from user
