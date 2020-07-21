@@ -2,11 +2,19 @@ const fs = require("fs")
 const path = require("path")
 const chalk = require("chalk")
 const { performance } = require("perf_hooks")
-require("dotenv").config({ path: path.join(__dirname, "..", "..", ".env") })
+require("dotenv").config({ path: path.join(__dirname, "..", ".env") })
 
-const { createConnection } = require("../../database")
+const { createConnection } = require("../database")
+
+const MIGRATIONS_DIR = path.join(__dirname, "..", "database", "migrations")
 
 let db
+
+// Terminal stylings
+const headline = chalk.bold
+const success = chalk.green
+const indent = str => "    " + str
+const timestamp = chalk.cyan
 
 // Run db.query promise-based
 function asyncQuery(query) {
@@ -22,29 +30,32 @@ function asyncQuery(query) {
     // Create database connection
     db = await createConnection()
 
-    run()
+    try {
+        run()
+    } catch(error) {
+        console.error(error)
+        db.end()
+    }
 })()
 
 // Run migrations
 function run() {
-    // Get all files in current directory
-    fs.readdir(__dirname, async (error, files) => {
+    // Get all migration files
+    fs.readdir(MIGRATIONS_DIR, async (error, files) => {
         if (error) throw error
 
-        // Remove index.js from the files array
-        files.splice(files.indexOf("index.js"), 1)
-
         // Create migrations array
-        const migrations = files.map(filename => require("./" + filename))
+        const migrations = files.map(filename => require(path.join(MIGRATIONS_DIR, filename)))
 
         // Drop all tables
-        console.log(chalk.bold("Remove tables"))
+        console.log(headline("Remove tables"))
 
-        const query = `DROP TABLE IF EXISTS ${migrations.map(migration => migration.table).filter(e => e).join(",")}`
+        const reversedMigrations = [...migrations].reverse()
+        const query = `DROP TABLE IF EXISTS ${reversedMigrations.map(migration => migration.table).filter(e => e).join(",")}`
         await asyncQuery(query)
 
         const startTime = performance.now()
-        console.log(chalk.bold("Create tables"))
+        console.log(headline("Create tables"))
 
         // Create tables
         for (let migration of migrations) {
@@ -52,7 +63,7 @@ function run() {
                 continue
             }
 
-            console.log("Creating", migration.table)
+            console.log(indent("Creating " + migration.table))
 
             // Build query
             const query = typeof migration.run === "function" ? migration.run() : migration.run
@@ -60,11 +71,11 @@ function run() {
             // Run SQL
             await asyncQuery(query)
 
-            console.log(chalk.green("Created successfully"))
+            console.log(success(indent("Created successfully")))
         }
 
         const elapsedTime = Math.floor(performance.now() - startTime)
-        console.log(`Executed in ${elapsedTime}ms`)
+        console.log("Executed in " + timestamp(elapsedTime + "ms"))
 
         // Disconnect from database
         db.end()

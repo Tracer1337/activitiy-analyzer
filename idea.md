@@ -5,6 +5,8 @@ WebApp:
 * Accounts
     * Store activities
 
+    * Integrate Google login
+
 * Add activities easily
     * Provide presetted activities and categories
     * Define Shortcuts and bind icons to them

@@ -5,6 +5,7 @@ let db
 
 function createConnection() {
     return new Promise(resolve => {
+        // Create database connection
         const connection = mysql.createConnection({
             host: process.env.DB_HOST,
             port: process.env.DB_PORT,
@@ -13,6 +14,7 @@ function createConnection() {
             database: process.env.DB_DATABASE
         })
 
+        // Connect to database
         connection.connect(error => {
             if(error) throw error
 
