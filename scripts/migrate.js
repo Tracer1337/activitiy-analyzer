@@ -10,15 +10,9 @@ const MIGRATIONS_DIR = path.join(__dirname, "..", "database", "migrations")
 
 let db
 
-// Terminal stylings
-const headline = chalk.bold
-const success = chalk.green
-const indent = str => "    " + str
-const timestamp = chalk.cyan
-
 // Run db.query promise-based
 function asyncQuery(query) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         db.query(query, (error) => {
             if(error) throw error
             resolve()
@@ -48,14 +42,14 @@ function run() {
         const migrations = files.map(filename => require(path.join(MIGRATIONS_DIR, filename)))
 
         // Drop all tables
-        console.log(headline("Remove tables"))
+        console.log(chalk.bold("Remove tables"))
 
         const reversedMigrations = [...migrations].reverse()
         const query = `DROP TABLE IF EXISTS ${reversedMigrations.map(migration => migration.table).filter(e => e).join(",")}`
         await asyncQuery(query)
 
         const startTime = performance.now()
-        console.log(headline("Create tables"))
+        console.log(chalk.bold("Create tables"))
 
         // Create tables
         for (let migration of migrations) {
@@ -63,19 +57,16 @@ function run() {
                 continue
             }
 
-            console.log(indent("Creating " + migration.table))
-
-            // Build query
-            const query = typeof migration.run === "function" ? migration.run() : migration.run
+            console.log("   Creating " + migration.table)
 
             // Run SQL
-            await asyncQuery(query)
+            await asyncQuery(migration.run)
 
-            console.log(success(indent("Created successfully")))
+            console.log(chalk.green("   Created successfully"))
         }
 
         const elapsedTime = Math.floor(performance.now() - startTime)
-        console.log("Executed in " + timestamp(elapsedTime + "ms"))
+        console.log("Executed in " + chalk.cyan(elapsedTime + "ms"))
 
         // Disconnect from database
         db.end()
