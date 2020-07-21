@@ -1,15 +1,15 @@
 module.exports = {
     table: "shortcuts",
 
-    run: `
-        CREATE TABLE shortcuts (
-            id varchar(255) PRIMARY KEY,
-            icon varchar(255),
-            user_id varchar(255) NOT NULL,
-            activity_id varchar(255) NOT NULL,
+    rows: async ({ query, uuid }) => {
+        // Get id of the first user
+        const userId = (await query("SELECT id FROM users WHERE id = id LIMIT 1"))[0].id
 
-            FOREIGN KEY (user_id) REFERENCES users(id),
-            FOREIGN KEY (activity_id) REFERENCES activities(id)
-        );
-    `
+        // Get the id of "Aufstehen" activitiy
+        const activityId = (await query("SELECT id FROM activities WHERE name = 'Aufstehen'"))[0].id
+
+        return [
+            [uuid(), "sun", userId, activityId]
+        ]
+    }
 }

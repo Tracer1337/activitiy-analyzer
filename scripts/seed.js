@@ -1,3 +1,4 @@
+const { v4: uuid } = require("uuid")
 const fs = require("fs")
 const path = require("path")
 const { performance } = require("perf_hooks")
@@ -13,9 +14,9 @@ let db
 // Run db.query promise-based
 function asyncQuery(query) {
     return new Promise((resolve) => {
-        db.query(query, (error) => {
+        db.query(query, (error, results) => {
             if (error) throw error
-            resolve()
+            resolve(results)
         })
     })
 }
@@ -41,7 +42,7 @@ async function run() {
 
     // Run seeders from files
     const startTime = performance.now()
-    console.log(chalk.bold("Run seeders"))
+    console.log(chalk.bold("Seed tables"))
 
     for(let seeder of seeders) {
         if(!seeder.rows) {
@@ -51,7 +52,7 @@ async function run() {
         console.log("   Seeding " + seeder.table)
 
         // Fetch rows from seeder
-        const rows = typeof seeder.rows === "function" ? await seeder.rows(db) : seeder.rows
+        const rows = typeof seeder.rows === "function" ? await seeder.rows({ db, query: asyncQuery, uuid }) : seeder.rows
 
         // Insert all rows into the specified table
         const query = `

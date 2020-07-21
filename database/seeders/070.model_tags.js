@@ -1,14 +1,38 @@
+function random(max) {
+    return Math.floor(Math.random() * max)
+}
+
 module.exports = {
     table: "model_tags",
 
-    run: `
-        CREATE TABLE model_tags (
-            id varchar(255) PRIMARY KEY,
-            model_name varchar(255) NOT NULL,
-            model_id varchar(255) NOT NULL,
-            tag_id varchar(255) NOT NULL,
+    rows: async ({ query, uuid }) => {
+        // Get all tags
+        const tags = await query("SELECT id, name FROM tags")
 
-            FOREIGN KEY (tag_id) REFERENCES tags(id)
-        );
-    `
+        // Get all activities
+        const activities = await query("SELECT id from activities")
+
+        // Get all categories
+        const categories = await query("SELECT id from categories")
+
+        // Map tag names to ids
+        const map = {}
+        tags.forEach(({ id, name }) => map[name] = id)
+
+        const result = []
+
+        // Assign active or passive to each activity
+        activities.forEach(({ id }) => {
+            const tagId = map[["active", "passive"][random(2)]]
+            result.push([uuid(), "activities", id, tagId])
+        })
+
+        // Assign good or bad to each category
+        categories.forEach(({ id }) => {
+            const tagId = map[["good", "bad"][random(2)]]
+            result.push([uuid(), "categories", id, tagId])
+        })
+
+        return result
+    }
 }

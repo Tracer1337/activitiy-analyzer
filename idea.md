@@ -39,3 +39,5 @@ WebApp:
 * Show day-intervals where no activity recordings where made
 
 * Buttons: Get Up / Go To Bed
+
+* "Happy with the day" Button

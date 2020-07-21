@@ -1,13 +1,15 @@
 module.exports = {
     table: "tags",
 
-    run: `
-        CREATE TABLE tags (
-            id varchar(255) PRIMARY KEY,
-            name varchar(255) NOT NULL,
-            user_id varchar(255) NOT NULL,
+    rows: async ({ query, uuid }) => {
+        // Get id of the first user
+        const userId = (await query("SELECT id FROM users WHERE id = id LIMIT 1"))[0].id
 
-            FOREIGN KEY (user_id) REFERENCES users(id)
-        );
-    `
+        return [
+            [uuid(), "good", userId],
+            [uuid(), "bad", userId],
+            [uuid(), "active", userId],
+            [uuid(), "passive", userId],
+        ]
+    }
 }
