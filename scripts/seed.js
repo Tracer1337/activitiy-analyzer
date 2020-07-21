@@ -48,7 +48,7 @@ async function run() {
             continue
         }
 
-        console.log("   Seeding table " + seeder.table)
+        console.log("   Seeding " + seeder.table)
 
         // Fetch rows from seeder
         const rows = typeof seeder.rows === "function" ? await seeder.rows(db) : seeder.rows

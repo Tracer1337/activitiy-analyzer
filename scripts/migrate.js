@@ -53,14 +53,21 @@ function run() {
 
         // Create tables
         for (let migration of migrations) {
-            if (!migration.run) {
+            if (!migration.columns) {
                 continue
             }
 
             console.log("   Creating " + migration.table)
 
-            // Run SQL
-            await asyncQuery(migration.run)
+            // Generate query
+            const query = `
+                CREATE TABLE ${migration.table} (
+                    ${migration.columns.join(",\n")}
+                );
+            `
+            
+            // Run query
+            await asyncQuery(query)
 
             console.log(chalk.green("   Created successfully"))
         }
