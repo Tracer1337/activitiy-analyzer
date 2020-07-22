@@ -7,6 +7,7 @@ const CategoryController = require("../app/controllers/CategoryController.js")
 const ActivityController = require("../app/controllers/ActivityController.js")
 const PerformedActivityController = require("../app/controllers/PerformedActivityController.js")
 const TagController = require("../app/controllers/TagController.js")
+const ShortcutController = require("../app/controllers/ShortcutController.js")
 
 const router = express.Router()
 
@@ -33,5 +34,10 @@ router.get("/tags", ProtectMiddleware, TagController.getAll)
 router.post("/tags", ProtectMiddleware, TagController.create)
 router.put("/tags", ProtectMiddleware, TagController.update)
 router.delete("/tags", ProtectMiddleware, TagController.deletion)
+
+router.get("/shortcuts", ProtectMiddleware, ShortcutController.getAll)
+router.post("/shortcuts", ProtectMiddleware, ShortcutController.create)
+router.put("/shortcuts", ProtectMiddleware, ShortcutController.update)
+router.delete("/shortcuts", ProtectMiddleware, ShortcutController.deletion)
 
 module.exports = router
