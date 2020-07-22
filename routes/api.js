@@ -6,6 +6,7 @@ const AuthController = require("../app/controllers/AuthController.js")
 const CategoryController = require("../app/controllers/CategoryController.js")
 const ActivityController = require("../app/controllers/ActivityController.js")
 const PerformedActivityController = require("../app/controllers/PerformedActivityController.js")
+const TagController = require("../app/controllers/TagController.js")
 
 const router = express.Router()
 
@@ -27,5 +28,10 @@ router.get("/performed-activities", ProtectMiddleware, PerformedActivityControll
 router.post("/performed-activities", ProtectMiddleware, PerformedActivityController.create)
 router.put("/performed-activities", ProtectMiddleware, PerformedActivityController.update)
 router.delete("/performed-activities", ProtectMiddleware, PerformedActivityController.deletion)
+
+router.get("/tags", ProtectMiddleware, TagController.getAll)
+router.post("/tags", ProtectMiddleware, TagController.create)
+router.put("/tags", ProtectMiddleware, TagController.update)
+router.delete("/tags", ProtectMiddleware, TagController.deletion)
 
 module.exports = router
