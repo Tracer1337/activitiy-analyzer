@@ -5,6 +5,7 @@ const ProtectMiddleware = require("../app/Middleware/ProtectMiddleware")
 const AuthController = require("../app/controllers/AuthController.js")
 const CategoryController = require("../app/controllers/CategoryController.js")
 const ActivityController = require("../app/controllers/ActivityController.js")
+const PerformedActivityController = require("../app/controllers/PerformedActivityController.js")
 
 const router = express.Router()
 
@@ -21,5 +22,10 @@ router.get("/activities", ProtectMiddleware, ActivityController.getAll)
 router.post("/activities", ProtectMiddleware, ActivityController.create)
 router.put("/activities", ProtectMiddleware, ActivityController.update)
 router.delete("/activities", ProtectMiddleware, ActivityController.deletion)
+
+router.get("/performed-activities", ProtectMiddleware, PerformedActivityController.getAll)
+router.post("/performed-activities", ProtectMiddleware, PerformedActivityController.create)
+router.put("/performed-activities", ProtectMiddleware, PerformedActivityController.update)
+router.delete("/performed-activities", ProtectMiddleware, PerformedActivityController.deletion)
 
 module.exports = router

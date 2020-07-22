@@ -3,7 +3,7 @@ module.exports = {
 
     columns: [
         "id varchar(255) PRIMARY KEY",
-        "finished_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP",
+        "finished_at TIMESTAMP",
         "activity_id varchar(255)",
         "user_id varchar(255) NOT NULL",
         "FOREIGN KEY (user_id) REFERENCES users(id)",
