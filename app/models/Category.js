@@ -24,18 +24,20 @@ class Category extends Model {
     }
 
     async storeTags(tagIds) {
-        this.deleteReferences()
+        await this.deleteTags()
 
-        // Store the new references in the database
-        await queryAsync(`INSERT INTO model_tags VALUES ${tagIds.map(id => quotedList([uuid(), this.table, this.id, id])).join(",")}`)
+        if(tagIds.length) {
+            // Store the new references in the database
+            await queryAsync(`INSERT INTO model_tags VALUES ${tagIds.map(id => quotedList([uuid(), this.table, this.id, id])).join(",")}`)
+        }
+    }
 
-        // Update model
-        await this.init()
+    async deleteTags() {
+        await queryAsync(`DELETE FROM model_tags WHERE model_id = '${this.id}'`)
     }
 
     async delete() {
-        // Delete all tag references from the database
-        await queryAsync(`DELETE FROM model_tags WHERE model_id = '${this.id}'`)
+        await this.deleteTags()
 
         // Remove category from activities
         const activities = await Activity.findAllBy("category_id", this.id)

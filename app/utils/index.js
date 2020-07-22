@@ -7,8 +7,8 @@ function generateJWT(input) {
 
 // Run db.query promise-based
 function queryAsync(query) {
-    // Replace "null" with NULL
-    query = query.replace(/['"]null['"]/g, "NULL")
+    // Replace "null" and "undefined" with NULL
+    query = query.replace(/['"](null|undefined)['"]/g, "NULL")
     
     return new Promise((resolve, reject) => {
         db.query(query, (error, result) => {

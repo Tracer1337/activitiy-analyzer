@@ -2,6 +2,7 @@ const Model = require("../../lib/Model.js")
 
 class PerfomedActivity extends Model {
     static findBy = Model.findBy.bind({ model: PerfomedActivity, table: "performed_activities" })
+    static findAllBy = Model.findAllBy.bind({ model: PerfomedActivity, table: "performed_activities" })
 
     constructor(values) {
         super({

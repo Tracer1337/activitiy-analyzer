@@ -10,20 +10,24 @@ async function getAllCategories(user) {
 
 // Validate creation inputs
 async function validateCreate(req, res) {
-    if(!req.body.name || !req.body.tag_ids) {
+    req.body.tag_ids = req.bods.tag_ids || []
+
+    if(!req.body.name) {
         res.status(400)
         res.end()
         return false
     }
 
-    // Check if all tag ids exist for user
-    const result = await queryAsync(`SELECT COUNT(1) FROM tags WHERE user_id = '${req.user.id}' AND id IN ${quotedList(req.body.tag_ids)}`)
-    const tagIdsValid = result[0]["COUNT(1)"] === req.body.tag_ids.length
-
-    if (!tagIdsValid) {
-        res.status(400)
-        res.send("Invalid tag id")
-        return false
+    if(req.body.tag_ids.length) {
+        // Check if all tag ids exist for user
+        const result = await queryAsync(`SELECT COUNT(1) FROM tags WHERE user_id = '${req.user.id}' AND id IN ${quotedList(req.body.tag_ids)}`)
+        const tagIdsValid = result[0]["COUNT(1)"] === req.body.tag_ids.length
+    
+        if (!tagIdsValid) {
+            res.status(400)
+            res.send("Invalid tag id")
+            return false
+        }
     }
 
     return true
@@ -65,12 +69,14 @@ async function validateDelete(req, res) {
     return true
 }
 
+// Check if category with name already exists for user
+async function isDuplicate(user, values) {
+    return (await getAllCategories(user)).some(category => category.name === values.name)
+}
+
 // Create new category and store it in the database
 async function createCategory({ user, values }, res) {
-    // Check if category with name already exists for user
-    const categoryExists = (await getAllCategories(user)).some(category => category.name === values.name)
-
-    if(categoryExists) {
+    if(await isDuplicate(user, values)) {
         res.status(409)
         res.send("Category already exists")
         return
@@ -87,13 +93,22 @@ async function createCategory({ user, values }, res) {
     
     await category.storeTags(values.tag_ids)
 
+    await category.init()
+
     return category
 }
 
 // Update existing category
-async function updateCategory({ user, values }, res) {    
+async function updateCategory({ user, values }, res) {
     // Get category from user with provided id
     const category = (await getAllCategories(user)).find(category => category.id === values.id)
+
+    // Check if the name has changed and is already taken
+    if(category.name !== values.name && await isDuplicate(user, values)) {
+        res.status(409)
+        res.send("Category already exists")
+        return
+    }
 
     if(!category) {
         res.status(404)
@@ -105,6 +120,7 @@ async function updateCategory({ user, values }, res) {
     category.name = values.name
     await category.update()
     await category.storeTags(values.tag_ids)
+    await category.init()
 
     return category
 }
