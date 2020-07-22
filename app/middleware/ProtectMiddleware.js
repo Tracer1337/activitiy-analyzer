@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken")
 
 const User = require("../models/User.js")
-const { queryAsync } = require("../utils")
 
 // Check for Authorization header and add user attribute to request object
 async function ProtectMiddleware(req, res, next) {
@@ -13,18 +12,22 @@ async function ProtectMiddleware(req, res, next) {
     // Get token from Authorization header
     const token = req.header("Authorization").split(" ")[1]
 
-    // Read userId from token
-    const userId = await new Promise((resolve, reject) => {
-        jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
-            if(error) {
-                console.error(error)
-                res.send(403)
-                reject()
-            }
-
-            resolve(decoded.id)
+    let userId
+    
+    try {
+        // Read userId from token
+        userId = await new Promise((resolve, reject) => {
+            jwt.verify(token, process.env.JWT_SECRET, (error, decoded) => {
+                if (error) reject()
+                resolve(decoded.id)
+            })
         })
-    })
+    } catch {
+        // Handle broken token
+        res.status(400)
+        res.end()
+        return
+    }
 
     // Get user from database
     const row = (await queryAsync(`SELECT * FROM users WHERE id = '${userId}'`))[0]

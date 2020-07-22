@@ -1,4 +1,4 @@
-const { registerUser, loginUser, validateAuth } = require("../services/AuthProvider.js")
+const { registerUser, loginUser, validateAuth } = require("../services/AuthServiceProvider.js")
 
 async function register(req, res) {
     if(!validateAuth(req, res)) {
@@ -15,9 +15,11 @@ async function login(req, res) {
         return
     }
 
-    const token = await loginUser(req.body)
+    const token = await loginUser(req.body, res)
 
-    res.send({ token })
+    if(token) {
+        res.send({ token })
+    }
 }
 
 async function profile(req, res) {

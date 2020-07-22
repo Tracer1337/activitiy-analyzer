@@ -1,9 +1,14 @@
-class User {
-    constructor({ id, email, password, created_at }) {
-        this.id = id
-        this.email = email
-        this.password = password
-        this.created_at = created_at
+const Model = require("../../lib/Model.js")
+
+class User extends Model {
+    static findBy = super.findBy.bind({ model: User, table: "users" })
+
+    constructor(values) {
+        super({
+            table: "users",
+            columns: ["id", "email", "password", "created_at"],
+            ...values
+        })
     }
 
     toJSON() {

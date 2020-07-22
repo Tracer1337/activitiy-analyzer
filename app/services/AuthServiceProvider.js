@@ -1,8 +1,9 @@
-const bcrypt = require("bcrypt")
 const { v4: uuid } = require("uuid")
+const bcrypt = require("bcrypt")
 const moment = require("moment")
 
-const { generateJWT, queryAsync } = require("../utils")
+const User = require("../models/User.js")
+const { generateJWT } = require("../utils")
 
 // Validate inputs from /register and /login route
 function validateAuth(req, res) {
@@ -20,10 +21,17 @@ async function registerUser({ email, password }) {
     // Hash password
     const hash = await bcrypt.hash(password, +process.env.SALT_ROUNDS)
 
-    // Store user in database
+    // Create new user
     const userId = uuid()
-    const query = `INSERT INTO users VALUES ('${userId}', '${email}', '${hash}', '${moment().format("YYYY-MM-DD HH:mm:ss")}')`
-    await queryAsync(query)
+    const user = new User({
+        id: userId,
+        email,
+        password: hash,
+        created_at: moment().format("YYYY-MM-DD HH:mm:ss")
+    })
+
+    // Store user in database
+    await user.store()
 
     // Generate JWT
     const token = generateJWT({ id: userId })
@@ -32,16 +40,23 @@ async function registerUser({ email, password }) {
 }
 
 // Log user in
-async function loginUser({ email, password }) {
+async function loginUser({ email, password }, res) {
     // Get user with email from database
-    const user = (await queryAsync(`SELECT * FROM users WHERE email = '${email}'`))[0]
+    const user = await User.findBy("email", email)
+
+    if(!user) {
+        res.status(404)
+        res.end()
+        return
+    }
 
     // Check password
-    const isPasswordValid = bcrypt.compare(password, user.password)
+    const isPasswordValid = await bcrypt.compare(password, user.password)
 
     if(!isPasswordValid) {
         res.status(401)
         res.end()
+        return
     }
 
     // Generate JWT
