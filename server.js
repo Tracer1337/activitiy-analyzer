@@ -1,5 +1,6 @@
 require("dotenv").config()
 const express = require("express")
+const { createProxyMiddleware } = require("http-proxy-middleware")
 
 require("./app/utils")
 const { createConnection } = require("./database")
@@ -17,6 +18,14 @@ app.use(express.urlencoded({
 
 // Support json
 app.use(express.json())
+
+// Proxy vue dev-server
+if(process.env.NODE_ENV === "development") {
+    app.use("/", createProxyMiddleware({
+        target: "http://localhost:3000/",
+        ws: true
+    }))
+}
 
 // Use Routes
 app.use("/", routes)

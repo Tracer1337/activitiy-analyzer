@@ -8,7 +8,7 @@ const routes = fs.readdirSync(__dirname)
                 .filter(filename => filename !== "index.js")
                 .map(filename => [filename.slice(0, -3), require("./" + filename)])
 
-// Apply routes
+// Create routes
 for(let [route, router] of routes) {
     rootRouter.use("/" + route, router)
 }
