@@ -1,11 +1,11 @@
-const { registerUser, loginUser, validateAuth } = require("../services/AuthServiceProvider.js")
+const { createUser, loginUser, validateAuth } = require("../services/AuthServiceProvider.js")
 
 async function register(req, res) {
     if(!validateAuth(req, res)) {
         return
     }
 
-    const token = await registerUser(req.body)
+    const token = await createUser(req.body)
 
     res.send({ token })
 }

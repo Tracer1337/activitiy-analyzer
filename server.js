@@ -11,7 +11,9 @@ global.db = createConnection()
 const app = express()
 
 // Support form data
-app.use(express.urlencoded())
+app.use(express.urlencoded({
+    extended: true
+}))
 
 // Support json
 app.use(express.json())

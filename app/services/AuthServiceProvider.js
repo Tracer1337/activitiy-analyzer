@@ -16,8 +16,8 @@ function validateAuth(req, res) {
     return true
 }
 
-// Register user
-async function registerUser({ email, password }) {
+// Create new user and store into database
+async function createUser({ email, password }) {
     // Hash password
     const hash = await bcrypt.hash(password, +process.env.SALT_ROUNDS)
 
@@ -66,7 +66,7 @@ async function loginUser({ email, password }, res) {
 }
 
 module.exports = {
-    registerUser,
+    createUser,
     loginUser,
     validateAuth
 }

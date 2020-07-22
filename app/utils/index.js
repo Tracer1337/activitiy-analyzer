@@ -19,9 +19,7 @@ function queryAsync(query) {
     })
 }
 
-// Set globals
-global.queryAsync = queryAsync
-
 module.exports = {
-    generateJWT
+    generateJWT,
+    queryAsync
 }

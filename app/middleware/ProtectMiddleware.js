@@ -1,12 +1,15 @@
 const jwt = require("jsonwebtoken")
 
 const User = require("../models/User.js")
+const { queryAsync } = require("../utils")
 
 // Check for Authorization header and add user attribute to request object
 async function ProtectMiddleware(req, res, next) {
     // Break if no Authorization header is set
     if(!req.header("Authorization")) {
-        res.send(401)
+        res.status(401)
+        res.end()
+        return
     }
 
     // Get token from Authorization header
@@ -25,12 +28,18 @@ async function ProtectMiddleware(req, res, next) {
     } catch {
         // Handle broken token
         res.status(400)
-        res.end()
+        res.send("Invalid auth token")
         return
     }
 
     // Get user from database
     const row = (await queryAsync(`SELECT * FROM users WHERE id = '${userId}'`))[0]
+
+    if(!row) {
+        res.status(400)
+        res.send("Invalid auth token")
+        return
+    }
     
     // Create user model
     const user = new User(row)
