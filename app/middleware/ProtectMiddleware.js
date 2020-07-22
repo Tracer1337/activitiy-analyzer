@@ -8,7 +8,7 @@ async function ProtectMiddleware(req, res, next) {
     // Break if no Authorization header is set
     if(!req.header("Authorization")) {
         res.status(401)
-        res.end()
+        res.send("Not authorized")
         return
     }
 

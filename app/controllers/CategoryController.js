@@ -1,9 +1,11 @@
 const {
     getAllCategories,
-    validateCreateCategory,
-    validateUpdateCategory,
+    validateCreate,
+    validateUpdate,
+    validateDelete,
     createCategory,
-    updateCategory
+    updateCategory,
+    deleteCategory
 } = require("../services/CategoryServiceProvider.js")
 
 async function getAll(req, res) {
@@ -13,7 +15,7 @@ async function getAll(req, res) {
 }
 
 async function create(req, res) {
-    if(!validateCreateCategory(req, res)) {
+    if(!(await validateCreate(req, res))) {
         return
     }
 
@@ -28,7 +30,7 @@ async function create(req, res) {
 }
 
 async function update(req, res) {
-    if(!validateUpdateCategory(req, res)) {
+    if(!(await validateUpdate(req, res))) {
         return
     }
 
@@ -42,8 +44,23 @@ async function update(req, res) {
     }
 }
 
+async function deletion(req, res) {
+    if(!(await validateDelete(req, res))) {
+        return
+    }
+
+    const hasDeleted = await deleteCategory({
+        id: req.body.id
+    })
+
+    if(hasDeleted) {
+        res.send("Success")
+    }
+}
+
 module.exports = {
     getAll,
     create,
-    update
+    update,
+    deletion
 }

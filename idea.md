@@ -42,6 +42,8 @@ WebApp:
 
 * "Happy with the day" Button
 
+* Integrate GitHub Hooks into deployment process
+
 Routes:
 
 * api

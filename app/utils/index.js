@@ -7,6 +7,9 @@ function generateJWT(input) {
 
 // Run db.query promise-based
 function queryAsync(query) {
+    // Replace "null" with NULL
+    query = query.replace(/['"]null['"]/g, "NULL")
+    
     return new Promise((resolve, reject) => {
         db.query(query, (error, result) => {
             if (error) {
@@ -19,7 +22,14 @@ function queryAsync(query) {
     })
 }
 
+// Convert array to list to be used in a SQL query
+// Example: [1, 2, 3] => "('1', '2', '3')"
+function quotedList(array) {
+    return `(${array.map(element => `'${element}'`).join(",")})`
+}
+
 module.exports = {
     generateJWT,
-    queryAsync
+    queryAsync,
+    quotedList
 }

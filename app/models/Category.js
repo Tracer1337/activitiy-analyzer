@@ -1,6 +1,9 @@
+const { v4: uuid } = require("uuid")
+
 const Model = require("../../lib/Model.js")
 const Tag = require("./Tag.js")
-const { queryAsync } = require("../utils")
+const Activity = require("./Activity.js")
+const { queryAsync, quotedList } = require("../utils")
 
 class Category extends Model {
     static findBy = Model.findBy.bind({ model: Category, table: "categories" })
@@ -20,10 +23,29 @@ class Category extends Model {
         this.tags = results.map(row => new Tag(row))
     }
 
-    async setTags(tagIds) {
+    async storeTags(tagIds) {
+        this.deleteReferences()
+
         // Store the new references in the database
-        console.log(tagIds)
-        return
+        await queryAsync(`INSERT INTO model_tags VALUES ${tagIds.map(id => quotedList([uuid(), this.table, this.id, id])).join(",")}`)
+
+        // Update model
+        await this.init()
+    }
+
+    async delete() {
+        // Delete all tag references from the database
+        await queryAsync(`DELETE FROM model_tags WHERE model_id = '${this.id}'`)
+
+        // Remove category from activities
+        const activities = await Activity.findAllBy("category_id", this.id)
+        
+        await Promise.all(activities.map(async activity => {
+            activity.category_id = null
+            await activity.update()
+        }))
+
+        await super.delete()
     }
 
     toJSON() {

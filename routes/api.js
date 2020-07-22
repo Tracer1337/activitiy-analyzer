@@ -14,6 +14,6 @@ router.get("/auth", ProtectMiddleware, AuthController.profile)
 router.get("/categories", ProtectMiddleware, CategoryController.getAll)
 router.post("/categories", ProtectMiddleware, CategoryController.create)
 router.put("/categories", ProtectMiddleware, CategoryController.update)
-// router.delete("/categories", ProtectMiddleware, CategoryController.delete)
+router.delete("/categories", ProtectMiddleware, CategoryController.deletion)
 
 module.exports = router
