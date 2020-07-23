@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function Header() {
+function Header({ title, onMenuClick }) {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
     const email = useSelector(store => store.auth.user?.email)
 
@@ -30,12 +30,12 @@ function Header() {
     return (
         <AppBar className={classes.appBar}>
             <Toolbar>
-                <IconButton edge="start">
+                <IconButton edge="start" onClick={onMenuClick}>
                     <MenuIcon/>
                 </IconButton>
 
                 <Typography variant="h6" className={classes.title} color="textPrimary">
-                    {email}
+                    {title}
                 </Typography>
             </Toolbar>
         </AppBar>

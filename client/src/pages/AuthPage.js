@@ -5,6 +5,7 @@ import { makeStyles } from "@material-ui/core/styles"
 import CloseIcon from "@material-ui/icons/Close"
 import AddIcon from "@material-ui/icons/Add"
 
+import Layout from "../components/Layout.js"
 import LoginForm from "../components/Forms/LoginForm.js"
 import RegisterForm from "../components/Forms/RegisterForm.js"
 import { getProfile } from "../config/api.js"
@@ -31,7 +32,11 @@ const useStyles = makeStyles(theme => ({
 
         "& .MuiFab-label": {
             display: "flex",
-            alignItems: "center"
+            alignItems: "center",
+
+            "& svg": {
+                marginRight: theme.spacing(1)
+            }
         }
     },
 
@@ -69,28 +74,30 @@ function AuthPage() {
     })
     
     return (
-        <div className={classes.container} style={{ paddingBottom: showRegisterForm && "0" }}>
-            {isLoading ? (
-                <CircularProgress />
-            ) : showRegisterForm ? (
-                <>
-                    <IconButton onClick={() => setShowRegisterForm(false)} className={classes.close}>
-                        <CloseIcon />
-                    </IconButton>
+        <Layout>
+            <div className={classes.container} style={{ paddingBottom: showRegisterForm && "0" }}>
+                {isLoading ? (
+                    <CircularProgress />
+                ) : showRegisterForm ? (
+                    <>
+                        <IconButton onClick={() => setShowRegisterForm(false)} className={classes.close}>
+                            <CloseIcon />
+                        </IconButton>
 
-                    <RegisterForm className={classes.form}/>
-                </>
-            ) : (
-                <>
-                    <LoginForm className={classes.form}/>
+                        <RegisterForm className={classes.form} />
+                    </>
+                ) : (
+                    <>
+                        <LoginForm className={classes.form} />
 
-                    <Fab variant="extended" color="secondary" className={classes.fab} onClick={() => setShowRegisterForm(true)}>
-                        <AddIcon />
-                        Register
-                    </Fab>
-                </>
-            )}
-        </div>
+                        <Fab variant="extended" color="secondary" className={classes.fab} onClick={() => setShowRegisterForm(true)}>
+                            <AddIcon />
+                            Register
+                        </Fab>
+                    </>
+                )}
+            </div>
+        </Layout>
     )
 }
 

@@ -19,6 +19,14 @@ function Router() {
                     <TodayPage/>
                 </Route>
 
+                <Route path="/activities">
+                    <TodayPage/>
+                </Route>
+
+                <Route path="/analysis">
+                    <TodayPage/>
+                </Route>
+
                 <Route path="/">
                     <Redirect to="/today"/>
                 </Route>
