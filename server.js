@@ -19,9 +19,9 @@ app.use(express.urlencoded({
 // Support json
 app.use(express.json())
 
-// Proxy vue dev-server
+// Proxy react dev-server
 if(process.env.NODE_ENV === "development") {
-    app.use("/", createProxyMiddleware({
+    app.use("/app", createProxyMiddleware({
         target: "http://localhost:3000/",
         ws: true
     }))

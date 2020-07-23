@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run start-server\" \"npm run start-client\"",
     "start-server": "nodemon server.js",
-    "start-client": "cd client && npm run serve",
+    "start-client": "cd client && npm run start",
     "jwt-secret": "node ./scripts/jwt-secret.js",
     "setup-db": "npm run migrate && npm run seed",
     "migrate": "node ./scripts/migrate.js",

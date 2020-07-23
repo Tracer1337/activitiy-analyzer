@@ -16,6 +16,26 @@ function validateAuth(req, res) {
     return true
 }
 
+// Validate inputs from /register route
+async function validateRegister(req, res) {
+    if(!validateAuth(req, res)) {
+        return false
+    }
+
+    // Check if email address already exists
+    if(await User.findBy("email", req.body.email)) {
+        res.status(409)
+        res.end()
+        return false
+    }
+
+    return true
+}
+
+function validateLogin(req, res) {
+    return validateAuth(req, res)
+}
+
 // Create new user and store into database
 async function createUser({ email, password }) {
     // Hash password
@@ -33,10 +53,7 @@ async function createUser({ email, password }) {
     // Store user in database
     await user.store()
 
-    // Generate JWT
-    const token = generateJWT({ id: userId })
-
-    return token
+    return user
 }
 
 // Log user in
@@ -58,15 +75,19 @@ async function loginUser({ email, password }, res) {
         res.end()
         return
     }
+    
+    return user
+}
 
-    // Generate JWT
-    const token = generateJWT({ id: user.id })
-
-    return token
+// Generate JWT for user
+function generateToken(user) {
+    return generateJWT({ id: user.id })
 }
 
 module.exports = {
     createUser,
     loginUser,
-    validateAuth
+    validateRegister,
+    validateLogin,
+    generateToken
 }

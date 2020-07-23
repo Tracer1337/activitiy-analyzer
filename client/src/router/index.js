@@ -1,17 +1,30 @@
-import Vue from "vue"
-import VueRouter from "vue-router"
+import React from "react"
+import { useSelector } from "react-redux"
+import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 
-import IndexPage from "../pages/IndexPage.vue"
+import AuthPage from "../pages/AuthPage.js"
+import TodayPage from "../pages/TodayPage.js"
 
-Vue.use(VueRouter)
+function Router() {
+    const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
+    
+    if(!isLoggedIn) {
+        return <AuthPage/>
+    }
 
-const router = new VueRouter({
-    routes: [
-        {
-            path: "/",
-            component: IndexPage
-        }
-    ]
-})
+    return (
+        <BrowserRouter basename="/app">
+            <Switch>
+                <Route path="/today">
+                    <TodayPage/>
+                </Route>
 
-export default router
+                <Route path="/">
+                    <Redirect to="/today"/>
+                </Route>
+            </Switch>
+        </BrowserRouter>
+    )
+}
+
+export default Router

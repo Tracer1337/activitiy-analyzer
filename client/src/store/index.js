@@ -1,24 +1,10 @@
-import Vue from "vue"
-import Vuex from "vuex"
+import { createStore } from "redux"
 
-Vue.use(Vuex)
+import rootReducer from "./reducers/root.js"
 
-const store = new Vuex.Store({
-    state: {
-
-    },
-
-    getters: {
-
-    },
-
-    mutations: {
-
-    },
-
-    actions: {
-        
-    }
-})
+const store = createStore(
+    rootReducer,
+    window.__REDUX_DEVTOOLS_EXTENSION__?.()
+)
 
 export default store
