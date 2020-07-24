@@ -10,10 +10,14 @@ module.exports = {
         const result = []
 
         for(let [activity, timestamp] of getPerformedActivities()) {
-            // Get activity id
-            const activityId = (await query(`SELECT id FROM activities WHERE name = '${activity}'`))[0].id
+            // Get activity
+            const queryResult = (await query(`SELECT id FROM activities WHERE name = '${activity}'`))[0]
+
+            if(!queryResult) {
+                throw new Error("Activity " + activity + " not found")
+            }
             
-            result.push([uuid(), timestamp, activityId, userId])
+            result.push([uuid(), timestamp, queryResult.id, userId])
         }
 
         return result

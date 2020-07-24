@@ -19,7 +19,6 @@ const useStyles = makeStyles(theme => ({
 
 function Header({ title, onMenuClick }) {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
-    const email = useSelector(store => store.auth.user?.email)
 
     const classes = useStyles()
 

@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "concurrently \"npm run start-server\" \"npm run start-client\"",
-    "start-server": "nodemon server.js",
+    "start-server": "node scripts/start-server.js && nodemon server.js",
     "start-client": "cd client && npm run start",
     "jwt-secret": "node ./scripts/jwt-secret.js",
     "setup-db": "npm run migrate && npm run seed",
@@ -24,6 +24,8 @@
   },
   "homepage": "https://github.com/Tracer1337/activitiy-analyzer#readme",
   "dependencies": {
+    "@date-io/moment": "^1.3.13",
+    "@material-ui/pickers": "^3.2.10",
     "bcrypt": "^5.0.0",
     "chalk": "^4.1.0",
     "concurrently": "^5.2.0",
@@ -33,6 +35,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
+    "opn": "^6.0.0",
     "uuid": "^8.2.0",
     "xlsx": "^0.16.4"
   },
@@ -40,6 +43,8 @@
     "nodemon": "^2.0.4"
   },
   "nodemonConfig": {
-    "ignore": ["client/*"]
+    "ignore": [
+      "client/*"
+    ]
   }
 }

@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 
 import AuthPage from "../pages/AuthPage.js"
 import TodayPage from "../pages/TodayPage.js"
+import LogoutPage from "../pages/LogoutPage.js"
 
 function Router() {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
@@ -15,6 +16,14 @@ function Router() {
     return (
         <BrowserRouter basename="/app">
             <Switch>
+                <Route path="/logout">
+                    <LogoutPage/>
+                </Route>
+
+                <Route path="/profile">
+                    <TodayPage/>
+                </Route>
+
                 <Route path="/today">
                     <TodayPage/>
                 </Route>

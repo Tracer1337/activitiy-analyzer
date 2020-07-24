@@ -42,7 +42,6 @@ function LoginForm({ className }) {
         
         login(values)
             .then(res => {
-                console.log(res)
                 dispatch(loginAction(res.data))
             })
             .catch((error) => {

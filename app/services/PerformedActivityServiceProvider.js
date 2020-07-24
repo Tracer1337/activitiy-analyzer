@@ -3,10 +3,21 @@ const moment = require("moment")
 
 const PerformedActivity = require("../models/PerformedActivity.js")
 const Activity = require("../models/Activity.js")
+const { queryAsync } = require("../utils")
 
 // Fetch all activities from user from database
 async function getAllActivities(user) {
     return await PerformedActivity.findAllBy("user_id", user.id)
+}
+
+// Fetch all activities from user with specific date
+async function getActivitesByDate(user, date) {
+    const query = `SELECT * FROM performed_activities WHERE user_id = '${user.id}' AND DATE(finished_at) LIKE '${date}%'`
+    const result = (await queryAsync(query)).map(row => new PerformedActivity(row))
+
+    await Promise.all(result.map(async model => model.init()))
+    
+    return result
 }
 
 // Validate creation inputs
@@ -27,7 +38,7 @@ async function validateCreate(req, res) {
     }
 
     // Check if finished_at has the correct format
-    if(!moment(req.body.finished_at, "YYYY-MM-DD HH:mm:ss").isValid()) {
+    if(!req.body.finished_at.match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}/)) {
         res.status(400)
         res.send("Invalid finished_at format")
         return false
@@ -72,8 +83,28 @@ async function validateDelete(req, res) {
     return true
 }
 
+// Validate /date inputs
+function validateGetDate(req, res) {
+    if(!req.query.date) {
+        res.status(400)
+        res.end()
+        return false
+    }
+
+    if(!moment(req.query.date).isValid()) {
+        res.status(400)
+        res.send("Invalid timestamp")
+        return false
+    }
+
+    return true
+}
+
 // Create new activity and store it in the database
 async function createActivity({ user, values }, res) {
+    // Convert finished_at to correct SQL format
+    values.finished_at = moment(values.finished_at, "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm:ss")
+
     // Create activity and store in database
     const performedActivity = new PerformedActivity({
         id: uuid(),
@@ -120,9 +151,11 @@ async function deleteActivity({ id }) {
 
 module.exports = {
     getAllActivities,
+    getActivitesByDate,
     validateCreate,
     validateUpdate,
     validateDelete,
+    validateGetDate,
     createActivity,
     updateActivity,
     deleteActivity

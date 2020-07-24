@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { IconButton, Fab, CircularProgress } from "@material-ui/core"
+import { IconButton, Fab } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import CloseIcon from "@material-ui/icons/Close"
 import AddIcon from "@material-ui/icons/Add"
@@ -8,6 +8,7 @@ import AddIcon from "@material-ui/icons/Add"
 import Layout from "../components/Layout.js"
 import LoginForm from "../components/Forms/LoginForm.js"
 import RegisterForm from "../components/Forms/RegisterForm.js"
+import LoadingIndicator from "../components/LoadingIndicator.js"
 import { getProfile } from "../config/api.js"
 import { login as loginAction } from "../store/actions.js"
 
@@ -77,7 +78,7 @@ function AuthPage() {
         <Layout>
             <div className={classes.container} style={{ paddingBottom: showRegisterForm && "0" }}>
                 {isLoading ? (
-                    <CircularProgress />
+                    <LoadingIndicator />
                 ) : showRegisterForm ? (
                     <>
                         <IconButton onClick={() => setShowRegisterForm(false)} className={classes.close}>

@@ -1,14 +1,10 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
-import { SwipeableDrawer, List, ListItem, ListItemText, Divider, Typography } from "@material-ui/core"
+import { SwipeableDrawer, List, ListItem, ListItemText, ListItemIcon, Divider, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
-const links = [
-   { title: "Today", to: "/today" }, 
-   { title: "Activities", to: "/activities" }, 
-   { title: "Analysis", to: "/analysis" } 
-]
+import { NAV_DRAWER_LINKS } from "../config/constants.js"
 
 const useStyles = makeStyles(theme => ({
     innerDrawer: {
@@ -47,25 +43,23 @@ function NavigationDrawer({ open, onOpen, onClose }) {
 
             { /* TODO: Icons */ }
 
-            <List>
-                <ListItem button onClick={() => redirect("/profile")}>
-                    <ListItemText>Profile</ListItemText>
-                </ListItem>
+            {NAV_DRAWER_LINKS.map((section, i) => (
+                <React.Fragment key={i}>
+                    <List>
+                        {section.map((entry, j) => (
+                            <ListItem button onClick={() => redirect(entry.to)} key={j}>
+                                <ListItemIcon>
+                                    {React.createElement(entry.icon)}
+                                </ListItemIcon>
 
-                <ListItem button onClick={() => redirect("/logout")}>
-                    <ListItemText>Logout</ListItemText>
-                </ListItem>
-            </List>
-            
-            <Divider/>
+                                <ListItemText>{ entry.title }</ListItemText>
+                            </ListItem>
+                        ))}
+                    </List>
 
-            <List>
-                {links.map((entry, i) => (
-                    <ListItem button onClick={() => redirect(entry.to)} key={i}>
-                        <ListItemText>{ entry.title }</ListItemText>
-                    </ListItem>
-                ))}
-            </List>
+                    { i < NAV_DRAWER_LINKS.length - 1 && <Divider/> }
+                </React.Fragment>
+            ))}
         </SwipeableDrawer>
     )
 }

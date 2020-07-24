@@ -1,11 +1,15 @@
-import { LOGIN } from "./actionTypes.js"
+import { LOGIN, LOGOUT } from "./actionTypes.js"
 
 export function login({ token, user }) {
-    localStorage.setItem("token", token)
-
     return {
         type: LOGIN,
         token,
         user
+    }
+}
+
+export function logout() {
+    return {
+        type: LOGOUT
     }
 }

@@ -26,6 +26,7 @@ router.put("/activities", ProtectMiddleware, ActivityController.update)
 router.delete("/activities", ProtectMiddleware, ActivityController.deletion)
 
 router.get("/performed-activities", ProtectMiddleware, PerformedActivityController.getAll)
+router.get("/performed-activities/date", ProtectMiddleware, PerformedActivityController.getDate)
 router.post("/performed-activities", ProtectMiddleware, PerformedActivityController.create)
 router.put("/performed-activities", ProtectMiddleware, PerformedActivityController.update)
 router.delete("/performed-activities", ProtectMiddleware, PerformedActivityController.deletion)

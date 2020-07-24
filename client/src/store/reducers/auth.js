@@ -1,4 +1,5 @@
-import { LOGIN } from "../actionTypes.js"
+import { LOGIN, LOGOUT } from "../actionTypes.js"
+import { setTokenHeader } from "../../config/api.js"
 
 const initialState = {
     token: localStorage.getItem("token"),
@@ -6,9 +7,14 @@ const initialState = {
     isLoggedIn: false
 }
 
+setTokenHeader(localStorage.getItem("token"))
+
 function authReducer(state = initialState, action) {
     switch(action.type) {
         case LOGIN:
+            localStorage.setItem("token", action.token)
+            setTokenHeader(action.token)
+
             return {
                 ...state,
                 token: action.token,
@@ -16,6 +22,15 @@ function authReducer(state = initialState, action) {
                 isLoggedIn: true
             }
         
+        case LOGOUT:
+            localStorage.removeItem("token")
+            setTokenHeader(null)
+
+            return {
+                ...initialState,
+                token: null
+            }
+
         default:
             return state
     }

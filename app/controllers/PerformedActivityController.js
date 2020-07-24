@@ -1,8 +1,10 @@
 const {
     getAllActivities,
+    getActivitesByDate,
     validateCreate,
     validateUpdate,
     validateDelete,
+    validateGetDate,
     createActivity,
     updateActivity,
     deleteActivity
@@ -11,6 +13,16 @@ const {
 async function getAll(req, res) {
     const activities = await getAllActivities(req.user)
 
+    res.send(activities)
+}
+
+async function getDate(req, res) {
+    if (!validateGetDate(req, res)) {
+        return
+    }
+
+    const activities = await getActivitesByDate(req.user, req.query.date)
+    
     res.send(activities)
 }
 
@@ -60,6 +72,7 @@ async function deletion(req, res) {
 
 module.exports = {
     getAll,
+    getDate,
     create,
     update,
     deletion
