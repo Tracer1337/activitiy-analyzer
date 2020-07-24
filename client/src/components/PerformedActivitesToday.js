@@ -1,19 +1,28 @@
 import React, { useMemo, useImperativeHandle } from "react"
 import moment from "moment"
-import { Paper, List, ListItem, ListItemText, Divider, Typography } from "@material-ui/core"
-import { makeStyles } from "@material-ui/core/styles"
+import { Paper, List, ListItem, ListItemText, Divider } from "@material-ui/core"
+import { makeStyles, useTheme } from "@material-ui/core/styles"
+import DeleteIcon from "@material-ui/icons/Delete"
+import EditIcon from "@material-ui/icons/Edit"
 
 import LoadingIndicator from "./LoadingIndicator.js"
+import Swipeable from "./Swipeable.js"
 import useAPIData from "../utils/useAPIData.js"
 import { getTodayPerformedActivities, getCurrentDate } from "../utils"
+import { deletePerformedActivity } from "../config/api.js"
 
 const useStyles = makeStyles(theme => ({
     container: {
-        marginBottom: theme.spacing(4)
+        marginBottom: theme.spacing(4),
+        overflowX: "hidden"
     },
 
     divider: {
         margin: `0 ${theme.spacing(2)}px`
+    },
+
+    item: {
+        backgroundColor: theme.palette.background.paper
     },
 
     itemInnerWrapper: {
@@ -26,31 +35,60 @@ const useStyles = makeStyles(theme => ({
     },
 
     itemSecondary: {
-        marginTop: 6,
-        height: 24,
+        height: 56,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center"
+    },
+
+    time: {
+        fontSize: 16
     }
 }))
 
-function Entry({ entry }) {
+function Entry({ entry, onDelete }) {
     const classes = useStyles()
 
-    return (
-        <ListItem>
-            <div className={classes.itemInnerWrapper}>
-                <div className={classes.itemPrimary}>
-                    <ListItemText primary={entry.activity.name} secondary={entry.activity.category?.name} />
-                </div>
+    const theme = useTheme()
 
-                <div className={classes.itemSecondary}>
-                    <Typography variant="caption">
-                        {moment(entry.finished_at).format("HH:mm")}
-                    </Typography>
+    const handleDelete = () => {
+        deletePerformedActivity(entry)
+            .then(() => onDelete())
+            .catch(error => console.error(error))
+    }
+
+    const handleEdit = () => {
+        console.log("Edit")
+    }
+
+    return (
+        <Swipeable
+            right={{
+                color: theme.palette.error.dark,
+                icon: DeleteIcon
+            }}
+            left={{
+                color: theme.palette.primary.main,
+                icon: EditIcon
+            }}
+
+            onSwipeLeft={handleDelete}
+            onSwipeRight={handleEdit}
+        >
+            <ListItem className={classes.item}>
+                <div className={classes.itemInnerWrapper}>
+                    <div className={classes.itemPrimary}>
+                        <ListItemText primary={entry.activity.name} secondary={entry.activity.category?.name} />
+                    </div>
+
+                    <div className={classes.itemSecondary}>
+                        <span className={classes.time}>
+                            {moment(entry.finished_at).format("HH:mm")}
+                        </span>
+                    </div>
                 </div>
-            </div>
-        </ListItem>
+            </ListItem>
+        </Swipeable>
     )
 }
 
@@ -68,23 +106,29 @@ function PerformedActivitesToday(props, ref) {
 
     useImperativeHandle(ref, () => ({ reload }))
 
-    console.log(data)
-
     if(isLoading) {
         return <LoadingIndicator/>
     }
 
     return (
         <Paper elevation={3} className={classes.container}>
-            <List>
-                {todayActivities.map((entry, i) => (
-                    <React.Fragment key={entry.id}>
-                        <Entry entry={entry}/>
+            { todayActivities.length > 0 ? (
+                <List>
+                    {todayActivities.map((entry, i) => (
+                        <React.Fragment key={entry.id}>
+                            <Entry entry={entry} onDelete={reload} />
 
-                        { i < todayActivities.length - 1 && <Divider className={classes.divider}/> }
-                    </React.Fragment>
-                ))}
-            </List>
+                            {i < todayActivities.length - 1 && <Divider className={classes.divider} />}
+                        </React.Fragment>
+                    ))}
+                </List>
+            ) : (
+                <List>
+                    <ListItem>
+                        <ListItemText>No Entries</ListItemText>
+                    </ListItem>
+                </List>
+            )}
         </Paper>
     )
 }

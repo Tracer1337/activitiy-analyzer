@@ -27,7 +27,7 @@ function Header({ title, onMenuClick }) {
     }
 
     return (
-        <AppBar className={classes.appBar}>
+        <AppBar className={classes.appBar} position="static">
             <Toolbar>
                 <IconButton edge="start" onClick={onMenuClick}>
                     <MenuIcon/>

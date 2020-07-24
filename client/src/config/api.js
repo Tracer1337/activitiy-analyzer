@@ -22,4 +22,4 @@ export const getPerformedActivities = () => axios.get(url("/performed-activities
 export const getPerformedActivitiesByDate = (data) => axios.get(url(`/performed-activities/date?date=${data.date}`))
 export const createPerformedActivity = (data) => axios.post(url("/performed-activities"), data)
 export const updatePerformedActivity = (data) => axios.put(url("/performed-activities"), data)
-export const deletePerformedActivity = (data) => axios.delete(url("/performed-activities"), data)
+export const deletePerformedActivity = (data) => axios.delete(url("/performed-activities"), { data })
