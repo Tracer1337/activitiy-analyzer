@@ -44,6 +44,8 @@ WebApp:
 
 * Integrate GitHub Hooks into deployment process
 
+* Skeleton-loading instead of circular loading
+
 Routes:
 
 * api

@@ -11,7 +11,7 @@ const useStyles = makeStyles(theme => ({
 
     icon: {
         position: "absolute",
-        color: theme.palette.background.default
+        color: "#000"
     }
 }))
 
@@ -54,7 +54,12 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
         const width = childRef.current.offsetWidth
 
         if(position.x <= width / -2) {
-            moveOutOfScreen(-1).then(onSwipeLeft)
+            if(left.moveOutOfScreen) {
+                moveOutOfScreen(-1).then(onSwipeLeft)
+            } else {
+                moveToInitialPosition()
+                onSwipeLeft()
+            }
         } else {
             moveToInitialPosition()
         }
@@ -64,7 +69,12 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
         const width = childRef.current.offsetWidth
 
         if (position.x >= width / 2) {
-            moveOutOfScreen(1).then(onSwipeRight)
+            if(right.moveOutOfScreen) {
+                moveOutOfScreen(1).then(onSwipeRight)
+            } else {
+                moveToInitialPosition()
+                onSwipeRight()
+            }
         } else {
             moveToInitialPosition()
         }
@@ -73,7 +83,7 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
     const handleDrag = (event, pos) => {
         const newX = position.x + pos.deltaX
 
-        if(newX > 0 && !onSwipeRight || newX < 0 && !onSwipeLeft) {
+        if((newX > 0 && !onSwipeRight) || (newX < 0 && !onSwipeLeft)) {
             return
         }
 
@@ -83,7 +93,7 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
         })
     }
 
-    const handleDragStop = (event) => {
+    const handleDragStop = () => {
         if(position.x < 0) {
             handleSwipeLeft()
         } else if (position.x > 0) {
@@ -112,7 +122,9 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
             setColor(null)
             setIcon(null)
         }
-    }, [position])
+        
+        // eslint-disable-next-line
+    }, [position, left, right])
 
     return (
         <div ref={containerRef} className={classes.container}>

@@ -1,5 +1,4 @@
-import React, { useMemo, useImperativeHandle } from "react"
-import moment from "moment"
+import React, { useState, useMemo, useImperativeHandle } from "react"
 import { Paper, List, ListItem, ListItemText, Divider } from "@material-ui/core"
 import { makeStyles, useTheme } from "@material-ui/core/styles"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -7,8 +6,9 @@ import EditIcon from "@material-ui/icons/Edit"
 
 import LoadingIndicator from "./LoadingIndicator.js"
 import Swipeable from "./Swipeable.js"
+import EditPerformedActivityDialog from "./Dialogs/EditPerformedActivityDialog.js"
 import useAPIData from "../utils/useAPIData.js"
-import { getTodayPerformedActivities, getCurrentDate } from "../utils"
+import { sortActivites, getCurrentDate } from "../utils"
 import { deletePerformedActivity } from "../config/api.js"
 
 const useStyles = makeStyles(theme => ({
@@ -46,49 +46,65 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function Entry({ entry, onDelete }) {
+function Entry({ entry, reloadList }) {
     const classes = useStyles()
 
     const theme = useTheme()
 
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
+
     const handleDelete = () => {
         deletePerformedActivity(entry)
-            .then(() => onDelete())
+            .then(() => reloadList())
             .catch(error => console.error(error))
     }
 
     const handleEdit = () => {
-        console.log("Edit")
+        setIsEditDialogOpen(true)
+    }
+
+    const handleEditDialogClose = () => {
+        setIsEditDialogOpen(false)
+        reloadList()
     }
 
     return (
-        <Swipeable
-            right={{
-                color: theme.palette.error.dark,
-                icon: DeleteIcon
-            }}
-            left={{
-                color: theme.palette.primary.main,
-                icon: EditIcon
-            }}
+        <>
+            <Swipeable
+                right={{
+                    color: theme.palette.error.dark,
+                    icon: DeleteIcon
+                }}
+                left={{
+                    color: theme.palette.primary.main,
+                    icon: EditIcon,
+                    moveOutOfScreen: false
+                }}
 
-            onSwipeLeft={handleDelete}
-            onSwipeRight={handleEdit}
-        >
-            <ListItem className={classes.item}>
-                <div className={classes.itemInnerWrapper}>
-                    <div className={classes.itemPrimary}>
-                        <ListItemText primary={entry.activity.name} secondary={entry.activity.category?.name} />
-                    </div>
+                onSwipeLeft={handleDelete}
+                onSwipeRight={handleEdit}
+            >
+                <ListItem className={classes.item}>
+                    <div className={classes.itemInnerWrapper}>
+                        <div className={classes.itemPrimary}>
+                            <ListItemText primary={entry.activity.name} secondary={entry.activity.category?.name} />
+                        </div>
 
-                    <div className={classes.itemSecondary}>
-                        <span className={classes.time}>
-                            {moment(entry.finished_at).format("HH:mm")}
-                        </span>
+                        <div className={classes.itemSecondary}>
+                            <span className={classes.time}>
+                                {entry.finished_at.format("HH:mm")}
+                            </span>
+                        </div>
                     </div>
-                </div>
-            </ListItem>
-        </Swipeable>
+                </ListItem>
+            </Swipeable>
+
+            <EditPerformedActivityDialog
+                data={entry}
+                open={isEditDialogOpen}
+                onClose={handleEditDialogClose}
+            />
+        </>
     )
 }
 
@@ -102,7 +118,7 @@ function PerformedActivitesToday(props, ref) {
         }
     })
     
-    const todayActivities = useMemo(() => getTodayPerformedActivities(data), [data])
+    const todayActivities = useMemo(() => sortActivites(data), [data])
 
     useImperativeHandle(ref, () => ({ reload }))
 
@@ -116,7 +132,7 @@ function PerformedActivitesToday(props, ref) {
                 <List>
                     {todayActivities.map((entry, i) => (
                         <React.Fragment key={entry.id}>
-                            <Entry entry={entry} onDelete={reload} />
+                            <Entry entry={entry} reloadList={reload} />
 
                             {i < todayActivities.length - 1 && <Divider className={classes.divider} />}
                         </React.Fragment>
@@ -125,7 +141,7 @@ function PerformedActivitesToday(props, ref) {
             ) : (
                 <List>
                     <ListItem>
-                        <ListItemText>No Entries</ListItemText>
+                        <ListItemText>No Entries For Today</ListItemText>
                     </ListItem>
                 </List>
             )}

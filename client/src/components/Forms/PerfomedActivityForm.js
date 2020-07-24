@@ -1,19 +1,19 @@
 import React, { useState } from "react"
 import moment from "moment"
 import { useForm, Controller } from "react-hook-form"
-import { Typography, TextField } from "@material-ui/core"
+import { Typography, TextField, Button } from "@material-ui/core"
 import { TimePicker } from "@material-ui/pickers"
 import { makeStyles } from "@material-ui/core/styles"
 
+import Shortcuts from "../Shortcuts.js"
 import ActivitySelect from "../ActivitySelect.js"
-import { createPerformedActivity } from "../../config/api.js"
 
 const useStyles = makeStyles(theme => ({
     title: {
         opacity: .87
     },
 
-    form: {
+    primaryInputs: {
         display: "flex",
         marginBottom: theme.spacing(2)
     },
@@ -29,42 +29,43 @@ const useStyles = makeStyles(theme => ({
         justifyContent: "center",
         alignItems: "center",
         fontSize: 20
+    },
+
+    submitButton: {
+        margin: "8px 0 16px 0"
     }
 }))
 
-function PerfomedActivityForm({ onSubmit }) {
+function PerfomedActivityForm({ onSubmit, defaultValues, title = true, submitButton = false }) {
     const classes = useStyles()
 
     const { register, control, watch, reset, getValues } = useForm({
         defaultValues: {
-            finished_at: moment()
+            finished_at: moment(),
+            ...defaultValues
         }
     })
 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false)
 
-    const handleActivityClick = (activity) => {
+    const handleSubmit = (activity) => {
         const finished_at = getValues("finished_at").format("YYYY-MM-DD HH:mm")
 
-        createPerformedActivity({
-            activity_id: activity.id,
+        onSubmit({
+            activity_id: activity?.id || defaultValues.activity_id,
             finished_at
-        }).then(() => {
-            reset()
-            onSubmit()
-        }).catch(error => {
-            console.error(error)
-        })
+        }).then(reset)
     }
 
     return (
         <>
-            <Typography variant="subtitle1" className={classes.title}>Register Activity</Typography>
+            {title && <Typography variant="subtitle1" className={classes.title}>Register Activity</Typography> }
 
-            <form noValidate className={classes.form}>
+            <form noValidate>
+                <div className={classes.primaryInputs}>
                     <TextField
                         variant="outlined"
-                        label="Activity Name"
+                        label="Activity"
                         name="activity_name"
                         inputRef={register()}
                         className={classes.input}
@@ -73,7 +74,7 @@ function PerfomedActivityForm({ onSubmit }) {
                     />
 
                     <div className={classes.timeDisplay} onClick={() => setIsDatePickerOpen(true)}>
-                        { watch("finished_at").format("HH:mm") }
+                        {watch("finished_at").format("HH:mm")}
                     </div>
 
                     <Controller
@@ -91,13 +92,28 @@ function PerfomedActivityForm({ onSubmit }) {
                             />
                         )}
                     />
+                </div>
+
+                <ActivitySelect
+                    filter={watch("activity_name")}
+                    style={{ display: !watch("activity_name") && "none" }}
+                    onClick={handleSubmit}
+                />
+
+                <Shortcuts onClick={handleSubmit} />
+
+                {submitButton && (
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        fullWidth
+                        onClick={handleSubmit}
+                        className={classes.submitButton}
+                    >
+                        Save
+                    </Button>
+                )}
             </form>
-            
-            <ActivitySelect
-                filter={watch("activity_name")}
-                style={{ display: !watch("activity_name") && "none" }}
-                onClick={handleActivityClick}
-            />
         </>
     )
 }

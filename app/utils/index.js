@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken")
 
 // Generate JSON Web Token
 function generateJWT(input) {
-    return jwt.sign(input, process.env.JWT_SECRET, { expiresIn: process.env.JWT_TTL + "s" })
+    return jwt.sign(input, process.env.JWT_SECRET)
 }
 
 // Run db.query promise-based

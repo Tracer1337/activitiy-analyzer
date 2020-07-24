@@ -123,9 +123,9 @@ async function createActivity({ user, values }, res) {
 // Update existing activity
 async function updateActivity({ user, values }, res) {
     // Get activity from user with provided id
-    const performedActivity = (await getAllActivities(user)).find(activity => activity.id === values.id)
+    const performedActivity = await PerformedActivity.findBy("id", values.id)
 
-    if (!performedActivity) {
+    if (!performedActivity || performedActivity.user_id !== user.id) {
         res.status(404)
         res.end()
         return

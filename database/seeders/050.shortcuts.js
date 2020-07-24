@@ -9,7 +9,7 @@ module.exports = {
         const activityId = (await query("SELECT id FROM activities WHERE name = 'Aufstehen'"))[0].id
 
         return [
-            [uuid(), "sun", activityId, userId]
+            [uuid(), "WbSunny", activityId, userId]
         ]
     }
 }

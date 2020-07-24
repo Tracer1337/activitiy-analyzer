@@ -44,7 +44,7 @@ function ActivitySelect({ filter = "", style, onClick }) {
             ) : (
                 <List>
                     <ListItem>
-                        <ListItemText>No Results</ListItemText>
+                        <ListItemText>No Activities Found</ListItemText>
                     </ListItem>
                 </List>
             )}
