@@ -24,10 +24,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function CreateShortcutForm({ onSubmit, defaultValues }) {
+function CreateShortcutForm({ onSubmit }) {
     const classes = useStyles()
 
-    const { register, control, watch, reset, getValues, setValue } = useForm()
+    const { register, watch, reset, getValues, setValue } = useForm()
 
     const [activity, setActivity] = useState()
 

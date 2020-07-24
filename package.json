@@ -29,6 +29,7 @@
     "animejs": "^3.2.0",
     "bcrypt": "^5.0.0",
     "chalk": "^4.1.0",
+    "cli-progress": "^3.8.2",
     "concurrently": "^5.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

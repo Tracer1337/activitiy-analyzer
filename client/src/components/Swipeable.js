@@ -25,6 +25,8 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
 
     const [position, setPosition] = useState({ x: 0, y: 0 })
     const [icon, setIcon] = useState()
+    const [isStart, setIsStart] = useState(false)
+    const [isDraggingDisabled, setIsDraggingDisabled] = useState(false)
 
     const moveToInitialPosition = () => {
         anime({
@@ -80,7 +82,30 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
         }
     }
 
+    const handleDragStart = (event, pos) => {
+        setIsStart(true)
+    }
+
     const handleDrag = (event, pos) => {
+        if(isDraggingDisabled) {
+            return
+        }
+
+        if(isStart && Math.abs(pos.deltaY) >= Math.abs(pos.deltaX)) {
+            setIsDraggingDisabled(true)
+            setIsStart(false)
+            
+            const handleMouseUp = () => {
+                setIsDraggingDisabled(false)
+
+                document.removeEventListener("touchend", handleMouseUp)
+            }
+
+            document.addEventListener("touchend", handleMouseUp)
+
+            return
+        }
+
         const newX = position.x + pos.deltaX
 
         if((newX > 0 && !onSwipeRight) || (newX < 0 && !onSwipeLeft)) {
@@ -91,6 +116,8 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
             ...position,
             x: newX
         })
+
+        setIsStart(false)
     }
 
     const handleDragStop = () => {
@@ -138,8 +165,10 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
 
             <DraggableCore
                 axis="x"
+                onStart={handleDragStart}
                 onDrag={handleDrag}
                 onStop={handleDragStop}
+                disabled={isDraggingDisabled}
             >
                 { React.cloneElement(React.Children.only(children), {
                     ref: childRef
