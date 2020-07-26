@@ -7,6 +7,7 @@ import LogoutPage from "../pages/LogoutPage.js"
 import TodayPage from "../pages/TodayPage.js"
 import AllTimePage from "../pages/AllTimePage.js"
 import ActivitiesPage from "../pages/ActivitiesPage.js"
+import CategoriesPage from "../pages/CategoriesPage.js"
 
 function Router() {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
@@ -36,6 +37,10 @@ function Router() {
 
                 <Route path="/activities">
                     <ActivitiesPage/>
+                </Route>
+
+                <Route path="/categories">
+                    <CategoriesPage/>
                 </Route>
 
                 <Route path="/analysis">

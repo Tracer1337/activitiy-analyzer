@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import moment from "moment"
 import { useForm } from "react-hook-form"
 import { Typography, TextField, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
@@ -20,15 +19,10 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories = false }) {
+function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories = false, submitText = "Create" }) {
     const classes = useStyles()
 
-    const { register, watch, reset, getValues, setValue } = useForm({
-        defaultValues: {
-            finished_at: moment(),
-            ...defaultValues
-        }
-    })
+    const { register, watch, reset, getValues, setValue } = useForm({ defaultValues })
 
     const [categoryId, setCategoryId] = useState()
 
@@ -88,7 +82,7 @@ function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories
                     onClick={handleSubmit}
                     className={classes.submitButton}
                 >
-                    Create
+                    { submitText }
                 </Button>
             </form>
         </>

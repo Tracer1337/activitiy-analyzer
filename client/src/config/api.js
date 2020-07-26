@@ -22,6 +22,9 @@ export const register = (data) => axios.post(url("/auth/register"), data)
 export const getProfile = () => axios.get(url("/auth"))
 
 export const getAllCategories = () => axios.get(url("/categories"))
+export const createCategory = (data) => axios.post(url("/categories"), data)
+export const updateCategory = (data) => axios.put(url("/categories"), data)
+export const deleteCategory = (data) => axios.delete(url("/categories"), { data })
 
 export const getAllActivities = () => axios.get(url("/activities"))
 export const createActivity = (data) => axios.post(url("/activities"), data)

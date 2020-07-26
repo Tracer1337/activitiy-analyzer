@@ -10,7 +10,7 @@ async function getAllCategories(user) {
 
 // Validate creation inputs
 async function validateCreate(req, res) {
-    req.body.tag_ids = req.bods.tag_ids || []
+    req.body.tag_ids = req.body.tag_ids || []
 
     if(!req.body.name) {
         res.status(400)

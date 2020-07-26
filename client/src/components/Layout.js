@@ -24,7 +24,6 @@ function Layout({ children, HeaderProps = {} }) {
 
             <NavigationDrawer
                 open={isNavDrawerOpen}
-                onOpen={() => setIsNavDrawerOpen(true)}
                 onClose={() => setIsNavDrawerOpen(false)}
             />
 

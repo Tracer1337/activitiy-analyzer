@@ -1,13 +1,13 @@
 import React from "react"
 import { Dialog, DialogTitle, DialogContent } from "@material-ui/core"
 
-import ActivityForm from "../Forms/ActivityForm.js"
-import { updateActivity } from "../../config/api.js"
+import CategoryForm from "../Forms/CategoryForm.js"
+import { updateCategory } from "../../config/api.js"
 
 function EditActivityDialog({ open, onClose, data }) {
     const handleSubmit = (values) => {
         return new Promise(resolve => {
-            updateActivity({
+            updateCategory({
                 ...values,
                 id: data.id
             }).then(() => {
@@ -22,18 +22,13 @@ function EditActivityDialog({ open, onClose, data }) {
             open={open}
             onClose={onClose}
         >
-            <DialogTitle>Edit Activity</DialogTitle>
+            <DialogTitle>Edit Category</DialogTitle>
 
             <DialogContent>
-                <ActivityForm
+                <CategoryForm
                     title={false}
-                    showAllCategories
+                    defaultValues={data}
                     submitText="Save"
-                    defaultValues={{
-                        name: data.name,
-                        category_id: data.category.id,
-                        category_name: data.category.name
-                    }}
                     onSubmit={handleSubmit}
                 />
             </DialogContent>
