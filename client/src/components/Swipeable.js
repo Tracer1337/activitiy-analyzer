@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react"
 import anime from "animejs"
 import { makeStyles, useTheme } from "@material-ui/core/styles"
+import DeleteIcon from "@material-ui/icons/Delete"
+import EditIcon from "@material-ui/icons/Edit"
 
 import Draggable from "./Draggable.js"
 
@@ -16,9 +18,9 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
+function Swipeable({ children, swipeLeftConfig, swipeRightConfig, onSwipeRight, onSwipeLeft }) {
     const theme = useTheme()
-
+    
     const classes = useStyles()
 
     const containerRef = useRef()
@@ -26,6 +28,20 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
 
     const [position, setPosition] = useState({ x: 0, y: 0 })
     const [icon, setIcon] = useState()
+
+    swipeLeftConfig = {
+        color: theme.palette.error.dark,
+        icon: DeleteIcon,
+        moveOutOfScreen: true,
+        ...swipeLeftConfig
+    }
+
+    swipeRightConfig = {
+        color: theme.palette.primary.main,
+        icon: EditIcon,
+        moveOutOfScreen: false,
+        ...swipeRightConfig
+    }
 
     const moveToInitialPosition = () => {
         anime({
@@ -55,7 +71,7 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
         const width = childRef.current.offsetWidth
 
         if(position.x <= width / -2) {
-            if(left.moveOutOfScreen) {
+            if (swipeLeftConfig.moveOutOfScreen) {
                 moveOutOfScreen(-1).then(onSwipeLeft)
             } else {
                 moveToInitialPosition()
@@ -70,8 +86,9 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
         const width = childRef.current.offsetWidth
 
         if (position.x >= width / 2) {
-            if(right.moveOutOfScreen) {
-                moveOutOfScreen(1).then(onSwipeRight)
+            if (swipeRightConfig.moveOutOfScreen) {
+                moveOutOfScreen(1)
+                onSwipeRight()
             } else {
                 moveToInitialPosition()
                 onSwipeRight()
@@ -113,19 +130,19 @@ function Swipeable({ children, right, left, onSwipeRight, onSwipeLeft }) {
 
         if(position.x < 0) {
             roundCorners("right")
-            setColor(right?.color || "")
-            setIcon(right?.icon)
+            setColor(swipeLeftConfig.color || "")
+            setIcon(swipeLeftConfig.icon)
         } else if (position.x > 0) {
             roundCorners("left")
-            setColor(left?.color || "")
-            setIcon(left?.icon)
+            setColor(swipeRightConfig.color || "")
+            setIcon(swipeRightConfig.icon)
         } else {
             setColor(null)
             setIcon(null)
         }
         
         // eslint-disable-next-line
-    }, [position, left, right])
+    }, [position, swipeRightConfig, swipeLeftConfig])
 
     return (
         <div ref={containerRef} className={classes.container}>

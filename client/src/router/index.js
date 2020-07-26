@@ -5,7 +5,8 @@ import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 import AuthPage from "../pages/AuthPage.js"
 import LogoutPage from "../pages/LogoutPage.js"
 import TodayPage from "../pages/TodayPage.js"
-import AllTime from "../pages/AllTime.js"
+import AllTimePage from "../pages/AllTimePage.js"
+import ActivitiesPage from "../pages/ActivitiesPage.js"
 
 function Router() {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
@@ -30,11 +31,11 @@ function Router() {
                 </Route>
 
                 <Route path="/all-time">
-                    <AllTime/>
+                    <AllTimePage/>
                 </Route>
 
                 <Route path="/activities">
-                    <TodayPage/>
+                    <ActivitiesPage/>
                 </Route>
 
                 <Route path="/analysis">

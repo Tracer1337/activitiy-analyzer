@@ -18,6 +18,8 @@ function useAPIData(props) {
             return
         }
 
+        setIsLoading(true)
+
         method()
             .then(res => {
                 setData(res.data)

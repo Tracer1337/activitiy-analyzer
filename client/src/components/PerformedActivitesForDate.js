@@ -1,8 +1,6 @@
 import React, { useState, useMemo, useImperativeHandle } from "react"
 import { Paper, List, ListItem, ListItemText, Divider } from "@material-ui/core"
-import { makeStyles, useTheme } from "@material-ui/core/styles"
-import DeleteIcon from "@material-ui/icons/Delete"
-import EditIcon from "@material-ui/icons/Edit"
+import { makeStyles } from "@material-ui/core/styles"
 
 import LoadingIndicator from "./LoadingIndicator.js"
 import Swipeable from "./Swipeable.js"
@@ -13,7 +11,6 @@ import { deletePerformedActivity } from "../config/api.js"
 
 const useStyles = makeStyles(theme => ({
     container: {
-        marginBottom: theme.spacing(4),
         overflowX: "hidden",
         width: "100%"
     },
@@ -50,8 +47,6 @@ const useStyles = makeStyles(theme => ({
 function Entry({ entry, reloadList }) {
     const classes = useStyles()
 
-    const theme = useTheme()
-
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
     const handleDelete = () => {
@@ -71,20 +66,7 @@ function Entry({ entry, reloadList }) {
 
     return (
         <>
-            <Swipeable
-                right={{
-                    color: theme.palette.error.dark,
-                    icon: DeleteIcon
-                }}
-                left={{
-                    color: theme.palette.primary.main,
-                    icon: EditIcon,
-                    moveOutOfScreen: false
-                }}
-
-                onSwipeLeft={handleDelete}
-                onSwipeRight={handleEdit}
-            >
+            <Swipeable onSwipeLeft={handleDelete} onSwipeRight={handleEdit}>
                 <ListItem className={classes.item}>
                     <div className={classes.itemInnerWrapper}>
                         <div className={classes.itemPrimary}>
@@ -122,7 +104,7 @@ function PerformedActivitesForDate({ date, defaultValue, style }, ref) {
     
     const activities = useMemo(() => sortActivities(data), [data])
 
-    useImperativeHandle(ref, () => ({ reload }))
+    useImperativeHandle(ref, () => ({ reload }), [reload])
 
     if(isLoading) {
         return <LoadingIndicator/>

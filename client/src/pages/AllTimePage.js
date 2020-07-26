@@ -10,8 +10,7 @@ import useAPIData from "../utils/useAPIData.js"
 
 const useStyles = makeStyles(theme => ({
     list: {
-        marginTop: theme.spacing(2),
-        marginBottom: theme.spacing(4)
+        marginTop: theme.spacing(2)
     },
 
     accordionDetails: {
@@ -33,7 +32,7 @@ function AllTimePage() {
             <div className={classes.list}>
                 {isLoading ? <LoadingIndicator /> : (
                     Object.keys(data).map(date => (
-                        <Accordion TransitionProps={{ unmountOnExit: true }}>
+                        <Accordion TransitionProps={{ unmountOnExit: true }} key={date}>
                             <AccordionSummary>
                                 <Typography variant="subtitle1">{date}</Typography>
                             </AccordionSummary>
@@ -42,7 +41,6 @@ function AllTimePage() {
                                 <PerformedActivitiesForDate
                                     date={moment(date, "DD.MM.YYYY")}
                                     defaultValue={data[date]}
-                                    style={{ margin: 0 }}
                                 />
                             </AccordionDetails>
                         </Accordion>

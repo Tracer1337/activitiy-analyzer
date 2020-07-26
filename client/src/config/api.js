@@ -21,7 +21,12 @@ export const login = (data) => axios.post(url("/auth/login"), data)
 export const register = (data) => axios.post(url("/auth/register"), data)
 export const getProfile = () => axios.get(url("/auth"))
 
+export const getAllCategories = () => axios.get(url("/categories"))
+
 export const getAllActivities = () => axios.get(url("/activities"))
+export const createActivity = (data) => axios.post(url("/activities"), data)
+export const updateActivity = (data) => axios.put(url("/activities"), data)
+export const deleteActivity = (data) => axios.delete(url("/activities"), { data })
 
 export const getAllPerformedActivities = () => axios.get(url("/performed-activities")).then(format(PERFORMED_ACTIVITIES))
 export const getAllPerformedActivitiesByDate = () => axios.get(url("/performed-activities/date")).then(format(PERFORMED_ACTIVITIES_BY_DATE))

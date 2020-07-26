@@ -7,7 +7,7 @@ import NavigationDrawer from "./NavigationDrawer.js"
 
 const useStyles = makeStyles(theme => ({
     main: {
-        margin: props => `0 ${theme.spacing(2)}px 0 ${theme.spacing(2)}px`
+        margin: props => `0 ${theme.spacing(2)}px ${theme.spacing(4)}px`
     }
 }))
 

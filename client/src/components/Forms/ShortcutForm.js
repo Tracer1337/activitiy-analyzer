@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function CreateShortcutForm({ onSubmit }) {
+function ShortcutForm({ onSubmit }) {
     const classes = useStyles()
 
     const { register, watch, reset, getValues, setValue } = useForm()
@@ -99,4 +99,4 @@ function CreateShortcutForm({ onSubmit }) {
     )
 }
 
-export default CreateShortcutForm
+export default ShortcutForm

@@ -1,7 +1,7 @@
 import React from "react"
 import { Dialog, DialogTitle, DialogContent } from "@material-ui/core"
 
-import CreateShortcutForm from "../Forms/CreateShortcutForm.js"
+import ShortcutForm from "../Forms/ShortcutForm.js"
 import { createShortcut } from "../../config/api.js"
 
 function CreateShortcutModal({ open, onClose }) {
@@ -23,7 +23,7 @@ function CreateShortcutModal({ open, onClose }) {
             <DialogTitle>Create Shortcut</DialogTitle>
 
             <DialogContent>
-                <CreateShortcutForm onSubmit={handleSubmit}/>
+                <ShortcutForm onSubmit={handleSubmit}/>
             </DialogContent>
         </Dialog>
     )
