@@ -42,12 +42,12 @@ function CategorySelect({ filter = "", style, onClick }) {
                     ))}
                 </List>
             ) : (
-                    <List>
-                        <ListItem>
-                            <ListItemText>No categories found</ListItemText>
-                        </ListItem>
-                    </List>
-                )}
+                <List>
+                    <ListItem>
+                        <ListItemText>No categories found</ListItemText>
+                    </ListItem>
+                </List>
+            )}
         </Paper>
     )
 }

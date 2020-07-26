@@ -1,7 +1,7 @@
 import React from "react"
 import { useSelector } from "react-redux"
 import { useHistory } from "react-router-dom"
-import { SwipeableDrawer, List, ListItem, ListItemText, ListItemIcon, Divider, Typography } from "@material-ui/core"
+import { Drawer, List, ListItem, ListItemText, ListItemIcon, Divider, Typography } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 import { NAV_DRAWER_LINKS } from "../config/constants.js"
@@ -30,7 +30,7 @@ function NavigationDrawer({ open, onOpen, onClose }) {
     }
     
     return (
-        <SwipeableDrawer
+        <Drawer
             open={open}
             onOpen={onOpen}
             onClose={onClose}
@@ -60,7 +60,7 @@ function NavigationDrawer({ open, onOpen, onClose }) {
                     { i < NAV_DRAWER_LINKS.length - 1 && <Divider/> }
                 </React.Fragment>
             ))}
-        </SwipeableDrawer>
+        </Drawer>
     )
 }
 

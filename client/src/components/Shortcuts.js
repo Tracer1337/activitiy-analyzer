@@ -3,7 +3,7 @@ import { Chip } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 import AddIcon from "@material-ui/icons/Add"
 
-import CreateShortcutModal from "./Dialogs/CreateShortcutModal.js"
+import CreateShortcutDialog from "./Dialogs/CreateShortcutDialog.js"
 import LoadingIndicator from "./LoadingIndicator.js"
 import useAPIData from "../utils/useAPIData.js"
 import { deleteShortcut } from "../config/api.js"
@@ -69,7 +69,7 @@ function Shortcuts({ onClick }) {
                 clickable
             />
 
-            <CreateShortcutModal
+            <CreateShortcutDialog
                 open={isCreateModalOpen}
                 onClose={handleCreateModalClose}
             />

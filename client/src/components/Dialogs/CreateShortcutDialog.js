@@ -4,7 +4,7 @@ import { Dialog, DialogTitle, DialogContent } from "@material-ui/core"
 import ShortcutForm from "../Forms/ShortcutForm.js"
 import { createShortcut } from "../../config/api.js"
 
-function CreateShortcutModal({ open, onClose }) {
+function CreateShortcutDialog({ open, onClose }) {
     const handleSubmit = (values) => {
         return new Promise(resolve => {
             createShortcut(values).then(() => {
@@ -29,4 +29,4 @@ function CreateShortcutModal({ open, onClose }) {
     )
 }
 
-export default CreateShortcutModal
+export default CreateShortcutDialog

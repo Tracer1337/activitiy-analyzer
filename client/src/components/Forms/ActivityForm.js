@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function ActivityForm({ onSubmit, defaultValues, title = true }) {
+function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories = false }) {
     const classes = useStyles()
 
     const { register, watch, reset, getValues, setValue } = useForm({
@@ -62,6 +62,7 @@ function ActivityForm({ onSubmit, defaultValues, title = true }) {
                     inputRef={register()}
                     className={classes.input}
                     fullWidth
+                    autoComplete="off"
                 />
 
                 <TextField
@@ -76,7 +77,7 @@ function ActivityForm({ onSubmit, defaultValues, title = true }) {
 
                 <CategorySelect
                     filter={watch("category_name")}
-                    style={{ display: !watch("category_name") && "none" }}
+                    style={{ display: !showAllCategories && !watch("category_name") && "none" }}
                     onClick={handleCategorySelect}
                 />
 
