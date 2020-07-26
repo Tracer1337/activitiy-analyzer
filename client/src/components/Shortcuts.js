@@ -49,7 +49,7 @@ function Shortcuts({ onClick }) {
 
     return (
         <div className={classes.container}>
-            {data.reverse().map(shortcut => (
+            {data.map(shortcut => (
                 <Chip
                     icon={shortcut.icon && React.createElement(shortcut.icon)}
                     label={shortcut.activity.name}
