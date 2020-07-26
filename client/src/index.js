@@ -8,7 +8,7 @@ import MomentUtils from "@date-io/moment"
 import store from "./store"
 import App from "./App.js"
 import * as serviceWorker from "./serviceWorker.js"
-import "./index.scss"
+import "./index.css"
 
 const theme = createMuiTheme({
     palette: {

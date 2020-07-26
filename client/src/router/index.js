@@ -8,6 +8,7 @@ import TodayPage from "../pages/TodayPage.js"
 import AllTimePage from "../pages/AllTimePage.js"
 import ActivitiesPage from "../pages/ActivitiesPage.js"
 import CategoriesPage from "../pages/CategoriesPage.js"
+import AnalysisPage from "../pages/AnalysisPage.js"
 
 function Router() {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
@@ -19,12 +20,12 @@ function Router() {
     return (
         <BrowserRouter basename="/app">
             <Switch>
-                <Route path="/logout">
-                    <LogoutPage/>
-                </Route>
-
                 <Route path="/profile">
                     <TodayPage/>
+                </Route>
+
+                <Route path="/logout">
+                    <LogoutPage/>
                 </Route>
 
                 <Route path="/today">
@@ -44,7 +45,7 @@ function Router() {
                 </Route>
 
                 <Route path="/analysis">
-                    <TodayPage/>
+                    <AnalysisPage/>
                 </Route>
 
                 <Route path="/">

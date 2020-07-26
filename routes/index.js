@@ -1,5 +1,4 @@
 const fs = require("fs")
-const path = require("path")
 const express = require("express")
 
 const rootRouter = express.Router()
@@ -13,8 +12,5 @@ const routes = fs.readdirSync(__dirname)
 for(let [route, router] of routes) {
     rootRouter.use("/" + route, router)
 }
-
-// Serve static files
-rootRouter.use("/", express.static(path.join(__dirname, "..", "public")))
 
 module.exports = rootRouter

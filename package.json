@@ -11,7 +11,8 @@
     "jwt-secret": "node ./scripts/jwt-secret.js",
     "setup-db": "npm run migrate && npm run seed",
     "migrate": "node ./scripts/migrate.js",
-    "seed": "node ./scripts/seed.js"
+    "seed": "node ./scripts/seed.js",
+    "prod": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -30,6 +31,7 @@
     "bcrypt": "^5.0.0",
     "chalk": "^4.1.0",
     "cli-progress": "^3.8.2",
+    "commander": "^6.0.0",
     "concurrently": "^5.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

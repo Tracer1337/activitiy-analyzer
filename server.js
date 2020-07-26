@@ -1,4 +1,5 @@
 require("dotenv").config()
+const path = require("path")
 const express = require("express")
 const { createProxyMiddleware } = require("http-proxy-middleware")
 
@@ -19,12 +20,15 @@ app.use(express.urlencoded({
 // Support json
 app.use(express.json())
 
-// Proxy react dev-server
 if(process.env.NODE_ENV === "development") {
+    // Proxy react dev-server
     app.use("/app", createProxyMiddleware({
         target: "http://localhost:3000/",
         ws: true
     }))
+} else {
+    // Serve static files
+    app.use("/app", express.static(path.join(__dirname, "public", "app")))
 }
 
 // Use Routes
