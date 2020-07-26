@@ -14,7 +14,8 @@ import { deletePerformedActivity } from "../config/api.js"
 const useStyles = makeStyles(theme => ({
     container: {
         marginBottom: theme.spacing(4),
-        overflowX: "hidden"
+        overflowX: "hidden",
+        width: "100%"
     },
 
     divider: {
@@ -108,7 +109,7 @@ function Entry({ entry, reloadList }) {
     )
 }
 
-function PerformedActivitesForDate({ date, defaultValue }, ref) {
+function PerformedActivitesForDate({ date, defaultValue, style }, ref) {
     const classes = useStyles()
 
     const { isLoading, data, reload } = useAPIData({
@@ -128,7 +129,7 @@ function PerformedActivitesForDate({ date, defaultValue }, ref) {
     }
 
     return (
-        <Paper elevation={3} className={classes.container}>
+        <Paper elevation={3} className={classes.container} style={style}>
             {activities.length > 0 ? (
                 <List>
                     {activities.map((entry, i) => (
