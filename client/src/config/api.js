@@ -1,6 +1,10 @@
 import axios from "axios"
 
-import format, { ACTIVITIES, SHORTCUTS } from "./formatAPI.js"
+import format, {
+    PERFORMED_ACTIVITIES,
+    PERFORMED_ACTIVITIES_BY_DATE,
+    SHORTCUTS
+} from "./formatAPI.js"
 import { API_BASE_URL } from "./constants.js"
 
 export function setTokenHeader(token) {
@@ -19,8 +23,9 @@ export const getProfile = () => axios.get(url("/auth"))
 
 export const getAllActivities = () => axios.get(url("/activities"))
 
-export const getAllPerformedActivities = () => axios.get(url("/performed-activities")).then(format(ACTIVITIES))
-export const getPerformedActivitiesByDate = (data) => axios.get(url(`/performed-activities/date?date=${data.date}`)).then(format(ACTIVITIES))
+export const getAllPerformedActivities = () => axios.get(url("/performed-activities")).then(format(PERFORMED_ACTIVITIES))
+export const getAllPerformedActivitiesByDate = () => axios.get(url("/performed-activities/date")).then(format(PERFORMED_ACTIVITIES_BY_DATE))
+export const getPerformedActivitiesByDate = (data) => axios.get(url(`/performed-activities/date?date=${data.date}`)).then(format(PERFORMED_ACTIVITIES))
 export const createPerformedActivity = (data) => axios.post(url("/performed-activities"), data)
 export const updatePerformedActivity = (data) => axios.put(url("/performed-activities"), data)
 export const deletePerformedActivity = (data) => axios.delete(url("/performed-activities"), { data })

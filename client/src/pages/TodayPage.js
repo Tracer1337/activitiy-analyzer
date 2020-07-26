@@ -1,8 +1,9 @@
 import React, { useRef } from "react"
+import moment from "moment"
 
 import Layout from "../components/Layout.js"
 import PerformedActivityForm from "../components/Forms/PerfomedActivityForm.js"
-import PerformedActivitesToday from "../components/PerformedActivitesToday.js"
+import PerformedActivitesForDate from "../components/PerformedActivitesForDate.js"
 import { createPerformedActivity } from "../config/api.js"
 
 function TodayPage() {
@@ -28,7 +29,7 @@ function TodayPage() {
         >
             <PerformedActivityForm onSubmit={handleSubmit}/>
 
-            <PerformedActivitesToday ref={list}/>
+            <PerformedActivitesForDate date={moment()} ref={list}/>
         </Layout>
     )
 }

@@ -12,10 +12,34 @@ async function getAllActivities(user) {
 
 // Fetch all activities from user with specific date
 async function getActivitesByDate(user, date) {
-    const query = `SELECT * FROM performed_activities WHERE user_id = '${user.id}' AND DATE(finished_at) LIKE '${date}%'`
-    const result = (await queryAsync(query)).map(row => new PerformedActivity(row))
+    let result
 
-    await Promise.all(result.map(async model => model.init()))
+    if(date) {
+        // Get activities by date
+        const query = `SELECT * FROM performed_activities WHERE user_id = '${user.id}' AND DATE(finished_at) LIKE '${date}%'`
+        result = (await queryAsync(query)).map(row => new PerformedActivity(row))
+
+        await Promise.all(result.map(async model => model.init()))
+    } else {
+        // Get all activities
+        const activities = await PerformedActivity.findAllBy("user_id", user.id)
+
+        // Sort activities by finished_at DESC
+        activities.sort((a, b) => moment(b.finished_at).unix() - moment(a.finished_at).unix())
+
+        // Group activities by date
+        result = {}
+
+        for (let activity of activities) {
+            const date = moment(activity.finished_at).format("DD.MM.YYYY")
+
+            if (!result[date]) {
+                result[date] = []
+            }
+
+            result[date].push(activity)
+        }
+    }
     
     return result
 }
@@ -84,14 +108,8 @@ async function validateDelete(req, res) {
 }
 
 // Validate /date inputs
-function validateGetDate(req, res) {
-    if(!req.query.date) {
-        res.status(400)
-        res.end()
-        return false
-    }
-
-    if(!moment(req.query.date).isValid()) {
+function validateGetByDate(req, res) {
+    if(req.query.date && !moment(req.query.date).isValid()) {
         res.status(400)
         res.send("Invalid timestamp")
         return false
@@ -155,7 +173,7 @@ module.exports = {
     validateCreate,
     validateUpdate,
     validateDelete,
-    validateGetDate,
+    validateGetByDate,
     createActivity,
     updateActivity,
     deleteActivity

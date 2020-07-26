@@ -1,17 +1,18 @@
 import moment from "moment"
 import * as icons from "@material-ui/icons"
 
-export const ACTIVITIES = "ACTIVITIES"
+export const PERFORMED_ACTIVITIES = "PERFORMED_ACTIVITIES"
+export const PERFORMED_ACTIVITIES_BY_DATE = "PERFORMED_ACTIVITIES_BY_DATE"
 export const SHORTCUTS = "SHORTCUTS"
 
-function formatActivity(activity) {
+function formatPerformedActivity(activity) {
     activity.finished_at = moment(activity.finished_at)
     
     return activity
 }
 
-function formatActivities(activities) {
-    return activities.map(activity => formatActivity(activity))
+function formatPerformedActivities(activities) {
+    return activities.map(activity => formatPerformedActivity(activity))
 }
 
 function formatShortcut(shortcut) {
@@ -27,8 +28,10 @@ function formatShortcuts(shortcuts) {
 export default function format(type) {
     let fn
 
-    if(type === ACTIVITIES) {
-        fn = data => formatActivities(data.data)
+    if(type === PERFORMED_ACTIVITIES) {
+        fn = data => formatPerformedActivities(data.data)
+    } else if (type === PERFORMED_ACTIVITIES_BY_DATE) {
+        fn = data => Object.values(data.data).map(formatPerformedActivities)
     } else if (type === SHORTCUTS) {
         fn = data => formatShortcuts(data.data)
     }

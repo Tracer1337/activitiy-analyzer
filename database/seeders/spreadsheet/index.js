@@ -1,6 +1,7 @@
 const xlsx = require("xlsx")
 const path = require("path")
 const moment = require("moment")
+const chalk = require("chalk")
 
 const OFFSET_ROWS = 3
 
@@ -66,7 +67,12 @@ function getPerformedActivities() {
         const time = sheet[time_column + i].w
 
         // Convert date and time to timestamp
-        const timestamp = moment(currentDate + " " + time, "DD.MM.YYYY hh:mm").format("YYYY-MM-DD HH:mm:ss")
+        const timestamp = moment(currentDate + " " + time, "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm:ss")
+
+        if(!moment(timestamp).isValid()) {
+            console.log(chalk.red(`[Row ${i}] Invalid timestamp '${timestamp}'`))
+            console.log(sheet[date_column + i], time)
+        }
 
         result.push([
             sheet[activity_column + i].v,

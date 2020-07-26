@@ -9,11 +9,15 @@ function useAPIData(props) {
         throw new Error("API Method " + (props.method || props) + " not found")
     }
 
-    const [isLoading, setIsLoading] = useState(true)
-    const [data, setData] = useState()
+    const [isLoading, setIsLoading] = useState(!props.defaultValue)
+    const [data, setData] = useState(props.defaultValue)
     const [reloadKey, reload] = useReducer((key) => key + 1, 0)
 
     useEffect(() => {
+        if (props.defaultValue && reloadKey === 0) {
+            return
+        }
+
         method()
             .then(res => {
                 setData(res.data)

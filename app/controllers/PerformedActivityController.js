@@ -4,7 +4,7 @@ const {
     validateCreate,
     validateUpdate,
     validateDelete,
-    validateGetDate,
+    validateGetByDate,
     createActivity,
     updateActivity,
     deleteActivity
@@ -16,8 +16,8 @@ async function getAll(req, res) {
     res.send(activities)
 }
 
-async function getDate(req, res) {
-    if (!validateGetDate(req, res)) {
+async function getByDate(req, res) {
+    if (!validateGetByDate(req, res)) {
         return
     }
 
@@ -72,7 +72,7 @@ async function deletion(req, res) {
 
 module.exports = {
     getAll,
-    getDate,
+    getByDate,
     create,
     update,
     deletion

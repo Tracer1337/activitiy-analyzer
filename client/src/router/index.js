@@ -3,8 +3,9 @@ import { useSelector } from "react-redux"
 import { BrowserRouter, Switch, Route, Redirect } from "react-router-dom"
 
 import AuthPage from "../pages/AuthPage.js"
-import TodayPage from "../pages/TodayPage.js"
 import LogoutPage from "../pages/LogoutPage.js"
+import TodayPage from "../pages/TodayPage.js"
+import AllTime from "../pages/AllTime.js"
 
 function Router() {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
@@ -26,6 +27,10 @@ function Router() {
 
                 <Route path="/today">
                     <TodayPage/>
+                </Route>
+
+                <Route path="/all-time">
+                    <AllTime/>
                 </Route>
 
                 <Route path="/activities">

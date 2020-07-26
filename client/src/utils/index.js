@@ -1,15 +1,7 @@
-import moment from "moment"
-
-// Get the current date in "YYYY-MM-DD" format
-export function getCurrentDate() {
-    return moment().format("YYYY-MM-DD")
-}
-
 // Sort performed activities by finished_at DESC
-export function sortActivites(activities = []) {
+export function sortActivities(activities = []) {
     return activities.sort((a, b) => b.finished_at.unix() - a.finished_at.unix())
 }
-
 
 // Source: https://stackoverflow.com/questions/4770025/how-to-disable-scrolling-temporarily
 function preventDefault(event) {

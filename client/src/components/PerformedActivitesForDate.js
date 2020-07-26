@@ -8,7 +8,7 @@ import LoadingIndicator from "./LoadingIndicator.js"
 import Swipeable from "./Swipeable.js"
 import EditPerformedActivityDialog from "./Dialogs/EditPerformedActivityDialog.js"
 import useAPIData from "../utils/useAPIData.js"
-import { sortActivites, getCurrentDate } from "../utils"
+import { sortActivities } from "../utils"
 import { deletePerformedActivity } from "../config/api.js"
 
 const useStyles = makeStyles(theme => ({
@@ -108,17 +108,18 @@ function Entry({ entry, reloadList }) {
     )
 }
 
-function PerformedActivitesToday(props, ref) {
+function PerformedActivitesForDate({ date, defaultValue }, ref) {
     const classes = useStyles()
 
     const { isLoading, data, reload } = useAPIData({
         method: "getPerformedActivitiesByDate",
+        defaultValue,
         data: {
-            date: getCurrentDate()
+            date: date.format("YYYY-MM-DD")
         }
     })
     
-    const todayActivities = useMemo(() => sortActivites(data), [data])
+    const activities = useMemo(() => sortActivities(data), [data])
 
     useImperativeHandle(ref, () => ({ reload }))
 
@@ -128,20 +129,20 @@ function PerformedActivitesToday(props, ref) {
 
     return (
         <Paper elevation={3} className={classes.container}>
-            { todayActivities.length > 0 ? (
+            {activities.length > 0 ? (
                 <List>
-                    {todayActivities.map((entry, i) => (
+                    {activities.map((entry, i) => (
                         <React.Fragment key={entry.id}>
                             <Entry entry={entry} reloadList={reload} />
 
-                            {i < todayActivities.length - 1 && <Divider className={classes.divider} />}
+                            {i < activities.length - 1 && <Divider className={classes.divider} />}
                         </React.Fragment>
                     ))}
                 </List>
             ) : (
                 <List>
                     <ListItem>
-                        <ListItemText>No Entries For Today</ListItemText>
+                        <ListItemText>No entries</ListItemText>
                     </ListItem>
                 </List>
             )}
@@ -149,4 +150,4 @@ function PerformedActivitesToday(props, ref) {
     )
 }
 
-export default React.forwardRef(PerformedActivitesToday)
+export default React.forwardRef(PerformedActivitesForDate)

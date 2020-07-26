@@ -1,6 +1,7 @@
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import ExitToApp from "@material-ui/icons/ExitToApp"
 import Today from "@material-ui/icons/Today"
+import History from "@material-ui/icons/History"
 import FormatListBulleted from "@material-ui/icons/FormatListBulleted"
 import Assessment from "@material-ui/icons/Assessment"
 
@@ -24,6 +25,11 @@ export const NAV_DRAWER_LINKS = [
             title: "Today",
             to: "/today",
             icon: Today
+        },
+        {
+            title: "All Time",
+            to: "/all-time",
+            icon: History
         },
         {
             title: "Activities",
