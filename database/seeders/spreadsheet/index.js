@@ -67,7 +67,7 @@ function getPerformedActivities() {
         const time = sheet[time_column + i].w
 
         // Convert date and time to timestamp
-        const timestamp = moment(currentDate + " " + time, "YYYY-MM-DD HH:mm").utcOffset("+02:00").format("YYYY-MM-DD HH:mm:ss")
+        const timestamp = moment(currentDate + " " + time, "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm:ss")
 
         if(!moment(timestamp).isValid()) {
             console.log(chalk.red(`[Row ${i}] Invalid timestamp '${timestamp}'`))

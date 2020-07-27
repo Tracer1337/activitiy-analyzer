@@ -16,7 +16,7 @@ async function getActivitesByDate(user, date) {
 
     if(date) {
         // Get activities by date
-        const query = `SELECT * FROM performed_activities WHERE user_id = '${user.id}' AND DATE(finished_at) LIKE '${date}%'`
+        const query = `SELECT * FROM performed_activities WHERE user_id = '${user.id}' AND finished_at LIKE '${date}%'`
         result = (await queryAsync(query)).map(row => new PerformedActivity(row))
 
         await Promise.all(result.map(async model => model.init()))
@@ -31,7 +31,7 @@ async function getActivitesByDate(user, date) {
         result = {}
 
         for (let activity of activities) {
-            const date = moment(activity.finished_at).utcOffset(0).format("YYYY-DD-MM")
+            const date = moment(activity.finished_at).format("YYYY-DD-MM")
 
             if (!result[date]) {
                 result[date] = []
