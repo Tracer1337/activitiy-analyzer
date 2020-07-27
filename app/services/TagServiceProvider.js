@@ -10,18 +10,7 @@ async function getAllTags(user) {
 // Validate creation inputs
 async function validateCreate(req, res) {
     if (!req.body.name) {
-        res.status(400)
-        res.end()
-        return false
-    }
-
-    // Check if tag exists for the user
-    const isValidTag = !!(await Tag.findBy("id", req.body.id))
-
-    if (!isValidTag) {
-        res.status(400)
-        res.send("Invalid tag id")
-        return false
+        return void res.status(400).end()
     }
 
     return true
@@ -34,9 +23,14 @@ async function validateUpdate(req, res) {
     }
 
     if (!req.body.id) {
-        res.status(400)
-        res.end()
-        return false
+        return void res.status(400).end()
+    }
+
+    // Check if tag exists for the user
+    const isValidTag = !!(await Tag.findBy("id", req.body.id))
+
+    if (!isValidTag) {
+        return void res.status(400).send("Invalid tag id")
     }
 
     return true
@@ -45,9 +39,7 @@ async function validateUpdate(req, res) {
 // Validate delete inputs
 async function validateDelete(req, res) {
     if (!req.body.id) {
-        res.status(400)
-        res.end()
-        return false
+        return void res.status(400).end()
     }
 
     // Check if tag exists and user owns it
@@ -55,9 +47,7 @@ async function validateDelete(req, res) {
     const canDelete = tag && tag.user_id === req.user.id
 
     if (!canDelete) {
-        res.status(403)
-        res.end()
-        return false
+        return void res.status(403).end()
     }
 
     return true
@@ -82,12 +72,10 @@ async function createTag({ user, values }, res) {
 // Update existing tag
 async function updateTag({ user, values }, res) {
     // Get tag from user with provided id
-    const tag = (await getAllTags(user)).find(tag => tag.id === tag.id)
+    const tag = (await getAllTags(user)).find(tag => values.id === tag.id)
 
     if (!tag) {
-        res.status(404)
-        res.end()
-        return
+        return void res.status(404).end()
     }
 
     // Update tag values and store them into database

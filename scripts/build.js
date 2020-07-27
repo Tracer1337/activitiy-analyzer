@@ -21,7 +21,7 @@ async function exec(command, title) {
 
 const ROOT_DIR = path.join(__dirname, "..")
 const BUILD_DIR = path.join(ROOT_DIR, "client", "build")
-const OUTPUT_DIR = path.join(ROOT_DIR, "public", "app")
+const OUTPUT_DIR = path.join(ROOT_DIR, "public")
 
 program
     .option("-i, --install", "install npm packages for server and client")

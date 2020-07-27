@@ -1,12 +1,11 @@
 import React, { useState, useImperativeHandle } from "react"
-import { Paper, List, ListItem, Typography } from "@material-ui/core"
+import { Paper, List as MuiList, ListItem as MuiListItem, ListItemText } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 import LoadingIndicator from "./LoadingIndicator.js"
 import Swipeable from "./Swipeable.js"
-import EditCategoryDialog from "./Dialogs/EditCategoryDialog.js"
 import useAPIData from "../utils/useAPIData.js"
-import { deleteCategory } from "../config/api.js"
+import * as api from "../config/api.js"
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -19,22 +18,16 @@ const useStyles = makeStyles(theme => ({
         display: "flex",
         justifyContent: "space-between",
         backgroundColor: theme.palette.background.paper
-    },
-
-    secondary: {
-        fontSize: 14,
-        lineHeight: 2,
-        opacity: .87
     }
 }))
 
-function Entry({ data, reloadList }) {
+function Entry({ data, reloadList, apiDelete, EditDialog, ListItem }) {
     const classes = useStyles()
 
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
     const handleDelete = () => {
-        deleteCategory({ id: data.id })
+        apiDelete({ id: data.id })
             .then(reloadList)
             .catch(console.error)
     }
@@ -51,12 +44,10 @@ function Entry({ data, reloadList }) {
     return (
         <>
             <Swipeable onSwipeLeft={handleDelete} onSwipeRight={handleEdit} key={data.id}>
-                <ListItem className={classes.listItem}>
-                    <Typography variant="subtitle1">{data.name}</Typography>
-                </ListItem>
+                <ListItem data={data} className={classes.listItem}/>
             </Swipeable>
 
-            <EditCategoryDialog
+            <EditDialog
                 open={isEditDialogOpen}
                 onClose={handleEditDialogClose}
                 data={data}
@@ -65,10 +56,10 @@ function Entry({ data, reloadList }) {
     )
 }
 
-function CategoryList(props, ref) {
+function List({ APIMethods, EditDialog, ListItem }, ref) {
     const classes = useStyles()
 
-    const { isLoading, data, reload } = useAPIData("getAllCategories")
+    const { isLoading, data, reload } = useAPIData(APIMethods.get)
 
     useImperativeHandle(ref, () => ({ reload }), [reload])
 
@@ -80,13 +71,26 @@ function CategoryList(props, ref) {
 
     return (
         <Paper className={classes.container}>
-            <List>
-                {data.map(category => (
-                    <Entry data={category} reloadList={reload} key={category.id} />
-                ))}
-            </List>
+            <MuiList>
+                {data.length > 0 ? (
+                    data.map(tag => (
+                        <Entry
+                            key={tag.id}
+                            data={tag}
+                            reloadList={reload}
+                            apiDelete={api[APIMethods.delete]}
+                            EditDialog={EditDialog}
+                            ListItem={ListItem}
+                        />
+                    ))
+                ) : (
+                    <MuiListItem>
+                        <ListItemText>No entries</ListItemText>
+                    </MuiListItem>
+                )}
+            </MuiList>
         </Paper>
     )
 }
 
-export default React.forwardRef(CategoryList)
+export default React.forwardRef(List)

@@ -108,19 +108,17 @@ function PerformedActivitesForDate({ date, defaultValue, style }, ref) {
 
     return (
         <Paper elevation={3} className={classes.container} style={style}>
-            {activities.length > 0 ? (
-                <List>
-                    {activities.map((entry, i) => (
-                        <Entry entry={entry} reloadList={reload} key={entry.id}/>
-                    ))}
-                </List>
-            ) : (
-                <List>
+            <List>
+                {activities.length > 0 ? (
+                    activities.map((entry, i) => (
+                        <Entry entry={entry} reloadList={reload} key={entry.id} />
+                    ))
+                ) : (
                     <ListItem>
                         <ListItemText>No entries</ListItemText>
                     </ListItem>
-                </List>
-            )}
+                )}
+            </List>
         </Paper>
     )
 }

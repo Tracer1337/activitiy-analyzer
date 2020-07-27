@@ -1,9 +1,12 @@
-import React, { useState } from "react"
-import { useForm } from "react-hook-form"
+import React, { useState, useMemo } from "react"
+import { useForm, Controller } from "react-hook-form"
 import { Typography, TextField, Button } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
+import LoadingIndicator from "../LoadingIndicator.js"
 import CategorySelect from "../CategorySelect.js"
+import Select from "../Select.js"
+import useAPIData from "../../utils/useAPIData.js"
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -22,9 +25,18 @@ const useStyles = makeStyles(theme => ({
 function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories = false, submitText = "Create" }) {
     const classes = useStyles()
 
-    const { register, watch, reset, getValues, setValue } = useForm({ defaultValues })
+    const { isLoading, data: tags } = useAPIData("getAllTags")
+    
+    const { register, watch, reset, getValues, setValue, control } = useForm({ defaultValues })
 
     const [categoryId, setCategoryId] = useState()
+
+    const tagOptions = useMemo(() => {
+        return tags?.map(tag => ({
+            label: tag.name,
+            value: tag.id
+        }))
+    }, [tags])
 
     const handleCategorySelect = (category) => {
         setCategoryId(category.id)
@@ -38,11 +50,19 @@ function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories
             return
         }
 
+        values.tag_ids = values.tag_ids?.map(option => option.value)
+
         onSubmit({
-            name: values.name,
+            ...values,
             category_id: categoryId
         }).then(reset)
     }
+
+    if(isLoading) {
+        return <LoadingIndicator/>
+    }
+
+    if(defaultValues) console.log(defaultValues)
 
     return (
         <>
@@ -73,6 +93,17 @@ function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories
                     filter={watch("category_name")}
                     style={{ display: !showAllCategories && !watch("category_name") && "none" }}
                     onClick={handleCategorySelect}
+                />
+
+                <Controller
+                    as={Select}
+                    name="tag_ids"
+                    label="Tags"
+                    control={control}
+                    options={tagOptions}
+                    isMulti
+                    className={classes.input}
+                    defaultValue={defaultValues?.tags?.map(tag => tagOptions.find(option => option.value === tag.id))}
                 />
 
                 <Button

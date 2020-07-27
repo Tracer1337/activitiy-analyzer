@@ -6,10 +6,10 @@ module.exports = {
         const userId = (await query("SELECT id FROM users WHERE id = id LIMIT 1"))[0].id
 
         return [
-            [uuid(), "good", userId],
-            [uuid(), "bad", userId],
-            [uuid(), "active", userId],
-            [uuid(), "passive", userId],
+            [uuid(), "Good", userId],
+            [uuid(), "Bad", userId],
+            [uuid(), "Active", userId],
+            [uuid(), "Passive", userId],
         ]
     }
 }

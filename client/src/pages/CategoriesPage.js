@@ -2,7 +2,7 @@ import React, { useRef } from "react"
 
 import Layout from "../components/Layout.js"
 import CategoryForm from "../components/Forms/CategoryForm.js"
-import CategoryList from "../components/CategoryList.js"
+import CategoryList from "../components/Lists/CategoryList.js"
 import { createCategory } from "../config/api.js"
 
 function CategoriesPage() {

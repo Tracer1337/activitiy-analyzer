@@ -1,16 +1,16 @@
 import React, { useRef } from "react"
 
 import Layout from "../components/Layout.js"
-import ActivityForm from "../components/Forms/ActivityForm.js"
-import ActivityList from "../components/Lists/ActivityList.js"
-import { createActivity } from "../config/api.js"
+import TagForm from "../components/Forms/TagForm.js"
+import TagsList from "../components/Lists/TagsList.js"
+import { createTag } from "../config/api.js"
 
-function ActivitiesPage() {
+function TagsPage() {
     const list = useRef()
 
     const handleSubmit = (values) => {
         return new Promise(resolve => {
-            createActivity(values)
+            createTag(values)
                 .then(() => {
                     list.current.reload()
                     resolve()
@@ -22,14 +22,14 @@ function ActivitiesPage() {
     return (
         <Layout
             HeaderProps={{
-                title: "Activities"
+                title: "TagsPage"
             }}
         >
-            <ActivityForm onSubmit={handleSubmit}/>
+            <TagForm onSubmit={handleSubmit} />
 
-            <ActivityList ref={list}/>
+            <TagsList ref={list} />
         </Layout>
     )
 }
 
-export default ActivitiesPage
+export default TagsPage

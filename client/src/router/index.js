@@ -8,6 +8,7 @@ import TodayPage from "../pages/TodayPage.js"
 import AllTimePage from "../pages/AllTimePage.js"
 import ActivitiesPage from "../pages/ActivitiesPage.js"
 import CategoriesPage from "../pages/CategoriesPage.js"
+import TagsPage from "../pages/TagsPage.js"
 import AnalysisPage from "../pages/AnalysisPage.js"
 
 function Router() {
@@ -42,6 +43,10 @@ function Router() {
 
                 <Route path="/categories">
                     <CategoriesPage/>
+                </Route>
+
+                <Route path="/tags">
+                    <TagsPage/>
                 </Route>
 
                 <Route path="/analysis">

@@ -23,13 +23,13 @@ module.exports = {
 
         // Assign active or passive to each activity
         activities.forEach(({ id }) => {
-            const tagId = map[["active", "passive"][random(2)]]
+            const tagId = map[["Active", "Passive"][random(2)]]
             result.push([uuid(), "activities", id, tagId])
         })
 
         // Assign good or bad to each category
         categories.forEach(({ id }) => {
-            const tagId = map[["good", "bad"][random(2)]]
+            const tagId = map[["Good", "Bad"][random(2)]]
             result.push([uuid(), "categories", id, tagId])
         })
 

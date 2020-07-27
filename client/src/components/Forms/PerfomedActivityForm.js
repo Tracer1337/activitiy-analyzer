@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import moment from "moment"
 import { useForm, Controller } from "react-hook-form"
 import { Typography, TextField, Button } from "@material-ui/core"
@@ -37,12 +37,16 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+function getFinishedAtDefault() {
+    return roundMinutesTo(moment(), 5)
+}
+
 function PerfomedActivityForm({ onSubmit, defaultValues, title = true, submitButton = false }) {
     const classes = useStyles()
 
-    const { register, control, watch, reset, getValues } = useForm({
+    const { register, control, watch, reset, getValues, setValue, formState } = useForm({
         defaultValues: {
-            finished_at: roundMinutesTo(moment(), 5),
+            finished_at: getFinishedAtDefault(),
             ...defaultValues
         }
     })
@@ -57,6 +61,16 @@ function PerfomedActivityForm({ onSubmit, defaultValues, title = true, submitBut
             finished_at
         }).then(reset)
     }
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if(!("finished_at" in formState.dirtyFields)) {
+                setValue("finished_at", getFinishedAtDefault())
+            }
+        }, 1000)
+
+        return () => clearInterval(interval)
+    })
 
     return (
         <>

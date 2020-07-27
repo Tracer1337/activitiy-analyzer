@@ -38,6 +38,11 @@ export const createPerformedActivity = (data) => axios.post(url("/performed-acti
 export const updatePerformedActivity = (data) => axios.put(url("/performed-activities"), data)
 export const deletePerformedActivity = (data) => axios.delete(url("/performed-activities"), { data })
 
+export const getAllTags = () => axios.get(url("/tags"))
+export const createTag = (data) => axios.post(url("/tags"), data)
+export const updateTag = (data) => axios.put(url("/tags"), data)
+export const deleteTag = (data) => axios.delete(url("/tags"), { data })
+
 export const getAllShortcuts = () => axios.get(url("/shortcuts")).then(format(SHORTCUTS))
 export const createShortcut = (data) => axios.post(url("/shortcuts"), data)
 export const deleteShortcut = (data) => axios.delete(url("/shortcuts"), { data })

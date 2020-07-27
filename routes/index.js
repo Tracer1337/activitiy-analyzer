@@ -17,7 +17,7 @@ for(let [route, router] of routes) {
 
 if (process.env.NODE_ENV === "development") {
     // Proxy react dev-server
-    rootRouter.use("/app", createProxyMiddleware({
+    rootRouter.use("/", createProxyMiddleware({
         target: "http://localhost:3000/",
         ws: true
     }))
@@ -25,8 +25,8 @@ if (process.env.NODE_ENV === "development") {
     // Serve static files
     rootRouter.use(express.static(path.join(__dirname, "..", "public")))
 
-    // Server React App on /app/*
-    rootRouter.get("/app/*", (req, res) => res.sendFile(path.resolve(__dirname, "..", "public", "app", "index.html")))
+    // Server React App on /*
+    rootRouter.get("/*", (req, res) => res.sendFile(path.resolve(__dirname, "..", "public", "index.html")))
 }
 
 module.exports = rootRouter

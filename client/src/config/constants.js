@@ -2,8 +2,9 @@ import AccountCircle from "@material-ui/icons/AccountCircle"
 import ExitToApp from "@material-ui/icons/ExitToApp"
 import Today from "@material-ui/icons/Today"
 import History from "@material-ui/icons/History"
-import Category from "@material-ui/icons/Category"
 import FormatListBulleted from "@material-ui/icons/FormatListBulleted"
+import Category from "@material-ui/icons/Category"
+import LocalOffer from "@material-ui/icons/LocalOffer"
 import Assessment from "@material-ui/icons/Assessment"
 
 export const API_BASE_URL = window.location.origin + "/api"
@@ -33,6 +34,13 @@ export const NAV_DRAWER_LINKS = [
             icon: History
         },
         {
+            title: "Analysis",
+            to: "/analysis",
+            icon: Assessment
+        }
+    ],
+    [
+        {
             title: "Activities",
             to: "/activities",
             icon: FormatListBulleted
@@ -43,9 +51,9 @@ export const NAV_DRAWER_LINKS = [
             icon: Category
         },
         {
-            title: "Analysis",
-            to: "/analysis",
-            icon: Assessment
+            title: "Tags",
+            to: "/tags",
+            icon: LocalOffer
         }
     ]
 ]
