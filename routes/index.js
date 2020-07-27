@@ -1,5 +1,7 @@
 const fs = require("fs")
+const path = require("path")
 const express = require("express")
+const { createProxyMiddleware } = require("http-proxy-middleware")
 
 const rootRouter = express.Router()
 
@@ -11,6 +13,20 @@ const routes = fs.readdirSync(__dirname)
 // Create routes
 for(let [route, router] of routes) {
     rootRouter.use("/" + route, router)
+}
+
+if (process.env.NODE_ENV === "development") {
+    // Proxy react dev-server
+    rootRouter.use("/app", createProxyMiddleware({
+        target: "http://localhost:3000/",
+        ws: true
+    }))
+} else {
+    // Serve static files
+    rootRouter.use(express.static(path.join(__dirname, "..", "public")))
+
+    // Server React App on /app/*
+    rootRouter.get("/app/*", (req, res) => res.sendFile(path.resolve(__dirname, "..", "public", "app", "index.html")))
 }
 
 module.exports = rootRouter
