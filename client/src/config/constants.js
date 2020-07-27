@@ -49,3 +49,5 @@ export const NAV_DRAWER_LINKS = [
         }
     ]
 ]
+
+export const TIMEZONE = "Europe/Berlin"

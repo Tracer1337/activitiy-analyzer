@@ -121,7 +121,7 @@ function validateGetByDate(req, res) {
 // Create new activity and store it in the database
 async function createActivity({ user, values }, res) {
     // Convert finished_at to correct SQL format
-    values.finished_at += ":00"
+    values.finished_at = moment(values.finished_at, "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm:ss")
 
     // Create activity and store in database
     const performedActivity = new PerformedActivity({

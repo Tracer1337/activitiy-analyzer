@@ -31,20 +31,24 @@ function AllTimePage() {
         >
             <div className={classes.list}>
                 {isLoading ? <LoadingIndicator /> : (
-                    Object.keys(data).map(date => (
-                        <Accordion TransitionProps={{ unmountOnExit: true }} key={date}>
-                            <AccordionSummary>
-                                <Typography variant="subtitle1">{ moment(date, "YYYY-DD-MM").format("DD.MM.YYYY") }</Typography>
-                            </AccordionSummary>
+                    Object.keys(data).map(date => {
+                        date = moment(date, "YYYY-DD-MM")
 
-                            <AccordionDetails classes={{ root: classes.accordionDetails }}>
-                                <PerformedActivitiesForDate
-                                    date={moment(date, "YYYY-DD-MM")}
-                                    defaultValue={data[date]}
-                                />
-                            </AccordionDetails>
-                        </Accordion>
-                    ))
+                        return (
+                            <Accordion TransitionProps={{ unmountOnExit: true }} key={date}>
+                                <AccordionSummary>
+                                    <Typography variant="subtitle1">{date.format("DD.MM.YYYY")}</Typography>
+                                </AccordionSummary>
+
+                                <AccordionDetails classes={{ root: classes.accordionDetails }}>
+                                    <PerformedActivitiesForDate
+                                        date={date}
+                                        defaultValue={data[date]}
+                                    />
+                                </AccordionDetails>
+                            </Accordion>
+                        )
+                    })
                 )}
             </div>
         </Layout>
