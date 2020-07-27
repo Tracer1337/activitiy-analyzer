@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles"
 
 import Shortcuts from "../Shortcuts.js"
 import ActivitySelect from "../ActivitySelect.js"
+import { roundMinutesTo } from "../../utils"
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -41,7 +42,7 @@ function PerfomedActivityForm({ onSubmit, defaultValues, title = true, submitBut
 
     const { register, control, watch, reset, getValues } = useForm({
         defaultValues: {
-            finished_at: moment(),
+            finished_at: roundMinutesTo(moment(), 5),
             ...defaultValues
         }
     })

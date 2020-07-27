@@ -1,3 +1,5 @@
+import moment from "moment"
+
 // Sort performed activities by finished_at DESC
 export function sortActivities(activities = []) {
     return activities.sort((a, b) => b.finished_at.unix() - a.finished_at.unix())
@@ -31,4 +33,10 @@ export function getPositionFromEvent(event) {
         x: event.clientX,
         y: event.clientY
     }
+}
+
+// Round minutes to nearest given value
+export function roundMinutesTo(time, minutes) {
+    const ms = minutes * 60 * 1000
+    return moment(Math.round((+time) / ms) * ms)
 }
