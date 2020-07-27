@@ -3,9 +3,11 @@ const {
     validateCreate,
     validateUpdate,
     validateDelete,
+    validateGetDetailed,
     createActivity,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    getActivityDetailed
 } = require("../services/ActivityServiceProvider.js")
 
 async function getAll(req, res) {
@@ -58,8 +60,19 @@ async function deletion(req, res) {
     }
 }
 
+async function getDetailed(req, res) {
+    if(!(await validateGetDetailed(req, res))) {
+        return
+    }
+
+    const data = await getActivityDetailed({ id: req.params.id })
+
+    res.send(data)
+}
+
 module.exports = {
     getAll,
+    getDetailed,
     create,
     update,
     deletion

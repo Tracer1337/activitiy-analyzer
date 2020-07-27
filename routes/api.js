@@ -21,6 +21,7 @@ router.put("/categories", ProtectMiddleware, CategoryController.update)
 router.delete("/categories", ProtectMiddleware, CategoryController.deletion)
 
 router.get("/activities", ProtectMiddleware, ActivityController.getAll)
+router.get("/activities/:id", ProtectMiddleware, ActivityController.getDetailed)
 router.post("/activities", ProtectMiddleware, ActivityController.create)
 router.put("/activities", ProtectMiddleware, ActivityController.update)
 router.delete("/activities", ProtectMiddleware, ActivityController.deletion)

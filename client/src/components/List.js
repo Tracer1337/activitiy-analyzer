@@ -12,12 +12,6 @@ const useStyles = makeStyles(theme => ({
         marginTop: theme.spacing(2),
         padding: 0,
         overflow: "hidden"
-    },
-
-    listItem: {
-        display: "flex",
-        justifyContent: "space-between",
-        backgroundColor: theme.palette.background.paper
     }
 }))
 
@@ -44,7 +38,7 @@ function Entry({ data, reloadList, apiDelete, EditDialog, ListItem }) {
     return (
         <>
             <Swipeable onSwipeLeft={handleDelete} onSwipeRight={handleEdit} key={data.id}>
-                <ListItem data={data} className={classes.listItem}/>
+                <ListItem data={data}/>
             </Swipeable>
 
             <EditDialog

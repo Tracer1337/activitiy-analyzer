@@ -1,7 +1,9 @@
 const { v4: uuid } = require("uuid")
+const moment = require("moment")
 
 const Activity = require("../models/Activity.js")
 const Category = require("../models/Category.js")
+const PerfomedActivity = require("../models/PerformedActivity.js")
 const { queryAsync, quotedList } = require("../utils")
 
 // Fetch all activities from user from database
@@ -79,6 +81,22 @@ async function validateDelete(req, res) {
     return true
 }
 
+// Validate getDetailed inputs
+async function validateGetDetailed(req, res) {
+    // Check if activity exists for user
+    const activity = await Activity.findBy("id", req.params.id)
+
+    if(!activity) {
+        return void res.status(404).end()
+    }
+
+    if(activity.user_id !== req.user.id) {
+        return void res.status(403).end()
+    }
+
+    return true
+}
+
 // Check if activity with name already exists for user
 async function isDuplicate(user, values) {
     return (await getAllActivities(user)).some(activity => activity.name === values.name)
@@ -146,12 +164,54 @@ async function deleteActivity({ id }) {
     return true
 }
 
+// Get activity with statistics
+async function getActivityDetailed({ id }) {
+    // Get activity
+    const activity = await Activity.findBy("id", id)
+
+    // Get all performed activities and format them
+    const performed_activities = await PerfomedActivity.findAllBy("user_id", activity.user_id)
+
+    performed_activities.forEach(entry => entry.finished_at = moment(entry.finished_at))
+
+    // Sort performed activities by date ASC
+    performed_activities.sort((a, b) => a.finished_at - b.finished_at)
+
+    // Get performed activities durations
+    const durations = []
+    
+    for(let i = 0; i < performed_activities.length; i++) {
+        const entry = performed_activities[i]
+
+        if(entry.activity.id !== id) {
+            continue
+        }
+
+        // Calculate duration and append it to durations array
+        const lastEntry = performed_activities[i - 1]
+        const diff = entry.finished_at - lastEntry.finished_at
+
+        durations.push(diff)
+    }
+
+    // Calculate total duration
+    const totalDuration = durations.reduce((sum, current) => sum += current, 0)
+
+    return {
+        activity,
+        durations,
+        total_duration: totalDuration
+    }
+}
+
 module.exports = {
     getAllActivities,
     validateCreate,
     validateUpdate,
     validateDelete,
+    validateGetDetailed,
     createActivity,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    getActivityDetailed
 }

@@ -10,6 +10,7 @@ import ActivitiesPage from "../pages/ActivitiesPage.js"
 import CategoriesPage from "../pages/CategoriesPage.js"
 import TagsPage from "../pages/TagsPage.js"
 import AnalysisPage from "../pages/AnalysisPage.js"
+import ActivityPage from "../pages/ActivityPage.js"
 
 function Router() {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
@@ -51,6 +52,10 @@ function Router() {
 
                 <Route path="/analysis">
                     <AnalysisPage/>
+                </Route>
+
+                <Route path="/activity/:id">
+                    <ActivityPage/>
                 </Route>
 
                 <Route path="/">

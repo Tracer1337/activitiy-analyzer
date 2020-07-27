@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken")
+const moment = require("moment")
 
 // Generate JSON Web Token
 function generateJWT(input) {
