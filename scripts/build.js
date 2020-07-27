@@ -2,22 +2,26 @@ const fs = require("fs")
 const path = require("path")
 const { program } = require("commander")
 const chalk = require("chalk")
+const ora = require("ora")
 const util = require("util")
 const execAsync = util.promisify(require("child_process").exec)
 
 async function exec(command, title) {
-    console.log(chalk.bold(title))
+    const spinner = ora(title).start()
+
     const { stderr } = await execAsync(command)
-    
+
     if (stderr) {
-        console.log(chalk.red("Error executing " + command))
+        spinner.fail()
         throw new Error(stderr)
     }
 
-    console.log(chalk.green("Done"))
+    spinner.succeed()
 }
 
 const ROOT_DIR = path.join(__dirname, "..")
+const BUILD_DIR = path.join(ROOT_DIR, "client", "build")
+const OUTPUT_DIR = path.join(ROOT_DIR, "public", "app")
 
 program
     .option("-i, --install", "install npm packages for server and client")
@@ -37,11 +41,18 @@ program
     // Create react production build
     await exec("cd client && npm run build", "Create react production build")
 
-    console.log(chalk.bold("Put build into desired destination"))
+    const spinner = ora("Put build into desired destination").start()
 
-    // Remove old react build
-    fs.rmdirSync(path.join(ROOT_DIR, "public", "app"), { recursive: true })
+    try {
+        // Remove old react build
+        fs.rmdirSync(OUTPUT_DIR, { recursive: true })
+    
+        // Move build to output
+        fs.renameSync(BUILD_DIR, OUTPUT_DIR)
+    } catch (error) {
+        spinner.fail()
+        throw new Error(error)
+    }
 
-    // Move client/build to public/app
-    fs.renameSync(path.join(ROOT_DIR, "client", "build"), path.join(__dirname, "public", "app"))
+    spinner.succeed()
 })()

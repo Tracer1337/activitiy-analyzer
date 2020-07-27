@@ -12,6 +12,7 @@
     "setup-db": "npm run migrate && npm run seed",
     "migrate": "node ./scripts/migrate.js",
     "seed": "node ./scripts/seed.js",
+    "build": "node ./scripts/build.js",
     "prod": "node server.js"
   },
   "repository": {
@@ -40,6 +41,7 @@
     "moment": "^2.27.0",
     "mysql": "^2.18.1",
     "opn": "^6.0.0",
+    "ora": "^4.0.5",
     "react-draggable": "^4.4.3",
     "uuid": "^8.2.0",
     "xlsx": "^0.16.4"
