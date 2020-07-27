@@ -35,7 +35,7 @@ program
         // Install npm packages for server
         await exec("npm install", "Install npm packages for server")
         // Install npm packages for client
-        await exec("cd client && npm install", "Install npm pac kages for client")
+        await exec("cd client && npm install", "Install npm packages for client")
     }
 
     // Create react production build

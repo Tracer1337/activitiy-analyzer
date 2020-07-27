@@ -1,6 +1,6 @@
 const express = require("express")
 
-const ProtectMiddleware = require("../app/Middleware/ProtectMiddleware")
+const ProtectMiddleware = require("../app/middleware/ProtectMiddleware")
 
 const AuthController = require("../app/controllers/AuthController.js")
 const CategoryController = require("../app/controllers/CategoryController.js")
