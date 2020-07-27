@@ -1,5 +1,5 @@
 const { v4: uuid } = require("uuid")
-const moment = require("moment-timezone")
+const moment = require("moment")
 
 const PerformedActivity = require("../models/PerformedActivity.js")
 const Activity = require("../models/Activity.js")
@@ -31,7 +31,7 @@ async function getActivitesByDate(user, date) {
         result = {}
 
         for (let activity of activities) {
-            const date = moment(activity.finished_at).format("YYYY-DD-MM")
+            const date = moment(activity.finished_at).utcOffset(0).format("YYYY-DD-MM")
 
             if (!result[date]) {
                 result[date] = []

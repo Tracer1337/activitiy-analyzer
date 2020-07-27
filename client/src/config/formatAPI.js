@@ -1,14 +1,14 @@
-import moment from "moment-timezone"
+import moment from "moment"
 import * as icons from "@material-ui/icons"
 
-import { TIMEZONE } from "./constants.js"
+import { UTC_OFFSET } from "./constants.js"
 
 export const PERFORMED_ACTIVITIES = "PERFORMED_ACTIVITIES"
 export const PERFORMED_ACTIVITIES_BY_DATE = "PERFORMED_ACTIVITIES_BY_DATE"
 export const SHORTCUTS = "SHORTCUTS"
 
 function formatPerformedActivity(activity) {
-    activity.finished_at = moment(activity.finished_at).tz(TIMEZONE)
+    activity.finished_at = moment(activity.finished_at).utcOffset(UTC_OFFSET)
     
     return activity
 }
