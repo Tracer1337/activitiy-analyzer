@@ -31,7 +31,7 @@ async function getActivitesByDate(user, date) {
         result = {}
 
         for (let activity of activities) {
-            const date = moment(activity.finished_at).format("DD.MM.YYYY")
+            const date = moment(activity.finished_at).format("YYYY-DD-MM")
 
             if (!result[date]) {
                 result[date] = []
@@ -121,7 +121,7 @@ function validateGetByDate(req, res) {
 // Create new activity and store it in the database
 async function createActivity({ user, values }, res) {
     // Convert finished_at to correct SQL format
-    values.finished_at = moment(values.finished_at, "YYYY-MM-DD HH:mm").tz("Europe/Berlin").format("YYYY-MM-DD HH:mm:ss")
+    values.finished_at += ":00"
 
     // Create activity and store in database
     const performedActivity = new PerformedActivity({

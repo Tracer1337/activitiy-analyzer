@@ -34,12 +34,12 @@ function AllTimePage() {
                     Object.keys(data).map(date => (
                         <Accordion TransitionProps={{ unmountOnExit: true }} key={date}>
                             <AccordionSummary>
-                                <Typography variant="subtitle1">{date}</Typography>
+                                <Typography variant="subtitle1">{ moment(date, "YYYY-DD-MM").format("DD.MM.YYYY") }</Typography>
                             </AccordionSummary>
 
                             <AccordionDetails classes={{ root: classes.accordionDetails }}>
                                 <PerformedActivitiesForDate
-                                    date={moment(date, "DD.MM.YYYY")}
+                                    date={moment(date, "YYYY-DD-MM")}
                                     defaultValue={data[date]}
                                 />
                             </AccordionDetails>
