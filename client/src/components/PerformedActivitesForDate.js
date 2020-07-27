@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useImperativeHandle } from "react"
-import { Paper, List, ListItem, ListItemText, Divider } from "@material-ui/core"
+import { Paper, List, ListItem, ListItemText } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
 import LoadingIndicator from "./LoadingIndicator.js"
@@ -13,10 +13,6 @@ const useStyles = makeStyles(theme => ({
     container: {
         overflowX: "hidden",
         width: "100%"
-    },
-
-    divider: {
-        margin: `0 ${theme.spacing(2)}px`
     },
 
     item: {
@@ -115,11 +111,7 @@ function PerformedActivitesForDate({ date, defaultValue, style }, ref) {
             {activities.length > 0 ? (
                 <List>
                     {activities.map((entry, i) => (
-                        <React.Fragment key={entry.id}>
-                            <Entry entry={entry} reloadList={reload} />
-
-                            {i < activities.length - 1 && <Divider className={classes.divider} />}
-                        </React.Fragment>
+                        <Entry entry={entry} reloadList={reload} key={entry.id}/>
                     ))}
                 </List>
             ) : (

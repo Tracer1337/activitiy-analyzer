@@ -120,6 +120,17 @@ function Swipeable({ children, swipeLeftConfig, swipeRightConfig, onSwipeRight, 
     }
 
     const setColor = (color) => containerRef.current.style.backgroundColor = color
+
+    const applyHighlight = () => {
+        childRef.current.style.transition = "box-shadow 100ms linear"
+        childRef.current.style.boxShadow = theme.shadows["2"]
+        childRef.current.style.zIndex = "10"
+    }
+
+    const removeHighlight = () => {
+        childRef.current.style.boxShadow = null
+        childRef.current.style.zIndex = null
+    }
     
     const roundCorners = (side) => {
         childRef.current.style.borderRadius = side === "right" ? `0 ${theme.spacing(1)}px ${theme.spacing(1)}px 0` : `${theme.spacing(1)}px 0 0 ${theme.spacing(1)}px`
@@ -127,6 +138,12 @@ function Swipeable({ children, swipeLeftConfig, swipeRightConfig, onSwipeRight, 
 
     useEffect(() => {
         childRef.current.style.transform = `translateX(${position.x}px)`
+
+        if(position.x !== 0 || position.y !== 0) {
+            applyHighlight()
+        } else {
+            removeHighlight()
+        }
 
         if(position.x < 0) {
             roundCorners("right")

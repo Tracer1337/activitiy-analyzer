@@ -28,9 +28,6 @@ program
     .parse(process.argv)
 
 ;(async function run() {
-    // Pull newest version from git
-    await exec("git pull", "Pull new version from git")
-
     if(program.install) {
         // Install npm packages for server
         await exec("npm install", "Install npm packages for server")
