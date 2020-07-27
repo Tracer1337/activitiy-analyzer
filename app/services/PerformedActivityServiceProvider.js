@@ -1,5 +1,5 @@
 const { v4: uuid } = require("uuid")
-const moment = require("moment")
+const moment = require("moment-timezone")
 
 const PerformedActivity = require("../models/PerformedActivity.js")
 const Activity = require("../models/Activity.js")
@@ -121,7 +121,7 @@ function validateGetByDate(req, res) {
 // Create new activity and store it in the database
 async function createActivity({ user, values }, res) {
     // Convert finished_at to correct SQL format
-    values.finished_at = moment(values.finished_at, "YYYY-MM-DD HH:mm").format("YYYY-MM-DD HH:mm:ss")
+    values.finished_at = moment(values.finished_at, "YYYY-MM-DD HH:mm").tz("Europe/Berlin").format("YYYY-MM-DD HH:mm:ss")
 
     // Create activity and store in database
     const performedActivity = new PerformedActivity({
