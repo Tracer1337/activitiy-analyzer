@@ -15,7 +15,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function Entry({ data, reloadList, apiDelete, EditDialog, ListItem }) {
+function Entry({ data, reloadList, apiDelete, EditDialog, ListItem, SwipeableProps }) {
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
     const handleDelete = () => {
@@ -35,7 +35,7 @@ function Entry({ data, reloadList, apiDelete, EditDialog, ListItem }) {
 
     return (
         <>
-            <Swipeable onSwipeLeft={handleDelete} onSwipeRight={handleEdit} key={data.id}>
+            <Swipeable onSwipeLeft={handleDelete} onSwipeRight={handleEdit} key={data.id} {...SwipeableProps}>
                 <ListItem data={data}/>
             </Swipeable>
 
@@ -48,7 +48,7 @@ function Entry({ data, reloadList, apiDelete, EditDialog, ListItem }) {
     )
 }
 
-function List({ APIMethods, EditDialog, ListItem }, ref) {
+function List({ APIMethods, EditDialog, ListItem, SwipeableProps, sort }, ref) {
     const classes = useStyles()
 
     const { isLoading, data, reload } = useAPIData(APIMethods.get)
@@ -59,7 +59,11 @@ function List({ APIMethods, EditDialog, ListItem }, ref) {
         return <LoadingIndicator />
     }
 
-    data.sort((a, b) => a.name.localeCompare(b.name))
+    if(sort) {
+        data.sort(sort)        
+    } else {
+        data.sort((a, b) => a.name.localeCompare(b.name))
+    }
 
     return (
         <Paper className={classes.container}>
@@ -73,6 +77,7 @@ function List({ APIMethods, EditDialog, ListItem }, ref) {
                             apiDelete={api[APIMethods.delete]}
                             EditDialog={EditDialog}
                             ListItem={ListItem}
+                            SwipeableProps={SwipeableProps}
                         />
                     ))
                 ) : (

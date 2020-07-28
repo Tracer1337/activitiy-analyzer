@@ -9,12 +9,7 @@ const useStyles = makeStyles(theme => ({
     listItem: {
         backgroundColor: theme.palette.background.paper,
         display: "flex",
-        flexDirection: "column",
-        alignItems: "stretch"
-    },
-
-    tags: {
-        marginTop: theme.spacing(1)
+        justifyContent: "space-between"
     },
 
     chip: {
@@ -36,12 +31,15 @@ function CategoryList(props, ref) {
                 get: "getAllCategories",
                 delete: "deleteCategory"
             }}
+            SwipeableProps={{
+                onSwipeLeft: null
+            }}
             EditDialog={EditCategoryDialog}
             ListItem={React.forwardRef(({ data, ...props }, ref) => (
                 <ListItem ref={ref} className={classes.listItem} {...props}>
                     <ListItemText>{data.name}</ListItemText>
 
-                    <div className={classes.tags}>
+                    <div>
                         {data.tags.map(tag => <Chip variant="outlined" label={tag.name} size="small" className={classes.chip} key={tag.id} />)}
                     </div>
                 </ListItem>
