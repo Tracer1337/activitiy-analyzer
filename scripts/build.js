@@ -34,7 +34,7 @@ const OUTPUT_DIR = path.join(ROOT_DIR, "public")
 
 program
     .option("-i, --install", "install npm packages for server and client")
-    .requiredOption("-v, --versionnumber", "version number visible in the commit message")
+    .requiredOption("-v, --version-number <number>", "version number visible in the commit message")
     .parse(process.argv)
 
 ;(async function run() {
