@@ -27,6 +27,7 @@ export const updateCategory = (data) => axios.put(url("/categories"), data)
 export const deleteCategory = (data) => axios.delete(url("/categories"), { data })
 
 export const getAllActivities = () => axios.get(url("/activities"))
+export const getAllActivitiesDetailed = () => axios.get(url("/activities?details=true"))
 export const getActivity = (id) => axios.get(url("/activities/" + id))
 export const createActivity = (data) => axios.post(url("/activities"), data)
 export const updateActivity = (data) => axios.put(url("/activities"), data)

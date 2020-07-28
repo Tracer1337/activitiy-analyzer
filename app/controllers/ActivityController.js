@@ -14,13 +14,16 @@ const PerfomedActivity = require("../models/PerformedActivity.js")
 async function getAll(req, res) {
     const activities = await Activity.findAllBy("user_id", req.user.id)
 
-    const performedActivities = await PerfomedActivity.findAllBy("user_id", req.user.id)
+    if(req.query.details) {
+        const performedActivities = await PerfomedActivity.findAllBy("user_id", req.user.id)
+    
+        // Insert total durations
+        activities.forEach(activity => {
+            const totalDuration = getDurations(activity, performedActivities).reduce((sum, current) => sum += current, 0)
+            activity.setTotalDuration(totalDuration)
+        })
+    }
 
-    // Insert total durations
-    activities.forEach(activity => {
-        const totalDuration = getDurations(activity, performedActivities).reduce((sum, current) => sum += current, 0)
-        activity.setTotalDuration(totalDuration)
-    })
 
     res.send(activities)
 }

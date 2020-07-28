@@ -45,7 +45,7 @@ function ActivityList(props, ref) {
         <List
             ref={ref}
             APIMethods={{
-                get: "getAllActivities",
+                get: "getAllActivitiesDetailed",
                 delete: "deleteActivity"
             }}
             EditDialog={EditActivityDialog}
@@ -63,7 +63,7 @@ function ActivityList(props, ref) {
                         </div>
 
                         <div className={classes.tags}>
-                            {data.tags.map(tag => <Chip variant="outlined" label={tag.name} size="small" className={classes.chip} />)}
+                            {data.tags.map(tag => <Chip variant="outlined" label={tag.name} size="small" className={classes.chip} key={tag.id} />)}
                         </div>
                     </div>
                 </ListItem>

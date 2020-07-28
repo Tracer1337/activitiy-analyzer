@@ -42,7 +42,7 @@ function CategoryList(props, ref) {
                     <ListItemText>{data.name}</ListItemText>
 
                     <div className={classes.tags}>
-                        {data.tags.map(tag => <Chip variant="outlined" label={tag.name} size="small" className={classes.chip} />)}
+                        {data.tags.map(tag => <Chip variant="outlined" label={tag.name} size="small" className={classes.chip} key={tag.id} />)}
                     </div>
                 </ListItem>
             ))}
