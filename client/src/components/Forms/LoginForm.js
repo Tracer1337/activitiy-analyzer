@@ -18,11 +18,6 @@ const useStyles = makeStyles(theme => ({
         textAlign: "center",
         fontWeight: 500,
         letterSpacing: 2
-    },
-
-    alternateTitle: {
-        textAlign: "center",
-        fontWeight: "lighter"
     }
 }))
 
@@ -88,8 +83,6 @@ function LoginForm({ className }) {
 
                 <Button variant="outlined" color="primary" fullWidth type="submit">Login</Button>
             </form>
-
-            <Typography variant="h5" color="textPrimary" className={clsx(classes.spacing, classes.alternateTitle)}>OR</Typography>
 
             {isErrorOpen && (
                 <Snackbar
