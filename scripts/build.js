@@ -34,7 +34,7 @@ const OUTPUT_DIR = path.join(ROOT_DIR, "public")
 
 program
     .option("-i, --install", "install npm packages for server and client")
-    .requiredOption("-v, --version-number", "version number visible in the commit message")
+    .requiredOption("-v, --versionnumber", "version number visible in the commit message")
     .parse(process.argv)
 
 ;(async function run() {
@@ -69,7 +69,7 @@ program
     // Push new version to git
     await exec([
         "git add .",
-        `git commit -m "Build version ${program.version}"`,
+        `git commit -m "Build version ${program.versionnumber}"`,
         "git push"
     ], "Push new version to git")
 })()
