@@ -47,7 +47,7 @@ const BUILD_DIR = path.join(ROOT_DIR, "client", "build")
 const OUTPUT_DIR = path.join(ROOT_DIR, "public")
 
 program
-    .option("-i, --install", "install npm packages for server and client")
+    .option("-b, --build", "create a new react production build")
     .requiredOption("-v, --version-number <number>", "version number visible in the commit message")
     .parse(process.argv)
 
@@ -59,11 +59,13 @@ program
 ;(async function() {
     const startTime = performance.now()
 
-    // Create react production build
-    await run(createBuild, "Create react production build")
+    if (program.build) {
+        // Create react production build
+        await run(createBuild, "Create react production build")
 
-    // Put build into desired destination
-    await run(moveBuild, "Put build into desired destination")
+        // Put build into desired destination
+        await run(moveBuild, "Put build into desired destination")
+    }
 
     // Push new version to git
     await run(pushToRemote, "Push new version to git")
