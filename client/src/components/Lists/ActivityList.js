@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles"
 
 import List from "../List.js"
 import EditActivityDialog from "../Dialogs/EditActivityDialog.js"
+import { parseDuration } from "../../utils"
 
 const useStyles = makeStyles(theme => ({
     listItem: {
@@ -56,8 +57,14 @@ function ActivityList(props, ref) {
                         <span className={classes.secondary}>{data.category.name}</span>
                     </div>
 
-                    <div className={classes.tags}>
-                        {data.tags.map(tag => <Chip variant="outlined" label={tag.name} size="small" className={classes.chip}/>)}
+                    <div className={classes.main}>
+                        <div className={classes.stats}>
+                            { Math.floor(parseDuration(data.total_duration)) }h
+                        </div>
+
+                        <div className={classes.tags}>
+                            {data.tags.map(tag => <Chip variant="outlined" label={tag.name} size="small" className={classes.chip} />)}
+                        </div>
                     </div>
                 </ListItem>
             ))}

@@ -3,13 +3,7 @@ const moment = require("moment")
 
 const Activity = require("../models/Activity.js")
 const Category = require("../models/Category.js")
-const PerfomedActivity = require("../models/PerformedActivity.js")
 const { queryAsync, quotedList } = require("../utils")
-
-// Fetch all activities from user from database
-async function getAllActivities(user) {
-    return await Activity.findAllBy("user_id", user.id)
-}
 
 // Validate creation inputs
 async function validateCreate(req, res) {
@@ -99,7 +93,7 @@ async function validateGetDetailed(req, res) {
 
 // Check if activity with name already exists for user
 async function isDuplicate(user, values) {
-    return (await getAllActivities(user)).some(activity => activity.name === values.name)
+    return (await Activity.findAllBy("user_id", user.id)).some(activity => activity.name === values.name)
 }
 
 // Create new activity and store it in the database
@@ -130,7 +124,7 @@ async function createActivity({ user, values }, res) {
 // Update existing activity
 async function updateActivity({ user, values }, res) {    
     // Get activity from user with provided id
-    const activity = (await getAllActivities(user)).find(activity => activity.id === values.id)
+    const activity = (await Activity.findAllBy("user_id", user.id)).find(activity => activity.id === values.id)
 
     // Check if the name has changed and is already taken
     if(activity.name !== values.name && await isDuplicate(user, values)) {
@@ -164,54 +158,12 @@ async function deleteActivity({ id }) {
     return true
 }
 
-// Get activity with statistics
-async function getActivityDetailed({ id }) {
-    // Get activity
-    const activity = await Activity.findBy("id", id)
-
-    // Get all performed activities and format them
-    const performed_activities = await PerfomedActivity.findAllBy("user_id", activity.user_id)
-
-    performed_activities.forEach(entry => entry.finished_at = moment(entry.finished_at))
-
-    // Sort performed activities by date ASC
-    performed_activities.sort((a, b) => a.finished_at - b.finished_at)
-
-    // Get performed activities durations
-    const durations = []
-    
-    for(let i = 0; i < performed_activities.length; i++) {
-        const entry = performed_activities[i]
-
-        if(entry.activity.id !== id) {
-            continue
-        }
-
-        // Calculate duration and append it to durations array
-        const lastEntry = performed_activities[i - 1]
-        const diff = entry.finished_at - lastEntry.finished_at
-
-        durations.push(diff)
-    }
-
-    // Calculate total duration
-    const totalDuration = durations.reduce((sum, current) => sum += current, 0)
-
-    return {
-        activity,
-        durations,
-        total_duration: totalDuration
-    }
-}
-
 module.exports = {
-    getAllActivities,
     validateCreate,
     validateUpdate,
     validateDelete,
     validateGetDetailed,
     createActivity,
     updateActivity,
-    deleteActivity,
-    getActivityDetailed
+    deleteActivity
 }

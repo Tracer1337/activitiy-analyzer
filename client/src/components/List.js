@@ -16,8 +16,6 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function Entry({ data, reloadList, apiDelete, EditDialog, ListItem }) {
-    const classes = useStyles()
-
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
 
     const handleDelete = () => {

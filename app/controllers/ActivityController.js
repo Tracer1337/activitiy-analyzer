@@ -1,17 +1,26 @@
 const {
-    getAllActivities,
     validateCreate,
     validateUpdate,
     validateDelete,
     validateGetDetailed,
     createActivity,
     updateActivity,
-    deleteActivity,
-    getActivityDetailed
+    deleteActivity
 } = require("../services/ActivityServiceProvider.js")
+const { getDurations } = require("../services/PerformedActivityServiceProvider.js")
+const Activity = require("../models/Activity.js")
+const PerfomedActivity = require("../models/PerformedActivity.js")
 
 async function getAll(req, res) {
-    const activities = await getAllActivities(req.user)
+    const activities = await Activity.findAllBy("user_id", req.user.id)
+
+    const performedActivities = await PerfomedActivity.findAllBy("user_id", req.user.id)
+
+    // Insert total durations
+    activities.forEach(activity => {
+        const totalDuration = getDurations(activity, performedActivities).reduce((sum, current) => sum += current, 0)
+        activity.setTotalDuration(totalDuration)
+    })
 
     res.send(activities)
 }
@@ -65,9 +74,20 @@ async function getDetailed(req, res) {
         return
     }
 
-    const data = await getActivityDetailed({ id: req.params.id })
+    const activity = await Activity.findBy("id", req.params.id)
 
-    res.send(data)
+    const performedActivities = await PerfomedActivity.findAllBy("user_id", req.user.id)
+
+    // Get durations
+    const durations = getDurations(activity, performedActivities)
+
+    // Calculate total duration
+    const totalDuration = durations.reduce((sum, current) => sum += current, 0)
+
+    activity.setDurations(durations)
+    activity.setTotalDuration(totalDuration)
+
+    res.send(activity)
 }
 
 module.exports = {

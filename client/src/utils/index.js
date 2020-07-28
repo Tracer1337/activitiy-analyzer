@@ -40,3 +40,8 @@ export function roundMinutesTo(time, minutes) {
     const ms = minutes * 60 * 1000
     return moment(Math.round((+time) / ms) * ms)
 }
+
+// Parse duration
+export function parseDuration(ms) {
+    return ms / 1000 / 3600
+}

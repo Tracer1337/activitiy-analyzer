@@ -25,6 +25,14 @@ class Activity extends Model {
         }
     }
 
+    setTotalDuration(value) {
+        this.total_duration = value
+    }
+
+    setDurations(value) {
+        this.durations = value
+    }
+
     async init() {
         // Get all tags for this activity
         const results = await queryAsync(`SELECT tags.* FROM model_tags INNER JOIN tags ON model_tags.tag_id = tags.id WHERE model_tags.model_id = '${this.id}'`)
@@ -71,7 +79,9 @@ class Activity extends Model {
             id: this.id,
             name: this.name,
             tags: this.tags,
-            category: this.category
+            category: this.category,
+            durations: this.durations,
+            total_duration: this.total_duration
         }
     }
 }

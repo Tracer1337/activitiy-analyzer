@@ -29,7 +29,7 @@ function ActivityForm({ onSubmit, defaultValues, title = true, showAllCategories
     
     const { register, watch, reset, getValues, setValue, control } = useForm({ defaultValues })
 
-    const [categoryId, setCategoryId] = useState()
+    const [categoryId, setCategoryId] = useState(defaultValues?.category_id)
 
     const tagOptions = useMemo(() => {
         return tags?.map(tag => ({

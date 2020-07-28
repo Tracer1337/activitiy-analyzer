@@ -44,6 +44,18 @@ async function getActivitesByDate(user, date) {
     return result
 }
 
+// Get sorted performed activities
+async function sortPerformedActivities(performedActivities) {
+    performedActivities.forEach(entry => entry.finished_at = moment(entry.finished_at))
+
+    // Sort performed activities by date ASC
+    performedActivities.sort((a, b) => a.finished_at - b.finished_at)
+
+    performedActivities.isSorted = true
+
+    return performedActivities
+}
+
 // Validate creation inputs
 async function validateCreate(req, res) {
     if (!req.body.activity_id || !req.body.finished_at) {
@@ -167,6 +179,32 @@ async function deleteActivity({ id }) {
     return true
 }
 
+// Get performed activity durations
+function getDurations(activity, performedActivities) {
+    if(!performedActivities.isSorted) {
+        sortPerformedActivities(performedActivities)
+    }
+
+    // Get performed activities durations
+    const durations = []
+
+    for (let i = 1; i < performedActivities.length; i++) {
+        const entry = performedActivities[i]
+
+        if (entry.activity.id !== activity.id) {
+            continue
+        }
+
+        // Calculate duration and append it to durations array
+        const lastEntry = performedActivities[i - 1]
+        const diff = entry.finished_at - lastEntry.finished_at
+
+        durations.push(diff)
+    }
+
+    return durations
+}
+
 module.exports = {
     getAllActivities,
     getActivitesByDate,
@@ -176,5 +214,7 @@ module.exports = {
     validateGetByDate,
     createActivity,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    getDurations,
+    sortPerformedActivities
 }
