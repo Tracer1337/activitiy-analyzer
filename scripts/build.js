@@ -1,7 +1,6 @@
 const fs = require("fs")
 const path = require("path")
 const { program } = require("commander")
-const chalk = require("chalk")
 const ora = require("ora")
 const util = require("util")
 const execAsync = util.promisify(require("child_process").exec)
@@ -9,11 +8,21 @@ const execAsync = util.promisify(require("child_process").exec)
 async function exec(command, title) {
     const spinner = ora(title).start()
 
-    const { stderr } = await execAsync(command)
+    const run = async (command) => {
+        const { stderr } = await execAsync(command)
 
-    if (stderr) {
-        spinner.fail()
-        throw new Error(stderr)
+        if (stderr) {
+            spinner.fail()
+            throw new Error(stderr)
+        }
+    }
+
+    if (Array.isArray(command)) {
+        for(let c of command) {
+            await run(c)
+        }
+    } else {
+        await run(c)
     }
 
     spinner.succeed()
@@ -25,6 +34,7 @@ const OUTPUT_DIR = path.join(ROOT_DIR, "public")
 
 program
     .option("-i, --install", "install npm packages for server and client")
+    .requiredOption("-v, --version-number", "version number visible in the commit message")
     .parse(process.argv)
 
 ;(async function run() {
@@ -35,21 +45,31 @@ program
         await exec("cd client && npm install", "Install npm packages for client")
     }
 
-    // Create react production build
-    await exec("cd client && npm run build", "Create react production build")
+    // // Create react production build
+    // await exec("cd client && npm run build", "Create react production build")
 
-    const spinner = ora("Put build into desired destination").start()
+    // /**
+    //  * Put build into desired destination
+    //  */
+    // const spinner = ora("Put build into desired destination").start()
 
-    try {
-        // Remove old react build
-        fs.rmdirSync(OUTPUT_DIR, { recursive: true })
+    // try {
+    //     // Remove old react build
+    //     fs.rmdirSync(OUTPUT_DIR, { recursive: true })
     
-        // Move build to output
-        fs.renameSync(BUILD_DIR, OUTPUT_DIR)
-    } catch (error) {
-        spinner.fail()
-        throw new Error(error)
-    }
+    //     // Move build to output
+    //     fs.renameSync(BUILD_DIR, OUTPUT_DIR)
+    // } catch (error) {
+    //     spinner.fail()
+    //     throw new Error(error)
+    // }
 
-    spinner.succeed()
+    // spinner.succeed()
+
+    // Push new version to git
+    await exec([
+        "git add .",
+        `git commit -m "Build version ${program.version}"`,
+        "git push"
+    ], "Push new version to git")
 })()
