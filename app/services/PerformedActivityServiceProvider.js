@@ -180,29 +180,28 @@ async function deleteActivity({ id }) {
 }
 
 // Get performed activity durations
-function getDurations(activity, performedActivities) {
-    if(!performedActivities.isSorted) {
-        sortPerformedActivities(performedActivities)
-    }
+async function getDurationMap(user) {
+    const performedActivities = await PerformedActivity.findAllBy("user_id", user.id)
+    sortPerformedActivities(performedActivities)
 
-    // Get performed activities durations
-    const durations = []
+    // Create activity-durations map
+    const durationMap = {}
 
     for (let i = 1; i < performedActivities.length; i++) {
         const entry = performedActivities[i]
 
-        if (entry.activity.id !== activity.id) {
-            continue
+        if (!durationMap[entry.activity.id]) {
+            durationMap[entry.activity.id] = []
         }
 
-        // Calculate duration and append it to durations array
+        // Calculate duration and append to activity's array in durationMap
         const lastEntry = performedActivities[i - 1]
         const diff = entry.finished_at - lastEntry.finished_at
 
-        durations.push(diff)
+        durationMap[entry.activity.id].push(diff)
     }
 
-    return durations
+    return durationMap
 }
 
 module.exports = {
@@ -215,6 +214,6 @@ module.exports = {
     createActivity,
     updateActivity,
     deleteActivity,
-    getDurations,
+    getDurationMap,
     sortPerformedActivities
 }

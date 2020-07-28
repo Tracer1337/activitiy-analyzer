@@ -7,23 +7,26 @@ const {
     updateActivity,
     deleteActivity
 } = require("../services/ActivityServiceProvider.js")
-const { getDurations } = require("../services/PerformedActivityServiceProvider.js")
+const { getDurationMap } = require("../services/PerformedActivityServiceProvider.js")
 const Activity = require("../models/Activity.js")
-const PerfomedActivity = require("../models/PerformedActivity.js")
 
 async function getAll(req, res) {
     const activities = await Activity.findAllBy("user_id", req.user.id)
 
     if(req.query.details) {
-        const performedActivities = await PerfomedActivity.findAllBy("user_id", req.user.id)
+        const durationMap = await getDurationMap(req.user)
     
         // Insert total durations
-        activities.forEach(activity => {
-            const totalDuration = getDurations(activity, performedActivities).reduce((sum, current) => sum += current, 0)
-            activity.setTotalDuration(totalDuration)
-        })
-    }
+        for(let activity of activities) {
+            if(!(activity.id in durationMap)) {
+                activity.setTotalDuration(0)
+                continue
+            }
 
+            const totalDuration = durationMap[activity.id].reduce((sum, current) => sum += current, 0)
+            activity.setTotalDuration(totalDuration)
+        }
+    }
 
     res.send(activities)
 }
@@ -79,10 +82,8 @@ async function getDetailed(req, res) {
 
     const activity = await Activity.findBy("id", req.params.id)
 
-    const performedActivities = await PerfomedActivity.findAllBy("user_id", req.user.id)
-
-    // Get durations
-    const durations = getDurations(activity, performedActivities)
+    // Get durations for activity
+    const durations = (await getDurationMap(req.user))[activity.id]
 
     // Calculate total duration
     const totalDuration = durations.reduce((sum, current) => sum += current, 0)

@@ -119,7 +119,7 @@ async function deploySSH() {
 
     ssh.dispose()
 
-    if(stderr) {
+    if(stderr && stderr.indexOf("github.com") === -1) {
         throw new Error(stderr)
     }
 }
