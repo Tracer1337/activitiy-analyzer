@@ -69,7 +69,7 @@ program
     // Push new version to git
     await exec([
         "git add .",
-        `git commit -m "Build version ${program.versionnumber}"`,
+        `git commit -m "Build version ${program.versionNumber}"`,
         "git push"
     ], "Push new version to git")
 })()
