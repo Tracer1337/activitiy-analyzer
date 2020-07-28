@@ -7,7 +7,13 @@ const {
     updateActivity,
     deleteActivity
 } = require("../services/ActivityServiceProvider.js")
-const { getDurationMap } = require("../services/PerformedActivityServiceProvider.js")
+
+const {
+    getDurationMap,
+    getDurationsDateMap,
+    fillMissingDates
+} = require("../services/PerformedActivityServiceProvider.js")
+
 const Activity = require("../models/Activity.js")
 
 async function getAll(req, res) {
@@ -26,6 +32,7 @@ async function getAll(req, res) {
             const totalDuration = durationMap[activity.id].reduce((sum, current) => sum += current, 0)
             activity.setTotalDuration(totalDuration)
         }
+
     }
 
     res.send(activities)
@@ -83,13 +90,25 @@ async function getDetailed(req, res) {
     const activity = await Activity.findBy("id", req.params.id)
 
     // Get durations for activity
-    const durations = (await getDurationMap(req.user))[activity.id]
+    const dateDurationsMap = (await getDurationsDateMap(req.user))[activity.id]
 
-    // Calculate total duration
-    const totalDuration = durations.reduce((sum, current) => sum += current, 0)
+    let totalDuration = 0
+    
+    if(!dateDurationsMap) {
+        // Handle empty duration map
+        activity.setTotalDuration(totalDuration)
+        activity.setDurations([])
+    } else {
+        // Calculate total duration
+        for (let durations of Object.values(dateDurationsMap)) {
+            totalDuration += durations.reduce((sum, current) => sum += current, 0)
+        }
 
-    activity.setDurations(durations)
-    activity.setTotalDuration(totalDuration)
+        fillMissingDates(dateDurationsMap)
+    
+        activity.setTotalDuration(totalDuration)
+        activity.setDurations(dateDurationsMap)
+    }
 
     res.send(activity)
 }

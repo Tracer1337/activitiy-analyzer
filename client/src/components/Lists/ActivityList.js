@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useHistory } from "react-router-dom"
 import { ListItem, Typography, Chip } from "@material-ui/core"
 import { ToggleButtonGroup, ToggleButton } from "@material-ui/lab"
 import { makeStyles } from "@material-ui/core/styles"
@@ -48,6 +49,8 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function ActivityList(props, ref) {
+    const history = useHistory()
+
     const classes = useStyles()
 
     const [sortBy, setSortBy] = useState("name")
@@ -61,7 +64,7 @@ function ActivityList(props, ref) {
     return (
         <>
             <div className={classes.buttonGroupWrapper}>
-                <ToggleButtonGroup value={sortBy} onChange={(event, value) => setSortBy(value)} exclusive>
+                <ToggleButtonGroup value={sortBy} onChange={(event, value) => value && setSortBy(value)} exclusive>
                     <ToggleButton value="name"><SortByAlphaIcon/></ToggleButton>
                     <ToggleButton value="duration"><SortByDurationIcon/></ToggleButton>
                 </ToggleButtonGroup>
@@ -79,7 +82,7 @@ function ActivityList(props, ref) {
                 EditDialog={EditActivityDialog}
                 sort={sort}
                 ListItem={React.forwardRef(({ data, ...props }, ref) => (
-                    <ListItem ref={ref} className={classes.listItem} {...props}>
+                    <ListItem ref={ref} className={classes.listItem} onClick={() => history.push("/activity/" + data.id)} {...props}>
                         <div className={classes.main}>
                             <Typography variant="subtitle1">{data.name}</Typography>
 

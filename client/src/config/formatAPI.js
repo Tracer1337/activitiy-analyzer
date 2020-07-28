@@ -3,9 +3,26 @@ import * as icons from "@material-ui/icons"
 
 import { UTC_OFFSET } from "./constants.js"
 
+export const ACTIVITY_DETAILED = "ACTIVITY_DETAILED"
 export const PERFORMED_ACTIVITIES = "PERFORMED_ACTIVITIES"
 export const PERFORMED_ACTIVITIES_BY_DATE = "PERFORMED_ACTIVITIES_BY_DATE"
 export const SHORTCUTS = "SHORTCUTS"
+
+function renameProperty(obj, from, to) {
+    if(from !== to) {
+        obj[to] = obj[from]
+        delete obj[from]
+    }
+}
+
+function formatActivityDetailed(activity) {
+    Object.keys(activity.durations).forEach(key => {
+        const newKey = moment(key, "YYYY-MM-DD").format("DD.MM.YYYY")
+        renameProperty(activity.durations, key, newKey)
+    })
+
+    return activity
+}
 
 function formatPerformedActivity(activity) {
     activity.finished_at = moment(activity.finished_at).utcOffset(UTC_OFFSET)
@@ -30,7 +47,9 @@ function formatShortcuts(shortcuts) {
 export default function format(type) {
     let fn
 
-    if(type === PERFORMED_ACTIVITIES) {
+    if (type === ACTIVITY_DETAILED) {
+        fn = data => formatActivityDetailed(data.data)
+    } else if (type === PERFORMED_ACTIVITIES) {
         fn = data => formatPerformedActivities(data.data)
     } else if (type === PERFORMED_ACTIVITIES_BY_DATE) {
         fn = data => Object.values(data.data).map(formatPerformedActivities)

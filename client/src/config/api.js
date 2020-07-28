@@ -3,7 +3,8 @@ import axios from "axios"
 import format, {
     PERFORMED_ACTIVITIES,
     PERFORMED_ACTIVITIES_BY_DATE,
-    SHORTCUTS
+    SHORTCUTS,
+    ACTIVITY_DETAILED
 } from "./formatAPI.js"
 import { API_BASE_URL } from "./constants.js"
 
@@ -28,7 +29,7 @@ export const deleteCategory = (data) => axios.delete(url("/categories"), { data 
 
 export const getAllActivities = () => axios.get(url("/activities"))
 export const getAllActivitiesDetailed = () => axios.get(url("/activities?details=true"))
-export const getActivity = (id) => axios.get(url("/activities/" + id))
+export const getActivity = (id) => axios.get(url("/activities/" + id)).then(format(ACTIVITY_DETAILED))
 export const createActivity = (data) => axios.post(url("/activities"), data)
 export const updateActivity = (data) => axios.put(url("/activities"), data)
 export const deleteActivity = (data) => axios.delete(url("/activities"), { data })

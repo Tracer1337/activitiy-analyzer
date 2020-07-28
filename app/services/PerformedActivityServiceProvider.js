@@ -204,6 +204,55 @@ async function getDurationMap(user) {
     return durationMap
 }
 
+// Get performed activity durations per day
+async function getDurationsDateMap(user) {
+    const performedActivities = await PerformedActivity.findAllBy("user_id", user.id)
+    sortPerformedActivities(performedActivities)
+
+    // Create activity-durations map
+    const durationMap = {}
+
+    for (let i = 1; i < performedActivities.length; i++) {
+        const entry = performedActivities[i]
+        const date = moment(entry.finished_at).format("YYYY-MM-DD")
+
+        if (!durationMap[entry.activity.id]) {
+            durationMap[entry.activity.id] = {}
+        }
+
+        if (!durationMap[entry.activity.id][date]) {
+            durationMap[entry.activity.id][date] = []
+        }
+
+        // Calculate duration and append to activity's array in durationMap
+        const lastEntry = performedActivities[i - 1]
+        const diff = entry.finished_at - lastEntry.finished_at
+
+        durationMap[entry.activity.id][date].push(diff)
+    }
+
+    return durationMap
+}
+
+// Fill missing dates
+function fillMissingDates(obj) {
+    // Get amount of days between first and last date in object
+    const dates = Object.keys(obj).map(date => moment(date, "YYYY-MM-DD"))
+    dates.sort((a, b) => a - b)
+    const deltaDays = (dates[dates.length - 1] - dates[0]) / 1000 / 3600 / 24
+
+    // Fill missing dates in object
+    for(let i = 0; i < deltaDays; i++) {
+        const currentDate = dates[0].add(1, "days").format("YYYY-MM-DD")
+
+        if (!(currentDate in obj)) {
+            obj[currentDate] = []
+        }
+    }
+
+    return obj
+}
+
 module.exports = {
     getAllActivities,
     getActivitesByDate,
@@ -215,5 +264,7 @@ module.exports = {
     updateActivity,
     deleteActivity,
     getDurationMap,
-    sortPerformedActivities
+    sortPerformedActivities,
+    getDurationsDateMap,
+    fillMissingDates
 }

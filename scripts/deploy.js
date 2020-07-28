@@ -48,7 +48,6 @@ const OUTPUT_DIR = path.join(ROOT_DIR, "public")
 
 program
     .option("-b, --build", "create a new react production build")
-    .requiredOption("-v, --version-number <number>", "version number visible in the commit message")
     .parse(process.argv)
 
 
@@ -103,7 +102,7 @@ async function moveBuild() {
 async function pushToRemote() {
     await exec([
         "git add .",
-        `git commit -m "Build version ${program.versionNumber}"`,
+        "git commit -m \"Create new build\"",
         "git push"
     ], { skipError: true })
 }

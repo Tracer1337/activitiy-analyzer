@@ -20,7 +20,7 @@ function Router() {
     }
 
     return (
-        <BrowserRouter basename="/app">
+        <BrowserRouter>
             <Switch>
                 <Route path="/profile">
                     <TodayPage/>
