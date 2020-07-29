@@ -6,11 +6,11 @@ const {
     createCategory,
     updateCategory,
     deleteCategory
-} = require("../services/CategoryServiceProvider.js")
+} = require("../Services/CategoryServiceProvider.js")
 
 const {
     getDurationMap
-} = require("../services/PerformedActivityServiceProvider.js")
+} = require("../Services/PerformedActivityServiceProvider.js")
 
 async function getAll(req, res) {
     const categories = await getAllCategories(req.user)

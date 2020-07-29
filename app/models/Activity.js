@@ -11,6 +11,7 @@ let Category
 class Activity extends Model {
     static findBy = Model.findBy.bind({ model: Activity, table: "activities" })
     static findAllBy = Model.findAllBy.bind({ model: Activity, table: "activities" })
+    static where = Model.where.bind({ model: Activity, table: "activities" })
 
     constructor(values) {
         super({

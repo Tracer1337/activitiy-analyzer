@@ -4,7 +4,8 @@ import format, {
     PERFORMED_ACTIVITIES,
     PERFORMED_ACTIVITIES_BY_DATE,
     SHORTCUTS,
-    ACTIVITY_DETAILED
+    ACTIVITY_DETAILED,
+    ANALYSIS
 } from "./formatAPI.js"
 import { API_BASE_URL } from "./constants.js"
 
@@ -50,3 +51,5 @@ export const deleteTag = (data) => axios.delete(url("/tags"), { data })
 export const getAllShortcuts = () => axios.get(url("/shortcuts")).then(format(SHORTCUTS))
 export const createShortcut = (data) => axios.post(url("/shortcuts"), data)
 export const deleteShortcut = (data) => axios.delete(url("/shortcuts"), { data })
+
+export const getAnalysisByDate = (date) => axios.get(url("/analysis/" + date)).then(format(ANALYSIS))

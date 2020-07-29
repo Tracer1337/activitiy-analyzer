@@ -1,8 +1,8 @@
 const { v4: uuid } = require("uuid")
 const moment = require("moment")
 
-const Activity = require("../models/Activity.js")
-const Category = require("../models/Category.js")
+const Activity = require("../Models/Activity.js")
+const Category = require("../Models/Category.js")
 const { queryAsync, quotedList } = require("../utils")
 
 // Validate creation inputs

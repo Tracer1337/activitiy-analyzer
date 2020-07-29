@@ -1,6 +1,6 @@
 const { v4: uuid } = require("uuid")
 
-const Category = require("../models/Category.js")
+const Category = require("../Models/Category.js")
 const { queryAsync, quotedList } = require("../utils")
 
 // Fetch all categories from user from database

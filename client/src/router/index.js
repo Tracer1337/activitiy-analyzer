@@ -50,7 +50,7 @@ function Router() {
                     <TagsPage/>
                 </Route>
 
-                <Route path="/analysis">
+                <Route path="/analysis/:date">
                     <AnalysisPage/>
                 </Route>
 

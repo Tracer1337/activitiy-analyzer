@@ -1,12 +1,19 @@
 import moment from "moment"
 import * as icons from "@material-ui/icons"
 
-import { UTC_OFFSET } from "./constants.js"
-
 export const ACTIVITY_DETAILED = "ACTIVITY_DETAILED"
 export const PERFORMED_ACTIVITIES = "PERFORMED_ACTIVITIES"
 export const PERFORMED_ACTIVITIES_BY_DATE = "PERFORMED_ACTIVITIES_BY_DATE"
 export const SHORTCUTS = "SHORTCUTS"
+export const ANALYSIS = "ANALYSIS"
+
+function formatTimestamp(timestamp) {
+    if (process.env.NODE_ENV === "development") {
+        return moment(timestamp).utcOffset(120)
+    } else {
+        return moment(timestamp).utcOffset(0)
+    }
+}
 
 function renameProperty(obj, from, to) {
     if(from !== to) {
@@ -25,7 +32,7 @@ function formatActivityDetailed(activity) {
 }
 
 function formatPerformedActivity(activity) {
-    activity.finished_at = moment(activity.finished_at).utcOffset(0)
+    activity.finished_at = formatTimestamp(activity.finished_at)
     
     return activity
 }
@@ -44,6 +51,16 @@ function formatShortcuts(shortcuts) {
     return shortcuts.map(shortcut => formatShortcut(shortcut))
 }
 
+function formatAnalysis(data) {
+    data.time_awake = formatTimestamp(data.time_awake)
+
+    data.activities.forEach(activity => activity.total_duration_for_date = formatTimestamp(activity.total_duration_for_date))
+
+    data.categories.forEach(category => category.total_duration_for_date = formatTimestamp(category.total_duration_for_date))
+
+    return data
+}
+
 export default function format(type) {
     let fn
 
@@ -55,6 +72,8 @@ export default function format(type) {
         fn = data => Object.values(data.data).map(formatPerformedActivities)
     } else if (type === SHORTCUTS) {
         fn = data => formatShortcuts(data.data)
+    } else if (type === ANALYSIS) {
+        fn = data => formatAnalysis(data.data)
     }
 
     return (data) => {

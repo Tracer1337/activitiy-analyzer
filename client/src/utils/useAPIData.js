@@ -31,6 +31,7 @@ function useAPIData(props) {
             })
             .catch(error => {
                 console.error(error)
+                setIsLoading(false)
             })
         // eslint-disable-next-line
     }, [reloadKey])

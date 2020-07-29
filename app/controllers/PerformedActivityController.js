@@ -9,7 +9,7 @@ const {
     updateActivity,
     deleteActivity,
     getDurationMapFromPerformedActivities
-} = require("../services/PerformedActivityServiceProvider.js")
+} = require("../Services/PerformedActivityServiceProvider.js")
 
 async function getAll(req, res) {
     const performedActivities = await getAllActivities(req.user)

@@ -6,6 +6,7 @@ let tableToModel
 class Tag extends Model {
     static findBy = Model.findBy.bind({ model: Tag, table: "tags" })
     static findAllBy = Model.findAllBy.bind({ model: Tag, table: "tags" })
+    static where = Model.where.bind({ model: Tag, table: "tags" })
 
     constructor(values) {
         super({

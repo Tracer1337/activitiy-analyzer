@@ -8,6 +8,7 @@ const { queryAsync, quotedList } = require("../utils")
 class Category extends Model {
     static findBy = Model.findBy.bind({ model: Category, table: "categories" })
     static findAllBy = Model.findAllBy.bind({ model: Category, table: "categories" })
+    static where = Model.where.bind({ model: Category, table: "categories" })
 
     constructor(values) {
         super({
@@ -17,8 +18,14 @@ class Category extends Model {
         })
     }
 
+    getTotalDurationForDate() { return this.total_duration_for_date }
+
     setTotalDuration(value) {
         this.total_duration = value
+    }
+
+    setTotalDurationForDate(value) {
+        this.total_duration_for_date = value
     }
 
     async init() {
@@ -59,7 +66,8 @@ class Category extends Model {
             id: this.id,
             name: this.name,
             tags: this.tags,
-            total_duration: this.total_duration
+            total_duration: this.total_duration,
+            total_duration_for_date: this.total_duration_for_date
         }
     }
 }

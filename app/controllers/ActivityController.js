@@ -6,14 +6,14 @@ const {
     createActivity,
     updateActivity,
     deleteActivity
-} = require("../services/ActivityServiceProvider.js")
+} = require("../Services/ActivityServiceProvider.js")
 
 const {
     getDurationMap,
     fillMissingDates
-} = require("../services/PerformedActivityServiceProvider.js")
+} = require("../Services/PerformedActivityServiceProvider.js")
 
-const Activity = require("../models/Activity.js")
+const Activity = require("../Models/Activity.js")
 
 async function getAll(req, res) {
     const activities = await Activity.findAllBy("user_id", req.user.id)

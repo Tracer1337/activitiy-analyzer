@@ -1,3 +1,5 @@
+import moment from "moment"
+
 import AccountCircle from "@material-ui/icons/AccountCircle"
 import ExitToApp from "@material-ui/icons/ExitToApp"
 import Today from "@material-ui/icons/Today"
@@ -35,7 +37,7 @@ export const NAV_DRAWER_LINKS = [
         },
         {
             title: "Analysis",
-            to: "/analysis",
+            to: "/analysis/" + moment().format("YYYY-MM-DD"),
             icon: Assessment
         }
     ],
@@ -57,5 +59,3 @@ export const NAV_DRAWER_LINKS = [
         }
     ]
 ]
-
-export const UTC_OFFSET = "+02:00"

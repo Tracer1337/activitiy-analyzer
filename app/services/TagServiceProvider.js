@@ -1,6 +1,6 @@
 const { v4: uuid } = require("uuid")
 
-const Tag = require("../models/Tag.js")
+const Tag = require("../Models/Tag.js")
 
 // Fetch all tags from user from database
 async function getAllTags(user) {

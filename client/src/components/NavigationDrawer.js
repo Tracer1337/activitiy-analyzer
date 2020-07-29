@@ -32,7 +32,6 @@ function NavigationDrawer({ open, onOpen, onClose }) {
     return (
         <Drawer
             open={open}
-            onOpen={onOpen}
             onClose={onClose}
             anchor="left"
             PaperProps={{ className: classes.innerDrawer }}

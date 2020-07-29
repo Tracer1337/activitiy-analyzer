@@ -5,6 +5,7 @@ let Activity
 class Shortcut extends Model {
     static findBy = Model.findBy.bind({ model: Shortcut, table: "shortcuts" })
     static findAllBy = Model.findAllBy.bind({ model: Shortcut, table: "shortcuts" })
+    static where = Model.where.bind({ model: Shortcut, table: "shortcuts" })
 
     constructor(values) {
         super({

@@ -1,7 +1,7 @@
 const { v4: uuid } = require("uuid")
 
-const Shortcut = require("../models/Shortcut.js")
-const Activity = require("../models/Activity.js")
+const Shortcut = require("../Models/Shortcut.js")
+const Activity = require("../Models/Activity.js")
 
 // Fetch all shortcuts from user from database
 async function getAllShortcuts(user) {

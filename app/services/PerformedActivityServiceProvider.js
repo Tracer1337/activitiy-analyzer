@@ -1,8 +1,8 @@
 const { v4: uuid } = require("uuid")
 const moment = require("moment")
 
-const PerformedActivity = require("../models/PerformedActivity.js")
-const Activity = require("../models/Activity.js")
+const PerformedActivity = require("../Models/PerformedActivity.js")
+const Activity = require("../Models/Activity.js")
 const { queryAsync } = require("../utils")
 
 // Fetch all activities from user from database

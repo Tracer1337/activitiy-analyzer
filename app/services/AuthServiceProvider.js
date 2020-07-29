@@ -2,7 +2,7 @@ const { v4: uuid } = require("uuid")
 const bcrypt = require("bcrypt")
 const moment = require("moment")
 
-const User = require("../models/User.js")
+const User = require("../Models/User.js")
 const { generateJWT } = require("../utils")
 
 // Validate inputs from /register and /login route

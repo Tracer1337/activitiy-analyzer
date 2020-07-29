@@ -6,7 +6,7 @@ const {
     createTag,
     updateTag,
     deleteTag
-} = require("../services/TagServiceProvider.js")
+} = require("../Services/TagServiceProvider.js")
 
 async function getAll(req, res) {
     const tags = await getAllTags(req.user)

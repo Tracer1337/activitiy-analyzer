@@ -6,7 +6,7 @@ const {
     createShortcut,
     updateShortcut,
     deleteShortcut
-} = require("../services/ShortcutServiceProvider.js")
+} = require("../Services/ShortcutServiceProvider.js")
 
 async function getAll(req, res) {
     const shortcuts = await getAllShortcuts(req.user)

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 
-const User = require("../models/User.js")
+const User = require("../Models/User.js")
 const { queryAsync } = require("../utils")
 
 // Check for Authorization header and add user attribute to request object

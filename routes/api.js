@@ -1,13 +1,14 @@
 const express = require("express")
 
-const ProtectMiddleware = require("../app/middleware/ProtectMiddleware")
+const ProtectMiddleware = require("../app/Middleware/ProtectMiddleware")
 
-const AuthController = require("../app/controllers/AuthController.js")
-const CategoryController = require("../app/controllers/CategoryController.js")
-const ActivityController = require("../app/controllers/ActivityController.js")
-const PerformedActivityController = require("../app/controllers/PerformedActivityController.js")
-const TagController = require("../app/controllers/TagController.js")
-const ShortcutController = require("../app/controllers/ShortcutController.js")
+const AuthController = require("../app/Controllers/AuthController.js")
+const CategoryController = require("../app/Controllers/CategoryController.js")
+const ActivityController = require("../app/Controllers/ActivityController.js")
+const PerformedActivityController = require("../app/Controllers/PerformedActivityController.js")
+const TagController = require("../app/Controllers/TagController.js")
+const ShortcutController = require("../app/Controllers/ShortcutController.js")
+const AnalysisController = require("../app/Controllers/AnalysisController.js")
 
 const router = express.Router()
 
@@ -41,5 +42,7 @@ router.get("/shortcuts", ProtectMiddleware, ShortcutController.getAll)
 router.post("/shortcuts", ProtectMiddleware, ShortcutController.create)
 router.put("/shortcuts", ProtectMiddleware, ShortcutController.update)
 router.delete("/shortcuts", ProtectMiddleware, ShortcutController.deletion)
+
+router.get("/analysis/:date", ProtectMiddleware, AnalysisController.analyzeDate)
 
 module.exports = router
