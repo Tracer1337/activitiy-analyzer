@@ -12,7 +12,8 @@
     "setup-db": "npm run migrate && npm run seed",
     "migrate": "node ./scripts/migrate.js",
     "seed": "node ./scripts/seed.js",
-    "prod": "node server.js"
+    "prod": "node server.js",
+    "deploy": "node scripts/deploy.js -b"
   },
   "repository": {
     "type": "git",
