@@ -25,7 +25,7 @@ function formatActivityDetailed(activity) {
 }
 
 function formatPerformedActivity(activity) {
-    activity.finished_at = moment(activity.finished_at).utcOffset(UTC_OFFSET)
+    activity.finished_at = moment(activity.finished_at).utcOffset(0)
     
     return activity
 }

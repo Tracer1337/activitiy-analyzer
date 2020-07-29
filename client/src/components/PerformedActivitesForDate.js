@@ -1,7 +1,6 @@
 import React, { useState, useMemo, useImperativeHandle } from "react"
 import { Paper, List, ListItem, ListItemText } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
-import moment from "moment"
 
 import LoadingIndicator from "./LoadingIndicator.js"
 import Swipeable from "./Swipeable.js"
@@ -9,8 +8,6 @@ import EditPerformedActivityDialog from "./Dialogs/EditPerformedActivityDialog.j
 import useAPIData from "../utils/useAPIData.js"
 import { sortActivities } from "../utils"
 import { deletePerformedActivity } from "../config/api.js"
-
-window.moment = moment
 
 const useStyles = makeStyles(theme => ({
     container: {
@@ -67,8 +64,6 @@ function Entry({ entry, reloadList }) {
         setIsEditDialogOpen(false)
         reloadList()
     }
-
-    console.log(entry)
 
     return (
         <>
