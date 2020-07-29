@@ -42,7 +42,7 @@ function DurationPerDayChart({ data }) {
 
     return (
         <>
-            <div className={classes.subtitle}>{firstDate.format("DD MMMM")} - {lastDate.format("DD MMMM")}</div>
+            <div className={classes.subtitle}>{firstDate?.format("DD MMMM")} - {lastDate?.format("DD MMMM")}</div>
 
             <Line
                 height={300}

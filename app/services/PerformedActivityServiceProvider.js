@@ -180,7 +180,7 @@ async function deleteActivity({ id }) {
 }
 
 // Get performed activity durations
-async function getDurationMap(user) {
+async function getDurationMap(user, options = {}) {
     const performedActivities = await PerformedActivity.findAllBy("user_id", user.id)
     sortPerformedActivities(performedActivities)
 
@@ -188,47 +188,38 @@ async function getDurationMap(user) {
     const durationMap = {}
 
     for (let i = 1; i < performedActivities.length; i++) {
-        const entry = performedActivities[i]
-
-        if (!durationMap[entry.activity.id]) {
-            durationMap[entry.activity.id] = []
-        }
-
-        // Calculate duration and append to activity's array in durationMap
         const lastEntry = performedActivities[i - 1]
-        const diff = entry.finished_at - lastEntry.finished_at
-
-        durationMap[entry.activity.id].push(diff)
-    }
-
-    return durationMap
-}
-
-// Get performed activity durations per day
-async function getDurationsDateMap(user) {
-    const performedActivities = await PerformedActivity.findAllBy("user_id", user.id)
-    sortPerformedActivities(performedActivities)
-
-    // Create activity-durations map
-    const durationMap = {}
-
-    for (let i = 1; i < performedActivities.length; i++) {
         const entry = performedActivities[i]
+        
+        // Format the finished_at date of current entry to "YYYY-MM-DD"
         const date = moment(entry.finished_at).format("YYYY-MM-DD")
 
-        if (!durationMap[entry.activity.id]) {
-            durationMap[entry.activity.id] = {}
+        // Get the key for durationMap
+        const key = options.useCategories ? entry.activity.category.id : entry.activity.id
+
+        // Create neccessary objects
+        if (!durationMap[key]) {
+            durationMap[key] = options.useDates ? {} : []
         }
 
-        if (!durationMap[entry.activity.id][date]) {
-            durationMap[entry.activity.id][date] = []
+        if (options.useDates && !durationMap[key][date]) {
+            durationMap[key][date] = []
         }
 
-        // Calculate duration and append to activity's array in durationMap
-        const lastEntry = performedActivities[i - 1]
-        const diff = entry.finished_at - lastEntry.finished_at
+        // Calculate duration between last and current entry
+        const duration = entry.finished_at - lastEntry.finished_at
 
-        durationMap[entry.activity.id][date].push(diff)
+        // Skip this entry if the duration is greater than a day => Skip empty days
+        if (duration / 1000 / 3600 / 24 >= 1) {
+            continue
+        }
+
+        // Append duration to corresponding entry in duration map
+        if (options.useDates) {
+            durationMap[key][date].push(duration)
+        } else {
+            durationMap[key].push(duration)
+        }
     }
 
     return durationMap
@@ -265,6 +256,5 @@ module.exports = {
     deleteActivity,
     getDurationMap,
     sortPerformedActivities,
-    getDurationsDateMap,
     fillMissingDates
 }

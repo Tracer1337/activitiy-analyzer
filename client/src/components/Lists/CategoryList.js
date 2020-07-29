@@ -28,7 +28,7 @@ function CategoryList(props, ref) {
         <List
             ref={ref}
             APIMethods={{
-                get: "getAllCategories",
+                get: "getAllCategoriesDetailed",
                 delete: "deleteCategory"
             }}
             SwipeableProps={{

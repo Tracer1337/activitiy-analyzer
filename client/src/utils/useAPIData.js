@@ -24,6 +24,10 @@ function useAPIData(props) {
             .then(res => {
                 setData(res.data)
                 setIsLoading(false)
+                
+                if(props.onLoad) {
+                    props.onLoad(res.data)
+                }
             })
             .catch(error => {
                 console.error(error)

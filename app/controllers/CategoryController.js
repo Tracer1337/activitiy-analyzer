@@ -8,8 +8,26 @@ const {
     deleteCategory
 } = require("../services/CategoryServiceProvider.js")
 
+const {
+    getDurationMap
+} = require("../services/PerformedActivityServiceProvider.js")
+
 async function getAll(req, res) {
     const categories = await getAllCategories(req.user)
+
+    if(req.query.details) {
+        const durationMap = await getDurationMap(req.user, { useCategories: true })
+
+        for(let category of categories) {
+            if(!(category.id in durationMap)) {
+                category.setTotalDuration(0)
+                continue
+            }
+
+            const totalDuration = durationMap[category.id].reduce((sum, current) => sum += current, 0)
+            category.setTotalDuration(totalDuration)
+        }
+    }
 
     res.send(categories)
 }

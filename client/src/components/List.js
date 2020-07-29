@@ -1,4 +1,4 @@
-import React, { useState, useImperativeHandle } from "react"
+import React, { useState, useImperativeHandle, useRef } from "react"
 import { Paper, List as MuiList, ListItem as MuiListItem, ListItemText } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
 
@@ -51,16 +51,21 @@ function Entry({ data, reloadList, apiDelete, EditDialog, ListItem, SwipeablePro
 function List({ APIMethods, EditDialog, ListItem, SwipeableProps, sort }, ref) {
     const classes = useStyles()
 
-    const { isLoading, data, reload } = useAPIData(APIMethods.get)
+    const event = useRef(new EventTarget())
 
-    useImperativeHandle(ref, () => ({ reload }), [reload])
+    const { isLoading, data, reload } = useAPIData({
+        method: APIMethods.get,
+        onLoad: (data) => event.current.dispatchEvent(new CustomEvent("load", { detail: data }))
+    })
+
+    useImperativeHandle(ref, () => ({ reload, event: event.current }), [reload, event])
 
     if (isLoading) {
         return <LoadingIndicator />
     }
 
     if(sort) {
-        data.sort(sort)        
+        data.sort(sort)
     } else {
         data.sort((a, b) => a.name.localeCompare(b.name))
     }

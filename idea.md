@@ -46,6 +46,9 @@ WebApp:
 
 * Skeleton-loading instead of circular loading
 
+* Cake-Chart for category durations
+* Same Page / Charts for category like activities
+
 Routes:
 
 * api

@@ -17,6 +17,10 @@ class Category extends Model {
         })
     }
 
+    setTotalDuration(value) {
+        this.total_duration = value
+    }
+
     async init() {
         // Get all tags for this category
         const results = await queryAsync(`SELECT tags.* FROM model_tags INNER JOIN tags ON model_tags.tag_id = tags.id WHERE model_tags.model_id = '${this.id}'`)
@@ -54,7 +58,8 @@ class Category extends Model {
         return {
             id: this.id,
             name: this.name,
-            tags: this.tags
+            tags: this.tags,
+            total_duration: this.total_duration
         }
     }
 }

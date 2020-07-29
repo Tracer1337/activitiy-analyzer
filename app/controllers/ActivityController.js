@@ -10,7 +10,6 @@ const {
 
 const {
     getDurationMap,
-    getDurationsDateMap,
     fillMissingDates
 } = require("../services/PerformedActivityServiceProvider.js")
 
@@ -90,7 +89,7 @@ async function getDetailed(req, res) {
     const activity = await Activity.findBy("id", req.params.id)
 
     // Get durations for activity
-    const dateDurationsMap = (await getDurationsDateMap(req.user))[activity.id]
+    const dateDurationsMap = (await getDurationMap(req.user, { useDates: true }))[activity.id]
 
     let totalDuration = 0
     

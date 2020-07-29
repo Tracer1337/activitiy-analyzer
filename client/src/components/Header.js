@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function Header({ title, onMenuClick }) {
+function Header({ title, Subtitle, onMenuClick }) {
     const isLoggedIn = useSelector(store => store.auth.isLoggedIn)
 
     const classes = useStyles()
@@ -36,6 +36,8 @@ function Header({ title, onMenuClick }) {
                 <Typography variant="h6" className={classes.title} color="textPrimary">
                     {title}
                 </Typography>
+
+                { Subtitle && <Subtitle/> }
             </Toolbar>
         </AppBar>
     )
