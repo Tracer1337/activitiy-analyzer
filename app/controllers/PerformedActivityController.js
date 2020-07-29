@@ -7,13 +7,14 @@ const {
     validateGetByDate,
     createActivity,
     updateActivity,
-    deleteActivity
+    deleteActivity,
+    getDurationMapFromPerformedActivities
 } = require("../services/PerformedActivityServiceProvider.js")
 
 async function getAll(req, res) {
-    const activities = await getAllActivities(req.user)
+    const performedActivities = await getAllActivities(req.user)
 
-    res.send(activities)
+    res.send(performedActivities)
 }
 
 async function getByDate(req, res) {
@@ -21,9 +22,20 @@ async function getByDate(req, res) {
         return
     }
 
-    const activities = await getActivitesByDate(req.user, req.query.date)
+    const performedActivities = await getActivitesByDate(req.user, req.query.date)
+
+    if(req.query.date) {
+        const durations = getDurationMapFromPerformedActivities(performedActivities)
     
-    res.send(activities)
+        performedActivities.forEach(({ activity }) => {
+            if (durations[activity.id]) {
+                const totalDuration = durations[activity.id].reduce((sum, current) => sum += current, 0)
+                activity.setTotalDurationForDate(totalDuration)
+            }
+        })
+    }
+
+    res.send(performedActivities)
 }
 
 async function create(req, res) {

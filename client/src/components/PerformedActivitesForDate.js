@@ -31,8 +31,13 @@ const useStyles = makeStyles(theme => ({
     itemSecondary: {
         height: 56,
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "center"
+        alignItems: "center"
+    },
+
+    totalDuration: {
+        fontSize: 16,
+        marginRight: theme.spacing(),
+        opacity: .87
     },
 
     time: {
@@ -70,6 +75,10 @@ function Entry({ entry, reloadList }) {
                         </div>
 
                         <div className={classes.itemSecondary}>
+                            {entry.activity.total_duration_for_date && (
+                                <span className={classes.totalDuration}>{ Math.floor(entry.activity.total_duration_for_date / 1000 / 3600 * 10) / 10 }h</span>
+                            )}
+
                             <span className={classes.time}>
                                 {entry.finished_at.format("HH:mm")}
                             </span>

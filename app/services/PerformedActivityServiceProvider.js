@@ -179,9 +179,8 @@ async function deleteActivity({ id }) {
     return true
 }
 
-// Get performed activity durations
-async function getDurationMap(user, options = {}) {
-    const performedActivities = await PerformedActivity.findAllBy("user_id", user.id)
+// Map activity-ids to duration arrays
+function getDurationMapFromPerformedActivities(performedActivities = [], options = {}) {
     sortPerformedActivities(performedActivities)
 
     // Create activity-durations map
@@ -190,7 +189,7 @@ async function getDurationMap(user, options = {}) {
     for (let i = 1; i < performedActivities.length; i++) {
         const lastEntry = performedActivities[i - 1]
         const entry = performedActivities[i]
-        
+
         // Format the finished_at date of current entry to "YYYY-MM-DD"
         const date = moment(entry.finished_at).format("YYYY-MM-DD")
 
@@ -221,6 +220,16 @@ async function getDurationMap(user, options = {}) {
             durationMap[key].push(duration)
         }
     }
+
+    return durationMap
+}
+
+// Get performed activity durations
+async function getDurationMap(user, options) {
+    const performedActivities = await PerformedActivity.findAllBy("user_id", user.id)
+    sortPerformedActivities(performedActivities)
+
+    const durationMap = getDurationMapFromPerformedActivities(performedActivities, options)
 
     return durationMap
 }
@@ -256,5 +265,6 @@ module.exports = {
     deleteActivity,
     getDurationMap,
     sortPerformedActivities,
-    fillMissingDates
+    fillMissingDates,
+    getDurationMapFromPerformedActivities
 }

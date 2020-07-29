@@ -29,6 +29,10 @@ class Activity extends Model {
         this.total_duration = value
     }
 
+    setTotalDurationForDate(value) {
+        this.total_duration_for_date = value
+    }
+
     setDurations(value) {
         this.durations = value
     }
@@ -81,7 +85,8 @@ class Activity extends Model {
             tags: this.tags,
             category: this.category,
             durations: this.durations,
-            total_duration: this.total_duration
+            total_duration: this.total_duration,
+            total_duration_for_date: this.total_duration_for_date
         }
     }
 }
