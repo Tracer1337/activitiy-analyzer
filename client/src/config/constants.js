@@ -57,5 +57,3 @@ export const NAV_DRAWER_LINKS = [
         }
     ]
 ]
-
-export const UTC_OFFSET = "+02:00"
