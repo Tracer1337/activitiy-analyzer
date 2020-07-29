@@ -15,7 +15,7 @@ function renameProperty(obj, from, to) {
 
 function formatActivityDetailed(activity) {
     Object.keys(activity.durations).forEach(key => {
-        const newKey = moment(key, "YYYY-MM-DD").format("DD.MM.YYYY")
+        const newKey = moment(key, "YYYY-MM-DD").utc().format("DD.MM.YYYY")
         renameProperty(activity.durations, key, newKey)
     })
 
