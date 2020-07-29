@@ -1,6 +1,8 @@
 import moment from "moment"
 import * as icons from "@material-ui/icons"
 
+import { UTC_OFFSET } from "./constants.js"
+
 export const ACTIVITY_DETAILED = "ACTIVITY_DETAILED"
 export const PERFORMED_ACTIVITIES = "PERFORMED_ACTIVITIES"
 export const PERFORMED_ACTIVITIES_BY_DATE = "PERFORMED_ACTIVITIES_BY_DATE"
@@ -15,7 +17,7 @@ function renameProperty(obj, from, to) {
 
 function formatActivityDetailed(activity) {
     Object.keys(activity.durations).forEach(key => {
-        const newKey = moment(key, "YYYY-MM-DD").utc().format("DD.MM.YYYY")
+        const newKey = moment(key, "YYYY-MM-DD").format("DD.MM.YYYY")
         renameProperty(activity.durations, key, newKey)
     })
 
@@ -23,7 +25,7 @@ function formatActivityDetailed(activity) {
 }
 
 function formatPerformedActivity(activity) {
-    activity.finished_at = moment(activity.finished_at)
+    activity.finished_at = moment(activity.finished_at).utcOffset(UTC_OFFSET)
     
     return activity
 }

@@ -4,6 +4,7 @@ import { Provider } from "react-redux"
 import { createMuiTheme, ThemeProvider } from "@material-ui/core"
 import { MuiPickersUtilsProvider } from "@material-ui/pickers"
 import MomentUtils from "@date-io/moment"
+import moment from "moment"
 import { defaults } from "react-chartjs-2"
 
 import store from "./store"
@@ -12,6 +13,8 @@ import * as serviceWorker from "./serviceWorker.js"
 import "./index.css"
 
 defaults.global.defaultFontColor = "#fff"
+
+window.moment = moment
 
 const theme = createMuiTheme({
     palette: {
