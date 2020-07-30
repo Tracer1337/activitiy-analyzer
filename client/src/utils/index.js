@@ -41,7 +41,17 @@ export function roundMinutesTo(time, minutes) {
     return moment(Math.round((+time) / ms) * ms)
 }
 
-// Parse duration
-export function parseDuration(ms) {
-    return ms / 1000 / 3600
+// Convert ms to hours
+export function msToHours(ms, roundTo = 2) {
+    return Math.floor(ms / 1000 / 3600 * (10 ** roundTo)) / (10 ** roundTo)
+}
+
+// Convert ms to minutes
+export function msToMinutes(ms, roundTo = 2) {
+    return Math.floor(ms / 1000 / 60 * (10 ** roundTo)) / (10 ** roundTo)
+}
+
+// Format duration in ms to "HH:mm" (Source: https://stackoverflow.com/questions/13262621/how-do-i-use-format-on-a-moment-js-duration)
+export function formatDuration(ms) {
+    return moment.utc(moment.duration(ms / 1000, "seconds").asMilliseconds()).format("HH:mm")
 }

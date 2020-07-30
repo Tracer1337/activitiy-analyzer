@@ -3,11 +3,13 @@ import { Pie } from "react-chartjs-2"
 import { useTheme } from "@material-ui/core/styles"
 
 import makeChart from "../makeChart.js"
+import { CHART_COLORS } from "../../config/constants.js"
+import { msToHours } from "../../utils/index.js"
 
-function CategorySharesChart({ data }) {
+function CategorySharesChart({ data, attribute = "total_duration" }) {
     const theme = useTheme()
 
-    data.sort((a, b) => b.total_duration - a.total_duration)
+    data.sort((a, b) => b[attribute] - a[attribute])
 
     return (
         <Pie
@@ -17,8 +19,8 @@ function CategorySharesChart({ data }) {
                 labels: data.map(category => category.name),
 
                 datasets: [{
-                    data: data.map(category => Math.floor(category.total_duration / 1000 / 3600 * 10) / 10),
-                    backgroundColor: ["#1976D2", "#388E3C", "#FFA000", "#7B1FA2", "#D32F2F", "#303F9F", "#E64A19"],
+                    data: data.map(category => msToHours(category[attribute])),
+                    backgroundColor: CHART_COLORS,
                     borderColor: theme.palette.background.paper
                 }]
             }}

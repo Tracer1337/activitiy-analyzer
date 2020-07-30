@@ -8,7 +8,7 @@ import SortByDurationIcon from "@material-ui/icons/Schedule"
 
 import List from "../List.js"
 import EditActivityDialog from "../Dialogs/EditActivityDialog.js"
-import { parseDuration } from "../../utils"
+import { msToHours } from "../../utils"
 
 const useStyles = makeStyles(theme => ({
     buttonGroupWrapper: {
@@ -91,7 +91,7 @@ function ActivityList(props, ref) {
 
                         <div className={classes.main}>
                             <div className={classes.stats}>
-                                {Math.floor(parseDuration(data.total_duration))}h
+                                {msToHours(data.total_duration, 0)}h
                         </div>
 
                             <div className={classes.tags}>

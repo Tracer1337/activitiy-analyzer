@@ -59,3 +59,7 @@ export const NAV_DRAWER_LINKS = [
         }
     ]
 ]
+
+export const CHART_COLORS = ["#1976D2", "#388E3C", "#FFA000", "#7B1FA2", "#D32F2F", "#303F9F", "#E64A19"]
+
+export const ACTIVITY_ANALYSIS_THRESHOLD = .05
