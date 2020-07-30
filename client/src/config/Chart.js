@@ -13,7 +13,7 @@ Chart.pluginService.register({
                 x: (chart.chartArea.left + chart.chartArea.right) / 2,
                 y: (chart.chartArea.top + chart.chartArea.bottom) / 2,
                 radius: (chart.outerRadius + chart.innerRadius) / 2,
-                thickness: (chart.outerRadius - chart.innerRadius) / 2 - 1,
+                thickness: (chart.outerRadius - chart.innerRadius) / 2,
                 backgroundColor: arc._model.backgroundColor
             }
         }
