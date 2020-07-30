@@ -39,7 +39,7 @@ function DateControl({ defaultValue = moment(), onChange = () => {} }) {
 
     return (
         <div className={classes.container}>
-            <Typography variant="subtitle1">{ date.format("DD.MM.YYYY") }</Typography>
+            <Typography variant="subtitle1">{ date.format("DD.MM.YYYY") } - { date.format("dddd") }</Typography>
 
             <div className={classes.controls}>
                 <IconButton onClick={handleLeftClick}>

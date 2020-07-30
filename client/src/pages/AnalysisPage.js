@@ -50,7 +50,7 @@ function AnalysisPage() {
                 title: "Analysis"
             }}
         >
-            <DateControl onChange={handleDateChange} defaultValue={moment(date, "YYYY-MM-DD")}/>
+            <DateControl onChange={handleDateChange} value={moment(date, "YYYY-MM-DD")}/>
 
             { isLoading ? <LoadingIndicator/> : error?.response.status === 404 ? <Typography variant="subtitle1">No entries</Typography> : (
                 <div>
