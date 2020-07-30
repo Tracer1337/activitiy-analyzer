@@ -1,10 +1,12 @@
 import React, { useEffect } from "react"
 import moment from "moment"
 import { useParams, useHistory } from "react-router-dom"
+import { Typography } from "@material-ui/core"
 
 import Layout from "../components/Layout.js"
 import LoadingIndicator from "../components/LoadingIndicator.js"
 import DateControl from "../components/DateControl.js"
+import TimeAwakeChart from "../components/Charts/TimeAwakeChart.js"
 import useAPIData from "../utils/useAPIData.js"
 
 function AnalysisPage() {
@@ -12,7 +14,7 @@ function AnalysisPage() {
 
     const { date } = useParams()
 
-    const { isLoading, data, reload } = useAPIData({
+    const { isLoading, data, error, reload } = useAPIData({
         method: "getAnalysisByDate",
         data: date
     })
@@ -22,7 +24,7 @@ function AnalysisPage() {
     }
 
     // eslint-disable-next-line
-    useEffect(() => data && reload(), [date])
+    useEffect(() => (data || error) && reload(), [date])
 
     return (
         <Layout
@@ -32,8 +34,10 @@ function AnalysisPage() {
         >
             <DateControl onChange={handleDateChange} defaultValue={moment(date, "YYYY-MM-DD")}/>
 
-            { isLoading ? <LoadingIndicator/> : (
-                <div>Data Loaded</div>
+            { isLoading ? <LoadingIndicator/> : error?.response.status === 404 ? <Typography variant="subtitle1">No entries</Typography> : (
+                <div>
+                    <TimeAwakeChart data={data.time_awake}/>
+                </div>
             )}
         </Layout>
     )

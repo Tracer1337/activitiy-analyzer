@@ -11,6 +11,7 @@ function useAPIData(props) {
 
     const [isLoading, setIsLoading] = useState(!props.defaultValue)
     const [data, setData] = useState(props.defaultValue)
+    const [error, setError] = useState()
     const [reloadKey, reload] = useReducer((key) => key + 1, 0)
 
     useEffect(() => {
@@ -23,6 +24,7 @@ function useAPIData(props) {
         method()
             .then(res => {
                 setData(res.data)
+                setError(null)
                 setIsLoading(false)
                 
                 if(props.onLoad) {
@@ -30,7 +32,8 @@ function useAPIData(props) {
                 }
             })
             .catch(error => {
-                console.error(error)
+                setData(null)
+                setError(error)
                 setIsLoading(false)
             })
         // eslint-disable-next-line
@@ -39,6 +42,7 @@ function useAPIData(props) {
     return {
         isLoading,
         data,
+        error,
         reload
     }
 }

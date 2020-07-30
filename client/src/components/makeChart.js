@@ -14,13 +14,13 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
-function makeChart(Child, { title }) {
+function makeChart(Child, args = {}) {
     return function Chart({ className, ...props }) {
         const classes = useStyles()
 
         return (
             <Paper className={clsx(classes.container, className)}>
-                <Typography variant="h6" className={classes.title}>{ title }</Typography>
+                { args.title && <Typography variant="h6" className={classes.title}>{ args.title }</Typography> }
 
                 <Child {...props}/>
             </Paper>
