@@ -54,9 +54,12 @@ function formatShortcuts(shortcuts) {
 function formatAnalysis(data) {
     data.time_awake = formatTimestamp(data.time_awake)
 
-    data.activities.forEach(activity => activity.total_duration_for_date = formatTimestamp(activity.total_duration_for_date))
+    const keys = ["activities", "categories"]
+    keys.forEach(prop => {
+        data[prop].forEach(element => element.total_duration_for_date = formatTimestamp(element.total_duration_for_date))
 
-    data.categories.forEach(category => category.total_duration_for_date = formatTimestamp(category.total_duration_for_date))
+        data[prop].sort((a, b) => b.total_duration_for_date - a.total_duration_for_date)
+    })
 
     return data
 }

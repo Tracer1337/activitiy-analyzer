@@ -11,6 +11,7 @@ import store from "./store"
 import App from "./App.js"
 import * as serviceWorker from "./serviceWorker.js"
 import "./index.css"
+import "./config/Chart.js"
 
 defaults.global.defaultFontColor = "#fff"
 
@@ -32,7 +33,8 @@ const theme = createMuiTheme({
         },
 
         secondary: {
-            main: "#03DAC5"
+            main: "#03DAC5",
+            dark: "#336D6F"
         },
 
         error: {
