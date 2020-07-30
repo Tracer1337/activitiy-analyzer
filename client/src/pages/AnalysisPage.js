@@ -42,7 +42,7 @@ function AnalysisPage() {
     // eslint-disable-next-line
     useEffect(() => (data || error) && reload(), [date])
 
-    console.log(data)
+    // console.log(data)
 
     return (
         <Layout
@@ -57,8 +57,8 @@ function AnalysisPage() {
                     <TimeAwakeChart data={data.time_awake} className={classes.chartGroup}/>
 
                     <div className={classes.chartGroup}>
-                        { data.activities.map(activity => (
-                            <SingleActivityDurationChart data={activity} timeAwake={data.time_awake} className={classes.chart} />
+                        { data.activities.filter(activity => activity.total_duration_for_date).map(activity => (
+                            <SingleActivityDurationChart data={activity} timeAwake={data.time_awake} className={classes.chart} key={activity.id}/>
                         )) }
                     </div>
                 </div>

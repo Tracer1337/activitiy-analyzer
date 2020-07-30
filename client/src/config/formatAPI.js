@@ -56,9 +56,13 @@ function formatAnalysis(data) {
 
     const keys = ["activities", "categories"]
     keys.forEach(prop => {
-        data[prop].forEach(element => element.total_duration_for_date = formatTimestamp(element.total_duration_for_date))
+        data[prop].forEach(element => {
+            if (element.total_duration_for_date) {
+                element.total_duration_for_date = formatTimestamp(element.total_duration_for_date)
+            }
+        })
 
-        data[prop].sort((a, b) => b.total_duration_for_date - a.total_duration_for_date)
+        data[prop].sort((a, b) => (b.total_duration_for_date || 0) - (a.total_duration_for_date || 0))
     })
 
     return data
