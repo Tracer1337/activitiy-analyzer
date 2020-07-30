@@ -5,12 +5,11 @@ import { Typography } from "@material-ui/core"
 import { makeStyles, useTheme } from "@material-ui/core/styles"
 
 import makeChart from "../makeChart.js"
-import { formatDuration, msToHours, msToMinutes } from "../../utils"
+import { msToHours, msToMinutes } from "../../utils"
 
 function durationToString(ms) {
     if (msToHours(ms) >= 1) {
-        const str = formatDuration(ms)
-        return str + " Hour" + (+str.substring(0, 2) > 1 ? "s" : "")
+        return msToHours(ms, 1) + " Hours"
     } else {
         return msToMinutes(ms) + " Minutes"
     }

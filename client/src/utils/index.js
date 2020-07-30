@@ -52,6 +52,6 @@ export function msToMinutes(ms, roundTo = 2) {
 }
 
 // Format duration in ms to "HH:mm" (Source: https://stackoverflow.com/questions/13262621/how-do-i-use-format-on-a-moment-js-duration)
-export function formatDuration(ms) {
-    return moment.utc(moment.duration(ms / 1000, "seconds").asMilliseconds()).format("HH:mm")
-}
+// export function formatDuration(ms) {
+//     return moment.utc(moment.duration(ms / 1000, "seconds").asMilliseconds()).format("HH:mm")
+// }

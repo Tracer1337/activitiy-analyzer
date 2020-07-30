@@ -26,7 +26,7 @@ function EmptyPage() {
         <div className={classes.container}>
             <Typography variant="h6" className={classes.title}>This page is empty</Typography>
 
-            <img src={emptyGif}/>
+            <img src={emptyGif} alt="No content here"/>
         </div>
     )
 }
