@@ -11,7 +11,7 @@ function formatTimestamp(timestamp) {
     if (process.env.NODE_ENV === "development") {
         return moment(timestamp).utcOffset(120)
     } else {
-        return moment(timestamp).utcOffset(0)
+        return moment(timestamp).utcOffset(120)
     }
 }
 
