@@ -46,7 +46,7 @@ function TimeAwakeChart({ data }) {
 
             <Bar progress={hours / 24} className={classes.bar}/>
 
-            <Typography variant="h6" className={classes.hours}>{ hours }h</Typography>
+            <Typography variant="h6" className={classes.hours}>{ hours } Hours</Typography>
         </div>
     )
 }
