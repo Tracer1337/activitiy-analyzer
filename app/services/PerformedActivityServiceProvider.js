@@ -228,7 +228,7 @@ function getDurationMapFromPerformedActivities(performedActivities = [], options
 async function getDurationMap(user, options) {
     const performedActivities = await PerformedActivity.findAllBy("user_id", user.id)
     sortPerformedActivities(performedActivities)
-
+    
     const durationMap = getDurationMapFromPerformedActivities(performedActivities, options)
 
     return durationMap

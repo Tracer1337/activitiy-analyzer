@@ -1,11 +1,37 @@
+const moment = require("moment")
+
 const Model = require("../../lib/Model.js")
 
 let Activity
 
+const cache = new Map()
+
 class PerfomedActivity extends Model {
     static findBy = Model.findBy.bind({ model: PerfomedActivity, table: "performed_activities" })
-    static findAllBy = Model.findAllBy.bind({ model: PerfomedActivity, table: "performed_activities" })
     static where = Model.where.bind({ model: PerfomedActivity, table: "performed_activities" })
+
+    static findAllBy = async (column, value) => {
+        const models = await Model.findAllBy.call({
+            model: PerfomedActivity,
+            table: "performed_activities"
+        }, column, value, { shouldInit: false })
+
+        // Use cached instance to improve performance
+        return await Promise.all(models.map(async (model) => {
+            if (cache.has(model.id)) {
+                return cache.get(model.id)
+            }
+            
+            await model.init()
+            
+            // Store model to cache if it isn't from today
+            if (!moment().isSame(model.finished_at, "day")) {
+                cache.set(model.id, model)
+            }
+
+            return model
+        }))
+    }
 
     constructor(values) {
         super({
