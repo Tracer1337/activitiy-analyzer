@@ -1,9 +1,9 @@
 import React, { useState, useImperativeHandle, useRef } from "react"
 import { Paper, List as MuiList, ListItem as MuiListItem, ListItemText } from "@material-ui/core"
 import { makeStyles } from "@material-ui/core/styles"
+import Swipeable from "react-mui-swipeable"
 
 import LoadingIndicator from "./LoadingIndicator.js"
-import Swipeable from "./Swipeable.js"
 import useAPIData from "../utils/useAPIData.js"
 import * as api from "../config/api.js"
 

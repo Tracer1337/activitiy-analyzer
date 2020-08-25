@@ -21,6 +21,7 @@
     "react-dom": "^16.13.1",
     "react-ga": "^3.1.2",
     "react-hook-form": "^6.0.8",
+    "react-mui-swipeable": "^1.0.7",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
