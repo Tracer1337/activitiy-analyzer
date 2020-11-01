@@ -8,11 +8,15 @@ export const SHORTCUTS = "SHORTCUTS"
 export const ANALYSIS = "ANALYSIS"
 
 function formatTimestamp(timestamp) {
-    if (process.env.NODE_ENV === "development") {
-        return moment(timestamp).utcOffset(120)
+    const formatted = moment(timestamp)
+
+    if (formatted.isDST()) {
+        formatted.utcOffset(120)
     } else {
-        return moment(timestamp).utcOffset(120)
+        formatted.utcOffset(60)
     }
+
+    return formatted
 }
 
 function renameProperty(obj, from, to) {
