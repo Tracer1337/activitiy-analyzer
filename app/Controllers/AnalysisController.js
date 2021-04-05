@@ -10,7 +10,10 @@ async function analyzeDate(req, res) {
     }
 
     // Get performed activities for the day
-    const performedActivities = await PerformedActivity.where(`finished_at LIKE '${req.params.date}%'`)
+    const performedActivities = await PerformedActivity.where(`
+        finished_at LIKE '${req.params.date}%' AND
+        user_id = '${req.user.id}'
+    `)
 
     // Get distinct activities from performedActivities
     const activities = performedActivities
