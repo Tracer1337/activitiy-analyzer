@@ -7,7 +7,6 @@ import { makeStyles } from "@material-ui/core/styles"
 
 import Shortcuts from "../Shortcuts.js"
 import ActivitySelect from "../ActivitySelect.js"
-import { roundMinutesTo } from "../../utils"
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -38,7 +37,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 function getFinishedAtDefault() {
-    return roundMinutesTo(moment(), 5)
+    return moment()
 }
 
 function PerfomedActivityForm({ onSubmit, defaultValues, title = true, submitButton = false }) {
@@ -67,7 +66,7 @@ function PerfomedActivityForm({ onSubmit, defaultValues, title = true, submitBut
             if(!("finished_at" in formState.dirtyFields)) {
                 setValue("finished_at", getFinishedAtDefault())
             }
-        }, 1000)
+        }, 250)
 
         return () => clearInterval(interval)
     })
