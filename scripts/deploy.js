@@ -1,7 +1,6 @@
 const fs = require("fs")
 const path = require("path")
 const { program } = require("commander")
-const NodeSSH = require("node-ssh")
 const chalk = require("chalk")
 const ora = require("ora")
 const util = require("util")
@@ -9,7 +8,6 @@ const { performance } = require("perf_hooks")
 require("dotenv").config({ path: path.join(__dirname, "..", ".env") })
 
 const execAsync = util.promisify(require("child_process").exec)
-const ssh = new NodeSSH()
 
 async function exec(command, options) {
     const run = async (command) => {
@@ -69,9 +67,6 @@ program
     // Push new version to git
     await run(pushToRemote, "Push new version to git")
 
-    // Connect to server via SSH
-    await run(connectSSH, "Connect to server")
-
     // Deploy new version on server
     await run(deploySSH, "Deploy new version")
 
@@ -107,20 +102,12 @@ async function pushToRemote() {
     ], { skipError: true })
 }
 
-async function connectSSH() {
-    await ssh.connect({
-        host: process.env.SSH_HOST,
-        username: process.env.SSH_USERNAME,
-        privateKey: path.resolve(ROOT_DIR, process.env.SSH_PRIVATE_KEY)
-    })
+async function deploySSH() {
+    try {
+        await execSSH("cd /var/www/activity-analyzer && sudo git pull && sudo pm2 restart activity-analyzer")
+    } catch {}
 }
 
-async function deploySSH() {
-    const { stderr } = await ssh.execCommand("sudo git pull && sudo pm2 restart activity-analyzer", { cwd: "/var/www/activity-analyzer" })
-
-    ssh.dispose()
-
-    if(stderr && stderr.indexOf("github.com") === -1) {
-        throw new Error(stderr)
-    }
+function execSSH(command) {
+    return exec(`ssh ${process.env.SSH_USERNAME}@${process.env.SSH_HOST} "${command}"`)    
 }
